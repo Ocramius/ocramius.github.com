@@ -90,7 +90,7 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
         <p>
             A simple repository that fetches a random greeting message from an array.
         </p>
-<pre class="prettyprint linenums lang-php">&lt;?php
+<pre class="prettyprint linenums lang-prepro">&lt;?php
 // module/Application/src/Application/Repository/StaticGreetingRepository.php
 
 namespace Application\Repository;
@@ -111,7 +111,7 @@ class StaticGreetingRepository
             A service that assembles the entire message by picking a random greeting from a given repository and a
             provided name.
         </p>
-<pre class="prettyprint linenums lang-php">&lt;?php
+<pre class="prettyprint linenums lang-prepro">&lt;?php
 // module/Application/src/Application/Service/GreetingService.php
 
 namespace Application\Service;
@@ -178,7 +178,7 @@ class GreetingController extends AbstractActionController
 }</pre>
 
         <h4>And then a view to see some output:</h4>
-<pre class="prettyprint linenums lang-php">&lt;?php
+<pre class="prettyprint linenums lang-prepro">&lt;?php
 // module/Application/view/application/greeting/hello.phtml
 echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
 </pre>
@@ -192,7 +192,7 @@ echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
             a route to allow access to our controller (and a couple of fixes required to inject inherited dependencies).
         </p>
 
-<pre class="prettyprint linenums lang-php">&lt;?php
+<pre class="prettyprint linenums lang-prepro">&lt;?php
 
 return array(
     'di' =&gt; array(
@@ -283,7 +283,7 @@ return array(
             Otherwise, simply do following in your configuration once you are sure your dependencies won't change much:
         </p>
 
-<pre class="prettyprint linenums lang-php">&lt;?php
+<pre class="prettyprint linenums lang-prepro">&lt;?php
 
 return array(
     'controllers' =&gt; array(
