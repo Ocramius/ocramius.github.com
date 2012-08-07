@@ -1,17 +1,24 @@
-* {
+/* {
   margin:0px;
   padding:0px;
-}
+}*/
 
 body {
-  margin-top: 15px;
-  font-size: 1.5em;
+  padding-top: 90px;
+  /*margin-top: 15px;*/
+  font-size: 1em;
   line-height:1.3em;
-  font-family: 'Caudex', serif;
-  font-color: #2B2E2E;
+  /*font-family: 'Caudex', serif;*/
+  /*font-color: #2B2E2E;*/
   -webkit-font-smoothing: antialiased;
 }
 
+pre {
+    font-size: 1em;
+    line-height:1.1em;
+}
+
+/*
 a {
   font-color:#2B2E2E;
   text-decoration:none;
@@ -98,3 +105,5 @@ p.section {
   display:inline;
   font-size:.8em;
 }
+
+*/

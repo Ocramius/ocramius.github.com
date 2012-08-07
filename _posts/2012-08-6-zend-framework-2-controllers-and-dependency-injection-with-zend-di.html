@@ -11,9 +11,7 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
 ---
 
 <div class="row">
-    {%include post_share_leftcolumn.html %}
-    <div class="span9 columns">
-
+    <!--<div class="span9 columns">-->
 
         <h2>What is Zend\Di</h2>
         <p>
@@ -61,13 +59,13 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
             module provided by ZendSkeletonApplication, but you should apply these concepts only for your own modules!
         </p>
 
-<pre class="prettyprint linenums">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+<pre class="prettyprint linenums lang-sh">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
 ~$ cd ZendSkeletonApplication
 ~$ ./composer.phar install</pre>
 
         <p>
-            If you just prefer to look at the code and run it without having to reproduce my example, you can just look
-            at the already modified skeleton at
+            <span class="label label-info">For the lazy:</span> If you just prefer to look at the code and run it
+            without having to reproduce my example, you can just look at the already modified skeleton at
             <a href="http://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di/module">
                 Ocramius/ZendSkeletonApplication - branch demo/zf2-controllers-from-zend-di
             </a> and see what I did in the
@@ -92,7 +90,7 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
         <p>
             A simple repository that fetches a random greeting message from an array.
         </p>
-<pre class="prettyprint linenums">&lt;?php
+<pre class="prettyprint linenums lang-php">&lt;?php
 // module/Application/src/Application/Repository/StaticGreetingRepository.php
 
 namespace Application\Repository;
@@ -113,7 +111,7 @@ class StaticGreetingRepository
             A service that assembles the entire message by picking a random greeting from a given repository and a
             provided name.
         </p>
-<pre class="prettyprint linenums">&lt;?php
+<pre class="prettyprint linenums lang-php">&lt;?php
 // module/Application/src/Application/Service/GreetingService.php
 
 namespace Application\Service;
@@ -180,7 +178,7 @@ class GreetingController extends AbstractActionController
 }</pre>
 
         <h4>And then a view to see some output:</h4>
-<pre class="prettyprint linenums">&lt;?php
+<pre class="prettyprint linenums lang-php">&lt;?php
 // module/Application/view/application/greeting/hello.phtml
 echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
 </pre>
@@ -194,7 +192,7 @@ echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
             a route to allow access to our controller (and a couple of fixes required to inject inherited dependencies).
         </p>
 
-<pre class="prettyprint linenums">&lt;?php
+<pre class="prettyprint linenums lang-php">&lt;?php
 
 return array(
     'di' =&gt; array(
@@ -263,8 +261,9 @@ return array(
         <hr/>
 
         <h2>Performance issues</h2>
-        <p>Performance impact of using <code>Zend\Di</code> over a ServiceManager
-            factory is around 15%, and that overhead increases with the number and recursion of the dependencies.
+        <p><span class="label label-important">Careful!</span> Performance impact of using <code>Zend\Di</code> over a
+            ServiceManager factory is around 15%, and that overhead increases with the number and recursion of the
+            dependencies.
             Enabling complex Di based modules such as <a href="https://github.com/Ocramius/ZfPhpcrOdm" target="_blank">
             ocramius/zf-phpcr-odm</a> may affect performance by an order of 200% or more!
         </p>
@@ -284,7 +283,7 @@ return array(
             Otherwise, simply do following in your configuration once you are sure your dependencies won't change much:
         </p>
 
-<pre class="prettyprint linenums">&lt;?php
+<pre class="prettyprint linenums lang-php">&lt;?php
 
 return array(
     'controllers' =&gt; array(
@@ -311,8 +310,8 @@ return array(
         </p>
 
         <p>
-            Please also note that in this example, all dependency injections are based on type hints of concrete
-            implementations. I cleaned up my code and invite you to check
+           <span class="label label-info">Note:</span>  Please also note that in this example, all dependency injection
+             are based on type hints of concret  implementations. I cleaned up my code and invite you to check
             <a href="http://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di-cleanup/module" target="_blank">
                 Ocramius/ZendSkeletonApplication - demo/zf2-controllers-from-zend-di-cleanup
             </a> and see what I did in the
@@ -332,4 +331,4 @@ return array(
             screwing up as much code as usual ;-)
         </p>
     </div>
-</div>
+<!--</div>-->

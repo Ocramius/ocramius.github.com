@@ -1,5 +1,5 @@
 <div class="row">
-    <h1>{{ page.title }}</h1>
+
     <div class="span3 column">
         <h4>
             <strong>
@@ -13,8 +13,8 @@
             <small>
                 Tags:
                 {% for tag in page.tags %}
-                    <a href="/tags/{{ tag }}" title="View posts tagged with &quot;{{ tag }}&quot;"><u>{{ tag }}</u></a>
-                    {% if forloop.last != true %} {% endif %}
+                <a href="/tags/{{ tag }}" title="View posts tagged with &quot;{{ tag }}&quot;"><u>{{ tag }}</u></a>
+                {% if forloop.last != true %} {% endif %}
                 {% endfor %}
             </small>
         </h4>
@@ -22,23 +22,38 @@
     <div class="span9 column">
         <p class="pull-right">
             {% if page.previous.url %}
-                <a href="{{page.previous.url}}" title="Previous Post: {{page.previous.title}}">
-                    <i class="icon-chevron-left"></i>
-                </a>
+            <a href="{{page.previous.url}}" title="Previous Post: {{page.previous.title}}">
+                <i class="icon-chevron-left"></i>
+            </a>
             {% endif %}
             {% if page.next.url %}
-                <a href="{{page.next.url}}" title="Next Post: {{page.next.title}}">
-                    <i class="icon-chevron-right"></i>
-                </a>
+            <a href="{{page.next.url}}" title="Next Post: {{page.next.title}}">
+                <i class="icon-chevron-right"></i>
+            </a>
             {% endif %}
         </p>
         <p>
-            <a class="btn btn-mini btn-warning" href="https://github.com/Ocramius/ocramius.github.com/issues/new">
+            <a class="btn btn-mini btn-warning" href="https://github.com/Ocramius/ocramius.github.com/issues/new" target="_blank">
                 Report an issue
             </a>
-            <a class="btn btn-mini btn-success" href="https://github.com/Ocramius/ocramius.github.com/fork_select">
+            <a class="btn btn-mini btn-success" href="https://github.com/Ocramius/ocramius.github.com/fork_select" target="_blank">
                 Fork and help me
             </a>
         </p>
     </div>
+
+    <div class="row">
+        <div class="span12 column">
+            <hr/>
+        </div>
+    </div>
+
+    <h1>{{ page.title }}</h1>
+
+    <div class="row">
+        <div class="span12 column">
+            <hr/>
+        </div>
+    </div>
+
 </div>
