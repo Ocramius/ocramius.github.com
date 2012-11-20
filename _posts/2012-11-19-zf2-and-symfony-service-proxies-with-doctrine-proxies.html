@@ -100,13 +100,14 @@ class HelloWorld
 
     <p>
         To solve the performance issues, some may be tempted to start using a
-        <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>:
+        <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
+        within their services:
     </p>
 <pre class="prettyprint linenums lang-prepro">class HelloWorld
 {
     public function __construct(ServiceLocator $serviceLocator)
     {
-        // ...
+        $this->serviceLocator = $serviceLocator;
     }
 
     public function sayHello()
@@ -145,14 +146,15 @@ class HelloWorld
         </dd>
         <dt><strong>Instantiation of dependencies moved to our code</strong>:</dt>
         <dd>
-            instantiation of <code>D</code> should not be a problem solved by our code, but we introduced more code to
-            be tested by handling lazy loading of it inside of <code>HelloWorld</code>
+            instantiation of <code>D</code> should not be a problem solved by our code. We introduced it in our code
+            now, so we must test it.
         </dd>
         <dt><strong>Hardcoded service name in our code</strong>:</dt>
         <dd>
-            we now have a hardcoded service name in our code. This makes our code very error prone if we don't write
-            extensive integration tests. Also, it makes our code incompatible with anything sharing the same
-            <code>ServiceLocator</code> instance and requiring an instance named <code>'D'</code>.
+            This makes our class very error prone if we don't write extensive integration tests each time we ship our
+            code. Also, it makes our code incompatible with anything sharing the same
+            <code>ServiceLocator</code> instance and requiring an instance named <code>'D'</code>, but with different
+            expectations.
         </dd>
     </dl>
     <p>
@@ -161,14 +163,15 @@ class HelloWorld
         Not really nice, eh? Not at all.
     </p>
     <p>
-        If you are already using service location, <strong>STOP NOW</strong> and please read the rest of this post.
+        If you are already using service location, <strong>STOP DOING IT NOW</strong> and please read the rest of this
+        post.
     </p>
 
     <p>
         There must be a <em>better</em> solution... After all, what we want to avoid is instantiating
-        <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> if we aren't using it.
+        <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> alltogether if we aren't using them.
         <br/>
-        Doesn't sound so hard!
+        Doesn't sound to be so hard!
     </p>
 
     <hr/>
@@ -224,8 +227,8 @@ class HelloWorld
     }
 }</pre>
     <p>
-        The previous snippet isn't very flexible, but as you may know, Doctrine is a set of libraries focusing on
-        persistence of data, and the
+        The previous snippet is just a simplified example, and isn't very flexible, but as you may know, Doctrine is a
+        set of libraries focusing on persistence of data, and the
         <a href="https://github.com/doctrine/common/blob/8b403cde97eaede30bd79acab4f18895fd5bdf27/lib/Doctrine/Common/Persistence/Proxy.php"
         target="_blank">first version of proxies</a> was highly focused on supporting the purpose of loading an object
         from a database.
@@ -366,7 +369,7 @@ class HelloWorld
         But wait: didn't I just say that service location is evil?
     </p>
     <p>
-        Yes it is, but <code>D_Proxy</code> is generated code and:
+        Yes it is, but <code>D_Proxy</code> is generated code (don't worry about how it is generated) and:
     </p>
     <ul>
         <li>
@@ -391,7 +394,7 @@ class HelloWorld
             Proxies actually allow cyclic dependencies. Since objects are lazily initialized, if <code>A</code> depends
             on <code>B</code>, and <code>B</code> depends on <code>A</code>, and one of those two is proxied, the lazy
             initialization mechanism will prevent us from triggering an infinite loop in our instantiation logic. This
-            is actually a thing I didn't think of initially, but it turns out to be a nice side effect.
+            is actually a thing I didn't think of initially, but it turns out to be a nice and powerful side effect.
         </li>
     </ul>
 
@@ -416,8 +419,8 @@ class HelloWorld
         </dd>
         <dt><strong>Must be synchronized</strong>:</dt>
         <dd>
-            changing implementation of our proxies requires us to re-generate them so that they respect the contract of
-            the class they proxy. Since generated code in PHP is hard to put into a cache (because opcode caches cannot
+            changing implementation of our services requires us to re-generate proxies so that they respect the contract
+            of the service class. Since generated code in PHP is hard to put into a cache (because opcode caches cannot
             act on serialized data) we need to save proxies to predictable location in our system in order to autoload
             them and avoid generating them over and over. That also means that we have to delete them when we change our
             code, so that we can let the generator rewrite them.
@@ -449,7 +452,7 @@ class HelloWorld
             target="_blank">his blog</a>.
         </li>
         <li>
-            I am also starting work to implement this idea for Symfony 2. Not quite there yet :-)
+            I am also starting work to implement this idea for Symfony 2 too. Not quite there yet :-)
         </li>
     </ul>
 
