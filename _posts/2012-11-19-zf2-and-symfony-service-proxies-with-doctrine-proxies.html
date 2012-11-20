@@ -2,7 +2,7 @@
 layout: post
 title: Dependency Injection slowness solved by Doctrine Proxies
 category: Coding
-tags: zend zendframework zf2 symfony doctrine dependency injection proxies
+tags: zend zendframework zf2 symfony doctrine dependency injection service location proxies
 year: 2012
 month: 11
 day: 19
@@ -44,7 +44,7 @@ summary: An explanation of how Doctrine Proxies work to enhance Zend Framework 2
         But there is one major pitfall: since your objects do not handle instantiation of their dependencies anymore
         <strong>you are now building huge object graphs, even if you're not using all of those objects</strong>.
         <br/>
-        Take for example following code:
+        Take for example the following code:
     </p>
 <pre class="prettyprint linenums lang-prepro">class A {}
 
@@ -80,16 +80,15 @@ class HelloWorld
         <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>HelloWorld</code>.
     </p>
     <p>
-        While this is very
-        robust code that will hardly break if <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code>
-        are correctly unit-tested, we are obviously having performance issues.
+        While this is robust code that will hardly break if <code>A</code>, <code>B</code>, <code>C</code> and
+        <code>D</code> are correctly unit-tested, we are obviously having performance issues.
         <br/>
-        Those issues becomes particularly noticeable when one of these objects needs to allocate a lot of resources or
+        Those issues become particularly noticeable when one of these objects needs to allocate a lot of resources or
         to perform costly operations such as opening a file or a socket to a remote machine.
     </p>
     <p>
-        Pure Dependency Injection is fantastic to achieve code stability, but introduces performance drawbacks,
-        especially in PHP, where the object graph is rebuilt at each dispatched request.
+        Using pure dependency injection yields stability stability, but introduces performance drawbacks, especially in
+        PHP, where the object graph is rebuilt on each dispatched request.
     </p>
 
     <hr/>
@@ -184,7 +183,7 @@ class HelloWorld
         tracker</a>.
     </p>
     <p>
-        Since I was already playing around with code generation for doctrine, I decided to attempt to make this reality
+        Since I was already playing around with code generation for doctrine, I decided to implement those concepts
         with <strong>Doctrine Proxies</strong>.
     </p>
 
