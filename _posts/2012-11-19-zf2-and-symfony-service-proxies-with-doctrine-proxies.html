@@ -329,10 +329,6 @@ class HelloWorld
 
     public function doSomethingWithD()
     {
-        if ( ! $this-&gt;d) {
-            $this-&gt;d = $this-&gt;serviceLocator-&gt;get('D');
-        }
-
         return $this-&gt;d-&gt;doSomething();
     }
 }</pre>
