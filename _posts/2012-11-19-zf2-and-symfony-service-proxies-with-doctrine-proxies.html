@@ -10,38 +10,41 @@ published: true
 summary: An explanation of how Doctrine Proxies work to enhance Zend Framework 2 and Symfony 2 services
 ---
 
-<div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html">
 
     <h2>Dependency Injection Containers and Performance</h2>
 
     <p>
         <a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank">Dependency Injection Containers</a>
-        are a vital tool for developers of complex and modular applications. Using a Dependency Injection Container in
-        your application brings you great benefits, allowing you to program without the need of the well known evil
-        <strong>static methods and properties</strong> to get access to i.e. your database connection or your logger
-        service.
+        are a vital tool for developers of complex and modular applications.
+        <br/>
+        Using a Dependency Injection Container in your application brings you great benefits, allowing you to compose
+        complex object graphs without compromises or unnecessary ugliness (i.e. static methods).
     </p>
     <p>
-        By using a Dependency Injection Container you automatically gain some benefits:
+        By using a Dependency Injection Container you automatically gain some unlocked benefits:
     </p>
-    <ul>
-        <li>
-            <strong>Absence of hardcoded dependencies</strong>: Your objects do not handle instantiation of their
-            dependencies, so you have one less problem to handle.
-        </li>
-        <li>
-            <strong>Better separation of concerns</strong>: Splitting problems across multiple objects becomes easier
-            as the container helps you gluing them all together.
-        </li>
-        <li>
-            <strong>Mocking is much easier</strong>: Since you compose your instances with other dependencies that solve
+    <dl>
+        <dt><strong>Absence of hardcoded dependencies</strong>:</dt>
+        <dd>
+            Your objects do not handle instantiation of their dependencies, so you have one less problem to handle.
+        </dd>
+        <dt><strong>Better separation of concerns</strong>:</dt>
+            <dd>
+                Splitting problems across multiple objects becomes easier as the container helps you gluing them all
+                together.
+            </dd>
+        <dt><strong>Mocking is much easier</strong>:</dt>
+        <dd>
+            Since you compose your instances with other dependencies that solve
             small problems, mocking those objects becomes really easy, and so writing tests for your application.
-        </li>
-    </ul>
+        </dd>
+    </dl>
     <p>
         But there is one major pitfall: since your objects do not handle instantiation of their dependencies anymore
-        you are now building huge object graphs, even if you're not using all of those objects. Take for example
-        following code:
+        <strong>you are now building huge object graphs, even if you're not using all of those objects</strong>.
+        <br/>
+        Take for example following code:
     </p>
 <pre class="prettyprint linenums lang-prepro">class A {}
 
@@ -74,23 +77,30 @@ class HelloWorld
     </p>
     <p>
         As you notice, to call <code>HelloWorld#sayHello()</code> we are required to instantiate 5 objects:
-        <code>A, B, C, D, HelloWorld</code>. While this is very robust code that will hardly break if A, B, C and D
-        are correctly unit-tested, we are obviously having performance issues.
-        This becomes particularly noticeable when one of these objects needs to allocate a lot of resources or to
-        perform costly operations such as opening a file or a socket to a remote machine.
+        <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>HelloWorld</code>.
     </p>
     <p>
-        We can then assume that pure Dependency Injection is fantastic to achieve code stability, but introduces
-        performance drawbacks, especially in PHP, where the object graph is rebuilt at each dispatched request.
+        While this is very
+        robust code that will hardly break if <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code>
+        are correctly unit-tested, we are obviously having performance issues.
+        <br/>
+        Those issues becomes particularly noticeable when one of these objects needs to allocate a lot of resources or
+        to perform costly operations such as opening a file or a socket to a remote machine.
+    </p>
+    <p>
+        Pure Dependency Injection is fantastic to achieve code stability, but introduces performance drawbacks,
+        especially in PHP, where the object graph is rebuilt at each dispatched request.
     </p>
 
     <hr/>
 
+    <p><br/></p>
+
     <h2>Service Location (to the rescue?)</h2>
 
     <p>
-        This brings us to the usage of a <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator"
-        target="_blank">Service Locator</a>:
+        To solve the performance issues, some may be tempted to start using a
+        <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>:
     </p>
 <pre class="prettyprint linenums lang-prepro">class HelloWorld
 {
@@ -114,70 +124,90 @@ class HelloWorld
     }
 }</pre>
     <p>
-        As you will have noticed, this solves the performance issue by allowing us to retrieve <code>D</code>
-        <strong>only when we really need</strong>. Performance! On the other side, some new problems are born:
-    </p>
-    <ul>
-        <li>
-            <strong>Our object cannot exist without a service locator</strong>: makes testability hard, since we will
-            need to mock the service locator in order to test <code>HelloWorld</code>, and mocking a service locator
-            is not so easy.
-        </li>
-        <li>
-            <strong>Our object depends on the implementation of the service locator</strong>: portability of our code
-            is reduced, since it will work only with a specific service locator implementing the <code>ServiceLocator</code>
-            contract.
-        </li>
-        <li>
-            <strong>Instantiation of dependencies moved to our code</strong>: instantiation of <code>D</code> should not
-            be a problem solved by our code, but we introduced more code to be tested by handling lazy loading of it
-            inside of <code>HelloWorld</code>
-        </li>
-        <li>
-            <strong>Hardcoded service name in our code</strong>: we now have a hardcoded service name in our code. This
-            makes our code very error prone if we don't write extensive integration tests. Also, it makes our code
-            incompatible with anything sharing the same <code>ServiceLocator</code> instance and requiring an instance
-            named <code>'D'</code>.
-        </li>
-    </ul>
-    <p>
-        Nice! We solved a performance problem to introduce at least 4 new ones! Not really nice, eh?
+        As you have noticed, this solves the performance issue by allowing us to retrieve an instance of <code>D</code>
+        <strong>only when we really need it</strong>:
+        <br/>
+        performance!
     </p>
     <p>
-        If you are using service location, <strong>STOP NOW</strong> and please read the rest of this post.
+        Anyway, by doing so we introduced some new problems:
+    </p>
+    <dl>
+        <dt><strong>Our object cannot exist without a service locator</strong>:</dt>
+        <dd>
+            makes testability hard, since we will need to mock the service locator in order to test
+            <code>HelloWorld</code>, and mocking a service locator is not so easy.
+        </dd>
+        <dt><strong>Our object depends on the implementation of the service locator</strong>:</dt>
+        <dd>
+            portability of our code is reduced, since it will work only with a specific service locator implementing the
+            <code>ServiceLocator</code> contract.
+        </dd>
+        <dt><strong>Instantiation of dependencies moved to our code</strong>:</dt>
+        <dd>
+            instantiation of <code>D</code> should not be a problem solved by our code, but we introduced more code to
+            be tested by handling lazy loading of it inside of <code>HelloWorld</code>
+        </dd>
+        <dt><strong>Hardcoded service name in our code</strong>:</dt>
+        <dd>
+            we now have a hardcoded service name in our code. This makes our code very error prone if we don't write
+            extensive integration tests. Also, it makes our code incompatible with anything sharing the same
+            <code>ServiceLocator</code> instance and requiring an instance named <code>'D'</code>.
+        </dd>
+    </dl>
+    <p>
+        We solved a performance problem to introduce at least <strong>4 new ones!</strong>
+        <br/>
+        Not really nice, eh? Not at all.
+    </p>
+    <p>
+        If you are already using service location, <strong>STOP NOW</strong> and please read the rest of this post.
     </p>
 
     <p>
-        There must be a better solution... After all, what we want to avoid is instantiating <code>A, B, C, D</code> if
-        we aren't using it. Doesn't sound so hard!
-    </p>
-
-    <h2>Doctrine Proxies to the rescue!</h2>
-    <p>
-        The idea is nothing new, and <a href="http://pooteeweet.org/" target="_blank">Lukas Smith</a> already
-        <a href="https://github.com/symfony/symfony/issues/5012" target="_blank">discussed it on the Symfony2 issue tracker</a>.
-    </p>
-    <p>
-        Since I was already playing around with code generation for doctrine, I decided to attempt to make this reality.
+        There must be a <em>better</em> solution... After all, what we want to avoid is instantiating
+        <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> if we aren't using it.
+        <br/>
+        Doesn't sound so hard!
     </p>
 
     <hr/>
+    <p><br/></p>
+
+    <h2>Doctrine Proxies to the rescue!</h2>
+    <p>
+        The idea is not new, and <a href="http://pooteeweet.org/" target="_blank">Lukas Smith</a> already
+        <a href="https://github.com/symfony/symfony/issues/5012" target="_blank">discussed it on the Symfony2 issue
+        tracker</a>.
+    </p>
+    <p>
+        Since I was already playing around with code generation for doctrine, I decided to attempt to make this reality
+        with <strong>Doctrine Proxies</strong>.
+    </p>
+
+    <hr/>
+    <p><br/></p>
 
     <h2>What are Doctrine Proxies?</h2>
     <p>
-        <a href="https://github.com/Ocramius/common/blob/DCOM-96/lib/Doctrine/Common/Proxy/Proxy.php" target="_blank">Doctrine Proxies</a>
-        are a PHP implementation of the <a href="http://en.wikipedia.org/wiki/Proxy_pattern" target="_blank">proxy pattern</a>
-        used to achieve <a href="http://www.martinfowler.com/eaaCatalog/lazyLoad.html" target="_blank">lazy loading</a>
-        of objects from a persistent storage. Doctrine implements this pattern by having <strong>Virtual Proxies</strong>
-        that behave like <strong>Ghost Objects</strong>.
+        <a href="https://github.com/Ocramius/common/blob/DCOM-96/lib/Doctrine/Common/Proxy/Proxy.php"
+        target="_blank">Doctrine Proxies</a> are a PHP implementation of the
+        <a href="http://en.wikipedia.org/wiki/Proxy_pattern" target="_blank">proxy pattern</a> used to achieve
+        <a href="http://www.martinfowler.com/eaaCatalog/lazyLoad.html" target="_blank">lazy loading</a> of objects from
+        a persistent storage.
+        <br/>
+        Doctrine implements this pattern by having <strong>Virtual Proxies</strong> that behave like
+        <strong>Ghost Objects</strong>.
     </p>
     <p>
         The concept behind proxies is quite simple: each time a method of the proxy is called, if the proxy is not
-        initialized, initialize it (which corresponds to filling its fields with data coming from a DB). After that, run
-        the code that was supposed to be executed with that method call.
+        initialized, initialization logic is triggered (which usually corresponds to filling its fields with data
+        coming from a DB).
+        <br/>
+        After that, the original code that was supposed to be executed with that method call is run.
     </p>
     <p>
-        This is achieved by having Doctrine generate a class that inherits from the original object and faking all of
+        This is achieved by Doctrine by generating a class that inherits from the original object and faking all of
         its public API and adding the required code to trigger lazy loading:
     </p>
 <pre class="prettyprint linenums lang-prepro">class UserProxy extends User
@@ -194,16 +224,17 @@ class HelloWorld
     }
 }</pre>
     <p>
-        The previous snippet isn't very flexible, but as you may know, Doctrine is a set of libraries focusing on persistence of data, and the
+        The previous snippet isn't very flexible, but as you may know, Doctrine is a set of libraries focusing on
+        persistence of data, and the
         <a href="https://github.com/doctrine/common/blob/8b403cde97eaede30bd79acab4f18895fd5bdf27/lib/Doctrine/Common/Persistence/Proxy.php"
-           target="_blank">first version of proxies</a> was highly focused on supporting the purpose of loading an
-        object from a database.
+        target="_blank">first version of proxies</a> was highly focused on supporting the purpose of loading an object
+        from a database.
     </p>
     <p>
         The implementation has been enhanced with <a href="https://github.com/doctrine/common/pull/168" target="_blank">
-        a patch I'm working on</a>, now allowing many different uses of the proxy pattern. This is mainly possible since
-        because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions in PHP</a>
-        used as initialization logic for our proxy objects:
+        a patch I'm working on</a>, now allowing many different uses of the proxy pattern. This is mainly possible
+        because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
+        used as initialization logic holders:
     </p>
 <pre class="prettyprint linenums lang-prepro">class UserProxy extends User
 {
@@ -230,10 +261,14 @@ class HelloWorld
         is a requirement for our next step.
     </p>
 
+    <hr/>
+    <p><br/></p>
+
     <h2>Why proxies?</h2>
 
     <p>
-        Let's get back to the example with <code>A, B, C, D, HelloWorld</code>, but we'll introduce a proxy now:
+        Let's get back to the example with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>,
+        <code>HelloWorld</code>, but we'll introduce a proxy now:
     </p>
 <pre class="prettyprint linenums lang-prepro">class A {}
 
@@ -250,7 +285,7 @@ class D
 
     public function doSomething()
     {
-        return 'Did something with ' . $this->a . ', ' . $this->b . ', ' . $this->c;
+        return 'Did something with ' . $this-&gt;a . ', ' . $this-&gt;b . ', ' . $this-&gt;c;
     }
 }
 
@@ -261,22 +296,22 @@ class D_Proxy extends D
 
     public function __construct(ServiceLocator $serviceLocator)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this-&gt;serviceLocator = $serviceLocator;
     }
 
     private function initialize()
     {
-        $this->initialized = true;
-        $this->original    = $this->serviceLocator->get('D');
+        $this-&gt;initialized = true;
+        $this-&gt;original    = $this-&gt;serviceLocator-&gt;get('D');
     }
 
     public function doSomething()
     {
-        if ( ! $this->initialized) {
-            $this->initialize();
+        if ( ! $this-&gt;initialized) {
+            $this-&gt;initialize();
         }
 
-        return $this->original->doSomething();
+        return $this-&gt;original-&gt;doSomething();
     }
 }
 
@@ -319,7 +354,7 @@ class HelloWorld
             from a service locator, and put into the <code>original</code> property.
         </li>
         <li>
-            The method call is proxied to <code>$this->original->doSomething();</code>.
+            The method call is proxied to <code>$this-&gt;original-&gt;doSomething();</code>.
         </li>
         <li>
             Since the original object is fully populated with instances of <code>a</code>, <code>b</code> and
@@ -327,7 +362,8 @@ class HelloWorld
         </li>
     </ol>
     <p>
-        We successfully avoided instantiating <code>A, B, C, D</code> when calling <code>sayHello</code>! Awesome!
+        We successfully avoided instantiating <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code> when
+        calling <code>sayHello</code>! <em>Awesome!</em>
     </p>
 
     <p>
@@ -344,68 +380,85 @@ class HelloWorld
             magic strings disappear from our code base.
         </li>
         <li>
-            It abstracts the problem of lazy initialization of a service for us, thus the generated code doesn't need
-            to be tested as it is something tested by the implementor of the proxy generator (me).
+            It abstracts the problem of lazy initialization of a service for us. The generated code doesn't need
+            to be tested as that is something done by the implementor of the proxy generator (me).
         </li>
         <li>
-            It has the same performance impact of introducing lazy initialization logic in our classes' methods (count
-            the method calls, it's the same exact overhead).
+            It has the same performance impact of introducing lazy initialization logic in our classes' methods (similar
+            amount of system calls).
         </li>
         <li>
             Turning on or off proxies does not change the functionality provided by our applications. They're just
-            a performance tweak.
+            a performance tweak. They do not affect how our logic is dispatched.
         </li>
         <li>
             Proxies actually allow cyclic dependencies. Since objects are lazily initialized, if <code>A</code> depends
             on <code>B</code>, and <code>B</code> depends on <code>A</code>, and one of those two is proxied, the lazy
-            initialization mechanism will prevent us from triggering an infinite loop in our instantiation logic.
+            initialization mechanism will prevent us from triggering an infinite loop in our instantiation logic. This
+            is actually a thing I didn't think of initially, but it turns out to be a nice side effect.
         </li>
     </ul>
 
     <hr/>
 
-    <h2>General usage direction</h2>
+    <h2>General usage directions</h2>
     <p>
         Proxies also have some limitations though:
     </p>
 
+    <dl>
+        <dt><strong>Cannot benefit from the initializer pattern/setter injection</strong>:</dt>
+        <dd>
+            since any call to a proxy method that isn't its constructor would cause its initialization, setter injection
+            cannot be used on a proxy, or it will basically render the underlying idea of performance tweak useless.
+        </dd>
+        <dt><strong>Cannot proxy dynamic services</strong>:</dt>
+        <dd>
+            you can apply this proxy pattern only when assuming that calling <code>$serviceLocator-&gt;get('D');</code>
+            will actually return an instance of <code>D</code>. If the return type varies depending on i.e. environment
+            variables, this code will break.
+        </dd>
+        <dt><strong>Must be synchronized</strong>:</dt>
+        <dd>
+            changing implementation of our proxies requires us to re-generate them so that they respect the contract of
+            the class they proxy. Since generated code in PHP is hard to put into a cache (because opcode caches cannot
+            act on serialized data) we need to save proxies to predictable location in our system in order to autoload
+            them and avoid generating them over and over. That also means that we have to delete them when we change our
+            code, so that we can let the generator rewrite them.
+        </dd>
+        <dt><strong>Add constant overhead to method calls</strong>:</dt>
+        <dd>
+            If your object is lightweight, you may not need to proxy it, especially if its methods get called thousands
+            of times.
+        </dd>
+    </dl>
+
+    <hr/>
+    <p><br/></p>
+
+    <h2>Examples/benchmarks</h2>
+
     <ul>
         <li>
-            <strong>Cannot benefit from the initializer pattern/setter injection</strong>: since any call to a proxy
-            method that isn't its constructor would cause its initialization, setter injection cannot be used on a proxy,
-            or it will basically render the underlying idea of performance tweak useless.
+            If you want to read further on the proxy implementation I proposed for Zend Framework 2 you can check the
+            <a href="https://github.com/zendframework/zf2/pull/2995" target="_blank">corresponding pull request</a>.
         </li>
         <li>
-            <strong>Cannot proxy dynamic services</strong>: you can apply this proxy pattern only when assuming that
-            calling <code>$serviceLocator->get('D');</code> will actually return an instance of <code>D</code>. If the
-            return type varies depending on i.e. environment variables, this code will break.
+            If you are interested in how proxy generation works in Doctrine, you can check
+            <a href="https://github.com/doctrine/common/pull/168" target="_blank">my current work</a> on doctrine common.
         </li>
         <li>
-            <strong>Must be synchronized</strong>: changing implementation of our proxies requires us to re-generate
-            them so that they respect the contract of the class they proxy. Since generated code in PHP is hard to put
-            into a cache (because opcode caches cannot act on serialized data) we need to save proxies to predictable
-            location in our system in order to autoload them and avoid generating them over and over. That also means
-            that we have to delete them when we change our code, so that we can let the generator rewrite them.
+            If performance is your concern, read about the results of the last PHPPeru hack day I had with cordoval in
+            <a href="http://www.craftitonline.com/2012/11/lazy-load-services-and-do-not-inject-the-container-into-them/"
+            target="_blank">his blog</a>.
+        </li>
+        <li>
+            I am also starting work to implement this idea for Symfony 2. Not quite there yet :-)
         </li>
     </ul>
 
     <hr/>
-
-    <h2>Examples/benchmarks</h2>
-
-    <p>
-        If you want to read further on the proxy implementation I proposed for Zend Framework 2 you can check the
-        <a href="https://github.com/zendframework/zf2/pull/2995" target="_blank">corresponding pull request</a>.
-    </p>
-    <p>
-        If you are interested in how proxy generation works in Doctrine, you can check
-        <a href="https://github.com/doctrine/common/pull/168" target="_blank">my current work</a> on doctrine common.
-    </p>
-    <p>
-        I am also starting work to implement this idea for Symfony 2.
-    </p>
-
-    <hr/>
+    <p><br/></p>
 
     <h2>Conclusions</h2>
 
@@ -415,9 +468,15 @@ class HelloWorld
         on writing clean and robust classes that are easy to test.
     </p>
     <p>
-        They surely add some magic to our code, and I've been already told by <a href="http://mwop.net/" target="_blank">
+        They surely add some hidden magic to our code, and I've been already told by <a href="http://mwop.net/" target="_blank">
         Matthew Weier 'o Phinney</a> that some newcomers may be confused by the additional calls they will in stack
-        traces when looking at exceptions.
+        traces when looking at exceptions. Since proxies are an optional feature, I'm not really concerned about it.
+    </p>
+    <p>
+        I also worked with <a href="http://www.craftitonline.com/2012/11/lazy-load-services-and-do-not-inject-the-container-into-them/"
+        target="_blank">Luis Cordova</a> in organizing the topics for the last PHPPeru hack day, and the participants
+        didn't have big problems in understanding the problems and solutions suggested by the proxy approach, so I'm
+        quite confident about having it adopted in ZF2 and SF2 soon.
     </p>
     <p>
         Anyway, proxies are not a requirement to get our application working. They are just steroids for our services,
