@@ -1,0 +1,3 @@
+[submodule "proxy-pattern-in-php"]
+	path = proxy-pattern-in-php
+	url = https://github.com/Ocramius/proxy-pattern-in-php.git
