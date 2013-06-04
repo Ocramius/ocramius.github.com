@@ -1,9 +1,9 @@
 [submodule "proxy-pattern-in-php"]
-	path = proxy-pattern-in-php
+	path = presentations/proxy-pattern-in-php
 	url = https://github.com/Ocramius/proxy-pattern-in-php.git
 [submodule "reveal.js"]
-	path = reveal.js
+	path = presentations/reveal.js
 	url = https://github.com/hakimel/reveal.js.git
 [submodule "doctrine-orm-zf2-tutorial"]
-	path = doctrine-orm-zf2-tutorial
+	path = presentations/doctrine-orm-zf2-tutorial
 	url = https://github.com/Ocramius/doctrine-orm-zf2-tutorial.git
