@@ -1,3 +1,6 @@
 [submodule "proxy-pattern-in-php"]
 	path = proxy-pattern-in-php
 	url = https://github.com/Ocramius/proxy-pattern-in-php.git
+[submodule "reveal.js"]
+	path = reveal.js
+	url = https://github.com/hakimel/reveal.js.git
