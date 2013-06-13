@@ -7,6 +7,3 @@
 [submodule "presentations/doctrine-orm-zf2-tutorial"]
 	path = presentations/doctrine-orm-zf2-tutorial
 	url = https://github.com/Ocramius/doctrine-orm-zf2-tutorial.git
-[submodule "presentations/doctrine2-zf2-introduction"]
-	path = presentations/doctrine2-zf2-introduction
-	url = https://github.com/Ocramius/doctrine2-zf2-introduction.git
