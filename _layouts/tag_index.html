@@ -23,8 +23,8 @@ layout: default
                                     <small><i>{{ post.summary }}</i></small>
                                     <br/>
                                     <small><i class="icon-tags"></i> {% for tag in post.tags %} <a
-                                            href="/tags/{{ tag }}" title="View posts tagged with &quot;{{ tag }}&quot;"><u>{{
-                                        tag }}</u></a> {% if forloop.last != true %} {% endif %} {% endfor %}
+                                            href="/tags/{{ tag }}" title="View posts tagged with &quot;{{ tag }}&quot;">
+                                        <u>{{ tag }}</u></a> {% if forloop.last != true %} {% endif %} {% endfor %}
                                     </small>
                                 </p>
                             </td>
