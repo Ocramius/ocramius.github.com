@@ -1,7 +1,7 @@
 
 td.linenos { background-color: #f0f0f0; padding-right: 10px; }
 span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
-.highlight pre, .highlight code { line-height: 1.1em; font-size: 1em; background: #002B36; }
+.highlight pre, .highlight pre code { line-height: 1.1em; font-size: 1em; background: #002B36; color: #93A1A1; }
 .highlight .hll { background-color: #ffffcc }
 .highlight  { background: #002B36; color: #93A1A1 }
 .highlight .c { color: #586E75 } /* Comment */
