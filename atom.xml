@@ -4,19 +4,19 @@ layout: nil
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Marco Pivetta - Ocramius</title>
-    <link href="http://ocramius.github.com/atom.xml" rel="self"/>
-    <link href="http://ocramius.github.com/"/>
+    <link href="http://ocramius.github.io/atom.xml" rel="self"/>
+    <link href="http://ocramius.github.io/"/>
     <updated>{{ site.time | date_to_xmlschema }}</updated>
-    <id>http://ocramius.github.com</id>
+    <id>http://ocramius.github.io</id>
     <author>
         <name>Marco Pivetta</name>
     </author>
     {% for post in site.posts %}
     <entry>
         <title>{{ post.title }}</title>
-        <link href="http://ocramius.github.com{{ post.url }}"/>
+        <link href="http://ocramius.github.io{{ post.url }}"/>
         <updated>{{ post.date | date_to_xmlschema }}</updated>
-        <id>http://ocramius.github.com{{ post.id }}</id>
+        <id>http://ocramius.github.io{{ post.id }}</id>
         <content type="html">{{ post.content | xml_escape }}</content>
     </entry>
     {% endfor %}
