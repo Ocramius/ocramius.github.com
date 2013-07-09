@@ -44,7 +44,7 @@ summary: A tutorial to start using assets from your modules within your ZF2 appl
         <a href="http://getcomposer.org/" target="_blank">Composer</a>:
     </p>
 
-<pre class="prettyprint linenums lang-sh">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+{% highlight sh %}~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
 Cloning into 'ZendSkeletonApplication'...
 
 ~$ cd ZendSkeletonApplication
@@ -67,19 +67,19 @@ Updating dependencies
     Downloading: 100%
 
 Writing lock file
-Generating autoload files</pre>
+Generating autoload files{% endhighlight %}
 
     <hr/>
 
     <p>Don't forget to enable the module in your <code>config/application.config.php</code>!</p>
 
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 return array(
     'modules' => array(
         'AssetManager',
         'Application',
     ),
-    // ... other configs ... </pre>
+    // ... other configs ... {% endhighlight %}
 
     <h2>Assets</h2>
     <p>
@@ -89,7 +89,7 @@ return array(
         dir does not yet exist in the skeleton application, you will need to create it):
     </p>
 
-<pre class="prettyprint linenums lang-css">* {color: green;}</pre>
+{% highlight css %}* {color: green;}{% endhighlight %}
 
     <p>
         We now need to teach the AssetManager where to look for our assets. To do so, we will
@@ -98,14 +98,16 @@ return array(
         add following configuration:
     </p>
 
-<pre class="prettyprint linenums lang-prepro">
+{% highlight php %}<?php
+return array(
     'asset_manager' => array(
-        'resolver_configs' =&gt; array(
+        'resolver_configs' => array(
             'paths' => array(
-                'Application' =&gt; __DIR__ . '/../public',
+                'Application' => __DIR__ . '/../public',
             ),
         ),
-    ),</pre>
+    ),
+);{% endhighlight %}
 
     <p>
         This basically means that any request that couldn't be routed to a controller will
@@ -133,10 +135,9 @@ return array(
         <code>module/Application/view/layout/layout.phtml</code> as following if you want:
     </p>
 
-<pre class="prettyprint linenums lang-prepro">
-&lt;?php
-    echo $this->headLink()-&gt;prependStylesheet($this-&gt;basePath() . '/test-asset.css');
-?&gt;</pre>
+{% highlight php %}<?php
+    echo $this->headLink()->prependStylesheet($this->basePath() . '/test-asset.css');
+?>{% endhighlight %}
 
     <p>
         Enjoy! You can now build your modules to ship any images, js or generally assets!
