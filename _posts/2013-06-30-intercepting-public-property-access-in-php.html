@@ -42,10 +42,12 @@ description: A simple technique to use PHP's OOP implementation to intercept acc
             Here's a very simple example:
         </p>
 
-<pre class="prettyprint linenums lang-prepro">class Foo
+{% highlight php %}<?php
+
+class Foo
 {
     public $publicProperty = 'baz';
-}</pre>
+}{% endhighlight %}
 
         <p>
             What we want is some way to know whenever somebody writes or reads property <code>$publicProperty</code>
@@ -58,21 +60,25 @@ description: A simple technique to use PHP's OOP implementation to intercept acc
             we have this wrapper extending <code>Foo</code>:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">class FooWrapper extends Foo
+{% highlight php %}<?php
+
+class FooWrapper extends Foo
 {
     public function __construct()
     {
         unset($this->publicProperty);
     }
-}</pre>
+}{% endhighlight %}
 
         <p>
             That's it so far! Let's try it out:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">$foo = new FooWrapper();
+{% highlight php %}<?php
 
-echo $foo->publicProperty;</pre>
+$foo = new FooWrapper();
+
+echo $foo->publicProperty;{% endhighlight %}
 
         <p>
             Weirdly, this <a href="http://3v4l.org/UFcjC" target="_blank">will produce</a>
@@ -89,7 +95,9 @@ echo $foo->publicProperty;</pre>
             Let's use this at our own advantage by tweaking <code>FooWrapper</code> a bit:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">class FooWrapper extends Foo
+{% highlight php %}<?php
+
+class FooWrapper extends Foo
 {
     private $wrapped;
 
@@ -113,25 +121,27 @@ echo $foo->publicProperty;</pre>
 
         return $this->wrapped->$name = $value;
     }
-}</pre>
+}{% endhighlight %}
         <p>
             And here again, let us try it out:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">$foo = new FooWrapper(new Foo());
+{% highlight php %}<?php
+
+$foo = new FooWrapper(new Foo());
 
 echo $foo->publicProperty;
 echo PHP_EOL;
-echo $foo->publicProperty = 'test';</pre>
+echo $foo->publicProperty = 'test';{% endhighlight %}
 
         <p>
             This <a href="http://3v4l.org/mmMZU" target="_blank">will produce</a> following output:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">Getting property publicProperty
+{% highlight sh %}Getting property publicProperty
 baz
 Setting property publicProperty to test
-test</pre>
+test{% endhighlight %}
 
         <p>
             Cool, huh? And the same works with <code>__isset</code> and <code>__unset</code> too!
@@ -158,7 +168,9 @@ test</pre>
             Here's how the code from before rewritten using ProxyManager 0.4:
         </p>
 
-        <pre class="prettyprint linenums lang-prepro">use ProxyManager\Configuration;
+{% highlight php %}<?php
+
+use ProxyManager\Configuration;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory as Factory;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -185,7 +197,7 @@ $foo = $factory->createProxy(
 
 echo $foo->publicProperty;
 echo PHP_EOL;
-echo $foo->publicProperty = 'test';</pre>
+echo $foo->publicProperty = 'test';{% endhighlight %}
 
         <p>
             Give it a try and drop me a line if you like it or hate it!
