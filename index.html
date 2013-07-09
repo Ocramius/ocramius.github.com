@@ -13,14 +13,16 @@ title: "Marco Pivetta"
 
             <p>
                 <small>
-                    {{ post.date | date: "%B %e, %Y" }} . {{ post.category }} .
+                    {{ post.date | date: "%B %e, %Y" }} - {{ post.category }} -
                     {% for tag in post.tags %}
                     <a href="/tags/{{ tag }}" title="View posts tagged with &quot;{{ tag }}&quot;">{{ tag }}</a>
                     {% if forloop.last != true %}
                     {% endif %}
                     {% endfor %} .
-                    <a href="http://ocramius.github.com{{ post.url }}#disqus_thread"
-                       data-disqus-identifier="{{ post.url }}"></a>
+                    <a
+                        href="http://ocramius.github.io{{ post.url }}#disqus_thread"
+                        data-disqus-identifier="{{ post.url }}"
+                    >Comments</a>
                 </small>
             </p>
         </td>

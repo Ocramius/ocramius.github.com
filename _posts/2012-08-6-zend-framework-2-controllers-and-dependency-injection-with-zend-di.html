@@ -59,9 +59,9 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
             module provided by ZendSkeletonApplication, but you should apply these concepts only for your own modules!
         </p>
 
-<pre class="prettyprint linenums lang-sh">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+{% highlight sh %}~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
 ~$ cd ZendSkeletonApplication
-~$ ./composer.phar install</pre>
+~$ ./composer.phar install{% endhighlight %}
 
         <p>
             <span class="label label-info">For the lazy:</span> If you just prefer to look at the code and run it
@@ -90,7 +90,7 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
         <p>
             A simple repository that fetches a random greeting message from an array.
         </p>
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 // module/Application/src/Application/Repository/StaticGreetingRepository.php
 
 namespace Application\Repository;
@@ -102,16 +102,16 @@ class StaticGreetingRepository
     /** @return string */
     public function getRandomGreeting()
     {
-        return $this-&gt;availableGreetings[array_rand($this-&gt;availableGreetings)];
+        return $this->availableGreetings[array_rand($this->availableGreetings)];
     }
-}</pre>
+}{% endhighlight %}
 
         <h4>Greetings service (consumes repository):</h4>
         <p>
             A service that assembles the entire message by picking a random greeting from a given repository and a
             provided name.
         </p>
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 // module/Application/src/Application/Service/GreetingService.php
 
 namespace Application\Service;
@@ -125,7 +125,7 @@ class GreetingService
     /** @var StaticGreetingRepository $repository */
     public function __construct(StaticGreetingRepository $repository)
     {
-        $this-&gt;repository = $repository;
+        $this->repository = $repository;
     }
 
     /**
@@ -137,15 +137,15 @@ class GreetingService
      */
     public function greet($name)
     {
-        return $this-&gt;repository-&gt;getRandomGreeting() . ' ' . $name . '!';
+        return $this->repository->getRandomGreeting() . ' ' . $name . '!';
     }
-}</pre>
+}{% endhighlight %}
 
         <h4>Greetings controller (consumes service):</h4>
         <p>
             A controller we use to collect a <code>GET</code> request and return the message to the end user.
         </p>
-<pre class="prettyprint linenums">&lt;?php
+{% highlight php %}<?php
 // module/Application/src/Application/Controller/GreetingController.php
 
 namespace Application\Controller;
@@ -166,22 +166,21 @@ class GreetingController extends AbstractActionController
      */
     public function __construct(GreetingService $greetingService)
     {
-        $this-&gt;greetingService = $greetingService;
+        $this->greetingService = $greetingService;
     }
 
     public function helloAction()
     {
-        $name = $this-&gt;getRequest()-&gt;getQuery('name', 'anonymous');
+        $name = $this->getRequest()->getQuery('name', 'anonymous');
 
-        return new ViewModel(array('greeting' =&gt; $this-&gt;greetingService-&gt;greet($name)));
+        return new ViewModel(array('greeting' => $this->greetingService->greet($name)));
     }
-}</pre>
+}{% endhighlight %}
 
         <h4>And then a view to see some output:</h4>
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 // module/Application/view/application/greeting/hello.phtml
-echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
-</pre>
+echo '<h1>' . $this->escapeHtml($this->greeting) . '</h1>';{% endhighlight %}
 
         <hr/>
 
@@ -192,36 +191,36 @@ echo '&lt;h1&gt;' . $this-&gt;escapeHtml($this-&gt;greeting) . '&lt;/h1&gt;';
             a route to allow access to our controller (and a couple of fixes required to inject inherited dependencies).
         </p>
 
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 
 return array(
-    'di' =&gt; array(
-        'allowed_controllers' =&gt; array(
+    'di' => array(
+        'allowed_controllers' => array(
             // this config is required, otherwise the MVC won't even attempt to ask Di for the controller!
             'Application\Controller\GreetingController',
         ),
 
-        'instance' =&gt; array(
-            'preference' =&gt; array(
+        'instance' => array(
+            'preference' => array(
                 // these allow injecting correct EventManager and ServiceManager
                 // (taken from the main ServiceManager) into the controller,
                 // because Di doesn't know how to retrieve abstract types. These
                 // dependencies are inherited from Zend\Mvc\Controller\AbstractController
-                'Zend\EventManager\EventManagerInterface' =&gt; 'EventManager',
-                'Zend\ServiceManager\ServiceLocatorInterface' =&gt; 'ServiceManager',
+                'Zend\EventManager\EventManagerInterface' => 'EventManager',
+                'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
             ),
         ),
     ),
 
-    'router' =&gt; array(
-        'routes' =&gt; array(
-            'hello' =&gt; array(
-                'type' =&gt; 'Zend\Mvc\Router\Http\Literal',
-                'options' =&gt; array(
-                    'route'    =&gt; '/hello',
-                    'defaults' =&gt; array(
-                        'controller' =&gt; 'Application\Controller\GreetingController',
-                        'action'     =&gt; 'hello',
+    'router' => array(
+        'routes' => array(
+            'hello' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/hello',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\GreetingController',
+                        'action'     => 'hello',
                     ),
                 ),
             ),
@@ -229,7 +228,7 @@ return array(
     ),
 
     // remaining config
-);</pre>
+);{% endhighlight %}
 
         <hr/>
 
@@ -283,12 +282,12 @@ return array(
             Otherwise, simply do following in your configuration once you are sure your dependencies won't change much:
         </p>
 
-<pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php %}<?php
 
 return array(
-    'controllers' =&gt; array(
-        'factories' =&gt; array(
-            'Application\Controller\GreetingController' =&gt; function($sm) {
+    'controllers' => array(
+        'factories' => array(
+            'Application\Controller\GreetingController' => function($sm) {
                 return new \Application\Controller\GreetingController(
                     new \Application\Service\GreetingService(
                        new \Application\Repository\StaticGreetingRepository()
@@ -299,7 +298,7 @@ return array(
     ),
 
     // remaining config
-);</pre>
+);{% endhighlight %}
 
         <p>
             This basically removes all the overhead, but also removes the flexibility of <code>Zend\Di</code>, since
