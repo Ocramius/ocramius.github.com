@@ -46,7 +46,9 @@ summary: An explanation of how Doctrine Proxies work to enhance Zend Framework 2
         <br/>
         Take for example the following code:
     </p>
-<pre class="prettyprint linenums lang-prepro">class A {}
+{% highlight php %}<?php
+
+class A {}
 
 class B {}
 
@@ -70,7 +72,7 @@ class HelloWorld
     {
         return 'Hello World';
     }
-}</pre>
+}{% endhighlight %}
     <p>
         The example is obviously nonsense, but this actually happens in your MVC controllers, where you may have 3 or 4
         actions and none of them using all of the dependencies of the controller itself.
@@ -102,7 +104,9 @@ class HelloWorld
         <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
         within their services:
     </p>
-<pre class="prettyprint linenums lang-prepro">class HelloWorld
+{% highlight php %}<?php
+
+class HelloWorld
 {
     public function __construct(ServiceLocator $serviceLocator)
     {
@@ -116,13 +120,13 @@ class HelloWorld
 
     public function doSomethingWithD()
     {
-        if ( ! $this-&gt;d) {
-            $this-&gt;d = $this-&gt;serviceLocator-&gt;get('D');
+        if ( ! $this->d) {
+            $this->d = $this->serviceLocator->get('D');
         }
 
-        $this-&gt;d-&gt;doSomething();
+        $this->d->doSomething();
     }
-}</pre>
+}{% endhighlight %}
     <p>
         As you have noticed, this solves the performance issue by allowing us to retrieve an instance of <code>D</code>
         <strong>only when we really need it</strong>:
@@ -212,19 +216,21 @@ class HelloWorld
         This is achieved by Doctrine by generating a class that inherits from the original object and faking all of
         its public API and adding the required code to trigger lazy loading:
     </p>
-<pre class="prettyprint linenums lang-prepro">class UserProxy extends User
+{% highlight php %}<?php
+
+class UserProxy extends User
 {
     protected $initialized = false;
 
     public function getUsername()
     {
-        if ( ! $this-&gt;initialized) {
+        if ( ! $this->initialized) {
             initialize($this);
         }
 
         return parent::getUsername();
     }
-}</pre>
+}{% endhighlight %}
     <p>
         The previous snippet is just a simplified example, and isn't very flexible, but as you may know, Doctrine is a
         set of libraries focusing on persistence of data, and the
@@ -238,25 +244,27 @@ class HelloWorld
         because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
         used as initialization logic holders:
     </p>
-<pre class="prettyprint linenums lang-prepro">class UserProxy extends User
+{% highlight php %}<?php
+
+class UserProxy extends User
 {
     /** @var Closure */
     protected $initializer;
 
     public function __setInitializer(Closure $initializer)
     {
-        $this-&gt;initializer = $initializer;
+        $this->initializer = $initializer;
     }
 
     public function getUsername()
     {
-        if ($this-&gt;initializer !== null) {
-            call_user_func($this-&gt;initializer);
+        if ($this->initializer !== null) {
+            call_user_func($this->initializer);
         }
 
         return parent::getUsername();
     }
-}</pre>
+}{% endhighlight %}
     <p>
         Using a <a href="http://php.net/manual/en/class.closure.php" target="_blank">Closure</a> as an initializer
         now enables us to swap the initialization logic used for our proxy object. I won't get into details, but this
@@ -272,7 +280,9 @@ class HelloWorld
         Let's get back to the example with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>,
         <code>HelloWorld</code>, but we'll introduce a proxy now:
     </p>
-<pre class="prettyprint linenums lang-prepro">class A {}
+{% highlight php linenums %}<?php
+
+class A {}
 
 class B {}
 
@@ -287,7 +297,7 @@ class D
 
     public function doSomething()
     {
-        return 'Did something with ' . $this-&gt;a . ', ' . $this-&gt;b . ', ' . $this-&gt;c;
+        return 'Did something with ' . $this->a . ', ' . $this->b . ', ' . $this->c;
     }
 }
 
@@ -298,22 +308,22 @@ class D_Proxy extends D
 
     public function __construct(ServiceLocator $serviceLocator)
     {
-        $this-&gt;serviceLocator = $serviceLocator;
+        $this->serviceLocator = $serviceLocator;
     }
 
     private function initialize()
     {
-        $this-&gt;initialized = true;
-        $this-&gt;original    = $this-&gt;serviceLocator-&gt;get('D');
+        $this->initialized = true;
+        $this->original    = $this->serviceLocator->get('D');
     }
 
     public function doSomething()
     {
-        if ( ! $this-&gt;initialized) {
-            $this-&gt;initialize();
+        if ( ! $this->initialized) {
+            $this->initialize();
         }
 
-        return $this-&gt;original-&gt;doSomething();
+        return $this->original->doSomething();
     }
 }
 
@@ -331,9 +341,9 @@ class HelloWorld
 
     public function doSomethingWithD()
     {
-        return $this-&gt;d-&gt;doSomething();
+        return $this->d->doSomething();
     }
-}</pre>
+}{% endhighlight %}
 
     <p>
         Wait... What? Ok, let's slow this down a bit:
@@ -352,7 +362,7 @@ class HelloWorld
             from a service locator, and put into the <code>original</code> property.
         </li>
         <li>
-            The method call is proxied to <code>$this-&gt;original-&gt;doSomething();</code>.
+            The method call is proxied to <code>$this->original->doSomething();</code>.
         </li>
         <li>
             Since the original object is fully populated with instances of <code>a</code>, <code>b</code> and

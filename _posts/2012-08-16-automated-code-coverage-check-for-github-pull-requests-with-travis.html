@@ -63,41 +63,41 @@ summary: Developers are lazy, and their Pull Requests in Github often do not res
         PHPUnit is able to generate log files in an XML format called <strong>clover</strong>. You will need to setup
         PHPUnit as following to generate a correct clover report:
     </p>
-<pre class="prettyprint linenums lang-xml">&lt;?xml version="1.0"?&gt;
-    &lt;!-- works fine with PHPUnit-3.6.10 --&gt;
-&lt;phpunit&gt;
-    &lt;!-- you can keep your own options in these elements --&gt;
-    &lt;filter&gt;
-        &lt;whitelist addUncoveredFilesFromWhitelist="true"&gt;
-            &lt;!-- this is the path of the files included in your clover report --&gt;
-            &lt;directory suffix=".php"&gt;./src&lt;/directory&gt;
-        &lt;/whitelist&gt;
-    &lt;/filter&gt;
-    &lt;logging&gt;
-        &lt;!-- and this is where your report will be written --&gt;
-        &lt;log type="coverage-clover" target="./clover.xml"/&gt;
-    &lt;/logging&gt;
-&lt;/phpunit&gt;</pre>
+    {% highlight xml %}<?xml version="1.0"?>
+<!-- works fine with PHPUnit-3.6.10 -->
+<phpunit>
+    <!-- you can keep your own options in these elements -->
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <!-- this is the path of the files included in your clover report -->
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <!-- and this is where your report will be written -->
+        <log type="coverage-clover" target="./clover.xml"/>
+    </logging>
+</phpunit>{% endhighlight %}
 
     <p>
         Now let's try to run our test suite... you will get a <code>clover.xml</code> file like following:
     </p>
 
-<pre class="prettyprint linenums lang-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;coverage generated="1345080270"&gt;
-        &lt;project timestamp="1345080270"&gt;
-            &lt;file name="/home/ocramius/Desktop/ZendSkeletonApplication/vendor/rwoverdijk/assetmanager/src/ClassName.php"&gt;
-                &lt;class name="ClassName" namespace="global"&gt;
-                    &lt;metrics methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="114" coveredstatements="0" elements="115" coveredelements="0"/&gt;
-                &lt;/class&gt;
-                &lt;line num="12" type="method" name="testMethod" crap="2" count="0"/&gt;
-                &lt;line num="15" type="stmt" count="0"/&gt;
-                &lt;line num="16" type="stmt" count="0"/&gt;
-                &lt;line num="17" type="stmt" count="0"/&gt;
-                &lt;line num="18" type="stmt" count="0"/&gt;
-                &lt;line num="19" type="stmt" count="0"/&gt;
-                &lt;line num="20" type="stmt" count="0"/&gt;
-                &lt;-- ... [continues] ... --&gt;</pre>
+{% highlight xml %}<?xml version="1.0" encoding="UTF-8"?>
+    <coverage generated="1345080270">
+        <project timestamp="1345080270"></project>
+            <file name="/home/ocramius/Desktop/ZendSkeletonApplication/vendor/rwoverdijk/assetmanager/src/ClassName.php">
+                <class name="ClassName" namespace="global">
+                    <metrics methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="114" coveredstatements="0" elements="115" coveredelements="0"/>
+                </class>
+                <line num="12" type="method" name="testMethod" crap="2" count="0"/>
+                <line num="15" type="stmt" count="0"/>
+                <line num="16" type="stmt" count="0"/>
+                <line num="17" type="stmt" count="0"/>
+                <line num="18" type="stmt" count="0"/>
+                <line num="19" type="stmt" count="0"/>
+                <line num="20" type="stmt" count="0"/>
+                <-- ... [continues] ... -->{% endhighlight %}
 
     <p>
         You can read more about this on the
@@ -118,7 +118,7 @@ summary: Developers are lazy, and their Pull Requests in Github often do not res
         to us and extract them from the XML.
     </p>
 
-    <pre class="prettyprint linenums lang-prepro">&lt;?php
+{% highlight php linenums %}<?php
 // coverage-checker.php
 $inputFile  = $argv[1];
 $percentage = min(100, max(0, (int) $argv[2]));
@@ -143,30 +143,30 @@ foreach ($metrics as $metric) {
 
 $coverage = ($checkedElements / $totalElements) * 100;
 
-if ($coverage &lt; $percentage) {
+if ($coverage < $percentage) {
     echo 'Code coverage is ' . $coverage . '%, which is below the accepted ' . $percentage . '%' . PHP_EOL;
     exit(1);
 }
 
-echo 'Code coverage is ' . $coverage . '% - OK!' . PHP_EOL;</pre>
+echo 'Code coverage is ' . $coverage . '% - OK!' . PHP_EOL;{% endhighlight %}
 
     <p>
         The script basically asks for two  input arguments. One is the clover file path and one is the minimum
         percentage of code coverage we want. Usage is like following:
     </p>
 
-<pre class="prettyprint linenums lang-sh">~$ php coverage-checker.php clover.xml 80
+{% highlight sh %}~$ php coverage-checker.php clover.xml 80
 Code coverage is 74.32%, which is below the accepted 80%
 
 ~$ php coverage-checker.php clover.xml 70
-Code coverage is 74.32% - OK!</pre>
+Code coverage is 74.32% - OK!{% endhighlight %}
 
     <h2>Putting it in our CI environment</h2>
     <p>
         And here's the simple <code>.travis.yml</code> configuration to make everything work!
     </p>
 
-<pre class="prettyprint linenums lang-yml">language: php
+                {% highlight yaml %}language: php
 
 php:
   - 5.3
@@ -174,7 +174,7 @@ php:
 
 script:
   - phpunit
-  - php coverage-checker.php clover.xml 75</pre>
+  - php coverage-checker.php clover.xml 75{% endhighlight %}
 
     <p>
         Was it hard? Quite impressive for such a simple script combined with what PHPUnit can do! If you don't want to
