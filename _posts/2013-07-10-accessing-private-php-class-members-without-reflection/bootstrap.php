@@ -15,4 +15,5 @@ class Kitchen
     private $yummy = 'cake';
 }
 
-$start = microtime(true);
+$kitchen = new Kitchen();
+$start   = microtime(true);
