@@ -122,7 +122,7 @@ var_dump($sweetsThief($kitchen));{% endhighlight %}
 
         {% highlight php %}<?php
 
-for ($i = 0; $i < 1000000; $i += 1) {
+for ($i = 0; $i < 100000; $i += 1) {
     $sweetsThief = Closure::bind(function (Kitchen $kitchen) {
         return $kitchen->yummy;
     }, null, 'Kitchen');
@@ -130,18 +130,19 @@ for ($i = 0; $i < 1000000; $i += 1) {
 
 {% highlight php %}<?php
 
-for ($i = 0; $i < 1000000; $i += 1) {
+for ($i = 0; $i < 100000; $i += 1) {
     $sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
     $sweetsThief->setAccessible(true);
 }{% endhighlight %}
 
         <p>
-            Turns out that on my pc (PHP 5.4.9 ubuntu 13.04 box), the first script takes <code>~ 1.3</code> seconds
-            to run, while the second one requires <code>~ 2.6</code> seconds. Reflection is slower here.
+            On a freshly compiled PHP 5.5 Ubuntu 13.04 box, the fist script takes around <strong>0.325</strong> seconds
+            to run, while the second one requires <strong>0.658</strong> seconds.
+            <strong>Reflection is much slower</strong> here.
         </p>
 
         <p>
-            That's completely un-interesting, since nobody will ever instantiate a million reflection properties,
+            That's completely un-interesting though, since nobody will ever instantiate a million reflection properties,
             or at least I cannot find a good reason to do that.
         </p>
 
@@ -159,7 +160,7 @@ $sweetsThief = Closure::bind(function (Kitchen $kitchen) {
     return $kitchen->yummy;
 }, null, 'Kitchen');
 
-for ($i = 0; $i < 1000000; $i += 1) {
+for ($i = 0; $i < 100000; $i += 1) {
     $sweetsThief($kitchen);
 }{% endhighlight %}
 
@@ -170,23 +171,17 @@ $kitchen = new Kitchen();
 $sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
 $sweetsThief->setAccessible(true);
 
-for ($i = 0; $i < 1000000; $i += 1) {
+for ($i = 0; $i < 100000; $i += 1) {
     $sweetsThief->getValue($kitchen);
 }{% endhighlight %}
 
         <p>
-            I would actually have expected the reflection system being very slow in this case, but in fact it is much
-            faster!
+            The first script took <strong>~ 0.110</strong> seconds to run, while the second one needed
+            <strong>~ 0.199</strong> seconds! We're faster than reflection!
         </p>
 
         <p>
-            The first script took <code>~ 3.4</code> seconds to run, while the second one just needed
-            <code>~ 1.4</code> seconds!
-        </p>
-
-        <p>
-            That basically tells us that the instantiation time of reflection classes is negligible, and that it's
-            actually faster than userland code in accessing properties.
+            We are actually <strong>much faster than reflection</strong>! Impressive!
         </p>
 
         <hr/>
@@ -266,7 +261,25 @@ var_dump($kitchen);{% endhighlight %}
         </p>
 
         <p>
-            I should hereby add a disclaimer: use with caution!
+            I should hereby add a disclaimer: <strong>use with caution!</strong>
+        </p>
+
+        <h2>Errata</h2>
+
+        <p>
+            In the first version of the article that was published 2013-07-10, I actually stated that Reflection
+            was faster: that's not true and is the result of a mistake that I made while running the tests, since
+            I was running a PHP version with loads of extensions that were affecting the results.
+        </p>
+        <p>
+            I have created a virtual machine with a clean 5.5 PHP build to get accurate results, which demonstrate
+            that <strong>Reflection is actually slower than closures in every case</strong>.
+        </p>
+
+        <p>
+            I also wrote a very small set of benchmarks that you may find
+            <a href="https://github.com/Ocramius/ocramius.github.com/tree/master/_posts/2013-07-10-accessing-private-php-class-members-without-reflection" target="_blank">
+            in the blog repository</a>
         </p>
     </div>
 </div>
