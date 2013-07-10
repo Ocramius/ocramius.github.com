@@ -25,12 +25,14 @@ description: A trick to use PHP 5.4 closure functionalities to get access to
             slow, and by slow, I mean <strong>really slow!</strong>
         </p>
         <p>
-            I wanted to get some better performance, and the reason for that is that I'm trying to optimize a
+            I wanted to get better performance, and the reason for that is that I'm trying to optimize a
             "<a href="http://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
-            to work with larger data-sets by still keeping a low overhead.
+            to work with larger data-sets by still keeping a low overhead, even when the data-sets are small.
         </p>
 
-        <h4>PHP 5.4 to the rescue!</h4>
+        <hr/>
+
+        <h2>PHP 5.4 to the rescue!</h2>
 
         <p>
             PHP 5.4 comes with a new API for Closures, which is
@@ -45,8 +47,6 @@ description: A trick to use PHP 5.4 closure functionalities to get access to
         <p>
             Let's break some OOP encapsulation to fit our needs!
         </p>
-
-        <h4>Accessing private properties example</h4>
 
         <p>
             The techniques to access private members are actually already largely explained on the PHP manual, but
@@ -108,15 +108,12 @@ var_dump($sweetsThief($kitchen));{% endhighlight %}
             <a href="http://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
         </p>
 
-        <h4>Changing closure scope vs. Reflection: performance</h4>
+        <hr/>
+
+        <h2>Changing closure scope vs. Reflection: performance</h2>
 
         <p>
             How does this technique compare with <code>ReflectionProperty#getValue()</code>? Is it actually faster?
-        </p>
-
-        <p>
-            At least from what reported by 3v4l.org, the performance of the <a href="" target="_blank">two</a>
-            <a href="" target="_blank">scripts</a> is comparable.
         </p>
 
         <p>
@@ -132,8 +129,6 @@ for ($i = 0; $i < 1000000; $i += 1) {
 }{% endhighlight %}
 
 {% highlight php %}<?php
-
-$kitchen = new Kitchen();
 
 for ($i = 0; $i < 1000000; $i += 1) {
     $sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
@@ -193,7 +188,9 @@ for ($i = 0; $i < 1000000; $i += 1) {
             actually faster than userland code in accessing properties.
         </p>
 
-        <h4>Accessing private class members by reference</h4>
+        <hr/>
+
+        <h2>Accessing private class members by reference</h2>
 
         <p>
             There's actually one big advantage in using a Closure instead of ReflectionProperty, which is that you can
@@ -201,7 +198,8 @@ for ($i = 0; $i < 1000000; $i += 1) {
         </p>
 
 
-{% highlight php %}
+{% highlight php %}<?php
+
 $sweetsThief = Closure::bind(function & (Kitchen $kitchen) {
     return $kitchen->yummy;
 }, null, $kitchen);
@@ -212,7 +210,9 @@ $cake = 'lie';
 
 var_dump('the cake is a ' . $sweetsThief($kitchen));{% endhighlight %}
 
-        <h4>A generic property reader abstraction</h4>
+        <hr/>
+
+        <h2>A generic property reader abstraction</h2>
 
         <p>
             With all these new concepts we can write a very simplified accessor that allows us to read any property
@@ -249,7 +249,9 @@ var_dump($kitchen);{% endhighlight %}
             of this basic trick.
         </p>
 
-        <h4>Conclusion</h4>
+        <hr/>
+
+        <h2>Conclusion</h2>
 
         <p>
             Yet another time, PHP shows its best and worst aspects all together. It's a horrible language with a
