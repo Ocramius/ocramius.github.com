@@ -1,0 +1,197 @@
+---
+layout: post
+title: Accessing private PHP class members without reflection
+category: PHP Hacks
+tags: php oop access property reflection private
+year: 2013
+month: 7
+day: 10
+published: true
+summary: Getting access to private class members in PHP (without reflection)
+description: A trick to use PHP 5.4 closure functionalities to get access to
+---
+
+<div class="row">
+    <div class="span12 columns">
+        <p>
+            A couple of weeks ago I was working on a
+            <a href="https://github.com/Ocramius/ProxyManager/issues/62" target="_blank">very tricky issue</a> on
+            <a href="https://github.com/Ocramius/ProxyManager" target="_blank">ProxyManager</a>.
+        </p>
+        <p>
+            The problem is simple: instantiating
+            <a href="http://php.net/manual/en/class.reflectionclass.php" target="_blank">ReflectionClass</a> or
+            <a href="http://php.net/manual/en/class.reflectionproperty.php" target="_blank">ReflectionProperty</a> is
+            slow, and by slow, I mean <strong>really slow!</strong>
+        </p>
+        <p>
+            I wanted to get some better performance, and the reason for that is that I'm trying to optimize a
+            "<a href="http://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
+            to work with larger data-sets by still keeping a low overhead.
+        </p>
+
+        <h4>PHP 5.4 to the rescue!</h4>
+
+        <p>
+            PHP 5.4 comes with a new API for Closures, which is
+            <a href="http://php.net/manual/en/closure.bind.php" target="_blank"><code>Closure#bind()</code></a>.
+        </p>
+
+        <p>
+            <code>Closure#bind()</code> basically allows you to get an instance of a closure with the scope of a given
+            object or class. Neat! That's basically like adding APIs to existing objects!
+        </p>
+
+        <p>
+            Let's break some OOP encapsulation to fit our needs!
+        </p>
+
+        <h4>Accessing private properties example</h4>
+
+        <p>
+            The techniques to access private members are actually already largely explained on the PHP manual, but
+            I am going to make a simplified example anyway.
+        </p>
+        <p>
+            Here's what you have to do to steal <code>Kitchen#yummy</code> from following object:
+        </p>
+
+{% highlight php %}<?php
+
+class Kitchen
+{
+    private $yummy = 'cake';
+}{% endhighlight %}
+
+        <p>
+            First of all, let's define a closure to read the property as if we had access to it:
+        </p>
+
+
+{% highlight php %}<?php
+
+$sweetsThief = function (Kitchen $kitchen) {
+    return $kitchen->yummy;
+}{% endhighlight %}
+
+        <p>
+            Let's use it to steal some <code>yummy</code> stuff from the <code>Kitchen</code>:
+        </p>
+
+{% highlight php %}<?php
+
+$kitchen = new Kitchen();
+
+var_dump($sweetsThief($kitchen));{% endhighlight %}
+
+        <p>
+            Sadly, this <a href="http://3v4l.org/ET06l" target="_blank">will result</a> in <code>$sweetsThief</code>
+            being caught with a fatal error that looks like following:
+        </p>
+
+{% highlight php %}Fatal error: Cannot access private property Kitchen::$yummy in [...] on line [...]{% endhighlight %}
+
+        <p>
+            Let's use <code>Closure#bind()</code> to make our thief smarter:
+        </p>
+
+{% highlight php %}<?php
+
+$kitchen = new Kitchen();
+
+// Closure::bind() actually creates a new instance of the closure
+$sweetsThief = Closure::bind($sweetsThief, null, $kitchen);
+
+var_dump($sweetsThief($kitchen));{% endhighlight %}
+
+        <p>
+            <a href="http://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
+        </p>
+
+        <h4>Changing closure scope vs. Reflection</h4>
+
+        <p>
+            How does this technique compare with <code>ReflectionProperty#getValue()</code>? Is it actually faster?
+        </p>
+
+        <p>
+            At least from what reported by 3v4l.org, the performance of the <a href="" target="_blank">two</a>
+            <a href="" target="_blank">scripts</a> is comparable.
+        </p>
+
+        <p>
+            I've tweaked the test scripts to profile only the "setup" step for this trick over a million iterations:
+        </p>
+
+        {% highlight php %}<?php
+
+for ($i = 0; $i < 1000000; $i += 1) {
+    $sweetsThief = Closure::bind(function (Kitchen $kitchen) {
+        return $kitchen->yummy;
+    }, null, 'Kitchen');
+}{% endhighlight %}
+
+{% highlight php %}<?php
+
+$kitchen = new Kitchen();
+
+for ($i = 0; $i < 1000000; $i += 1) {
+    $sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
+    $sweetsThief->setAccessible(true);
+}{% endhighlight %}
+
+        <p>
+            Turns out that on my pc (PHP 5.4.9 ubuntu 13.04 box), the first script takes <code>~ 1.3</code> seconds
+            to run, while the second one requires <code>~ 2.6</code> seconds.
+        </p>
+
+        <p>
+            That's completely un-interesting, since nobody will ever instantiate a million reflection properties
+            if not completely insane.
+        </p>
+
+        <p>
+            What is more interesting is how <strong>accessing properties</strong> compares. I've profiled that too:
+        </p>
+
+
+        {% highlight php %}<?php
+
+$kitchen = new Kitchen();
+
+$sweetsThief = Closure::bind(function (Kitchen $kitchen) {
+    return $kitchen->yummy;
+}, null, 'Kitchen');
+
+for ($i = 0; $i < 1000000; $i += 1) {
+    $sweetsThief($kitchen);
+}{% endhighlight %}
+
+{% highlight php %}<?php
+
+$kitchen = new Kitchen();
+
+$sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
+$sweetsThief->setAccessible(true);
+
+for ($i = 0; $i < 1000000; $i += 1) {
+    $sweetsThief->getValue($kitchen);
+}{% endhighlight %}
+
+        <p>
+            I would actually have expected the reflection system being very slow in this case, but in fact it is much
+            faster!
+        </p>
+
+        <p>
+            The first script took <code>~ 3.4</code> seconds to run, while the second one just needed
+            <code>~ 1.4</code> seconds!
+        </p>
+
+        <p>
+            That basically tells us that the instantiation time of reflection classes is negligible, and that it's
+            actually faster than userland code in accessing properties.
+        </p>
+        
+    </div>
+</div>
