@@ -108,7 +108,7 @@ var_dump($sweetsThief($kitchen));{% endhighlight %}
             <a href="http://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
         </p>
 
-        <h4>Changing closure scope vs. Reflection</h4>
+        <h4>Changing closure scope vs. Reflection: performance</h4>
 
         <p>
             How does this technique compare with <code>ReflectionProperty#getValue()</code>? Is it actually faster?
@@ -192,6 +192,78 @@ for ($i = 0; $i < 1000000; $i += 1) {
             That basically tells us that the instantiation time of reflection classes is negligible, and that it's
             actually faster than userland code in accessing properties.
         </p>
-        
+
+        <h4>Accessing private class members by reference</h4>
+
+        <p>
+            There's actually one big advantage in using a Closure instead of ReflectionProperty, which is that you can
+            now <a href="http://3v4l.org/W12Hf" target="_blank">retrieve the private member by reference</a>!
+        </p>
+
+
+{% highlight php %}
+$sweetsThief = Closure::bind(function & (Kitchen $kitchen) {
+    return $kitchen->yummy;
+}, null, $kitchen);
+
+
+$cake = & $sweetsThief($kitchen);
+$cake = 'lie';
+
+var_dump('the cake is a ' . $sweetsThief($kitchen));{% endhighlight %}
+
+        <h4>A generic property reader abstraction</h4>
+
+        <p>
+            With all these new concepts we can write a very simplified accessor that allows us to read any property
+            of any object:
+        </p>
+
+{% highlight php %}<?php
+
+$reader = function & ($object, $property) {
+    $value = & Closure::bind(function & () use ($property) {
+        return $this->$property;
+    }, $object, $object)->__invoke();
+
+    return $value;
+};
+
+$kitchen = new Kitchen();
+$cake    = & $reader($kitchen, 'cake');
+$cake    = 'sorry, I ate it!';
+
+var_dump($kitchen);{% endhighlight %}
+
+        <p>
+            Here's the <a href="http://3v4l.org/JE0eX" target="_blank">working example</a>.
+        </p>
+
+        <p>
+            That's it: accessing any property, anywhere, and that even by reference! Success! We have broken the rules
+            once again!
+        </p>
+
+        <p>
+            I won't cover the "writing properties" part, nor inherited private properties, since that's just details
+            of this basic trick.
+        </p>
+
+        <h4>Conclusion</h4>
+
+        <p>
+            Yet another time, PHP shows its best and worst aspects all together. It's a horrible language with a
+            horrible syntax, but it allows us to write amazing code and to run around a huge number of language
+            limitations by just providing new and awesome features at every release!
+        </p>
+
+        <p>
+            I won't use this technique myself, but it was interesting to dive into it, and it will become useful again
+            if I need to get references to private/protected class members in my crazy proxy projects.
+        </p>
+
+        <p>
+            I should hereby add a disclaimer: use with caution!
+        </p>
     </div>
 </div>
