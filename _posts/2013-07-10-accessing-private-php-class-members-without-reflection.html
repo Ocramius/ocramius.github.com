@@ -25,9 +25,9 @@ description: A trick to use PHP 5.4 closure functionalities to get access to
             slow, and by slow, I mean <strong>really slow!</strong>
         </p>
         <p>
-            I wanted to get better performance, and the reason for that is that I'm trying to optimize a
+            The reason for this reasearch is that I'm trying to optimize a
             "<a href="http://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
-            to work with larger data-sets by still keeping a low overhead, even when the data-sets are small.
+            to work with larger data-sets by still keeping a low initialization overhead.
         </p>
 
         <hr/>
@@ -45,12 +45,12 @@ description: A trick to use PHP 5.4 closure functionalities to get access to
         </p>
 
         <p>
-            Let's break some OOP encapsulation to fit our needs!
+            Let's break some OOP encapsulation to fit our needs.
         </p>
 
         <p>
-            The techniques to access private members are actually already largely explained on the PHP manual, but
-            I am going to make a simplified example anyway.
+            The techniques to access private members are already explained on the PHP manual, but I am going to make a
+            simplified example anyway.
         </p>
         <p>
             Here's what you have to do to steal <code>Kitchen#yummy</code> from following object:
@@ -117,7 +117,7 @@ var_dump($sweetsThief($kitchen));{% endhighlight %}
         </p>
 
         <p>
-            I've tweaked the test scripts to profile only the "setup" step for this trick over a million iterations:
+            I've built a simple benchmark to profile the "setup" step for this trick over a million iterations:
         </p>
 
         {% highlight php %}<?php
@@ -137,16 +137,17 @@ for ($i = 0; $i < 1000000; $i += 1) {
 
         <p>
             Turns out that on my pc (PHP 5.4.9 ubuntu 13.04 box), the first script takes <code>~ 1.3</code> seconds
-            to run, while the second one requires <code>~ 2.6</code> seconds.
+            to run, while the second one requires <code>~ 2.6</code> seconds. Reflection is slower here.
         </p>
 
         <p>
-            That's completely un-interesting, since nobody will ever instantiate a million reflection properties
-            if not completely insane.
+            That's completely un-interesting, since nobody will ever instantiate a million reflection properties,
+            or at least I cannot find a good reason to do that.
         </p>
 
         <p>
-            What is more interesting is how <strong>accessing properties</strong> compares. I've profiled that too:
+            What seems to be more interesting is how <strong>accessing properties</strong> compares. I've profiled
+            that too:
         </p>
 
 
@@ -190,11 +191,11 @@ for ($i = 0; $i < 1000000; $i += 1) {
 
         <hr/>
 
-        <h2>Accessing private class members by reference</h2>
+        <h2>Accessing private class properties by reference</h2>
 
         <p>
             There's actually one big advantage in using a Closure instead of ReflectionProperty, which is that you can
-            now <a href="http://3v4l.org/W12Hf" target="_blank">retrieve the private member by reference</a>!
+            now <a href="http://3v4l.org/W12Hf" target="_blank">retrieve a private property by reference</a>!
         </p>
 
 
@@ -245,8 +246,8 @@ var_dump($kitchen);{% endhighlight %}
         </p>
 
         <p>
-            I won't cover the "writing properties" part, nor inherited private properties, since that's just details
-            of this basic trick.
+            I won't cover the "writing properties" part, nor handling inherited private properties,
+            since that's just details of this basic trick that need more code and are un-interesting to us.
         </p>
 
         <hr/>
