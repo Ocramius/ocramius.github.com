@@ -117,7 +117,7 @@ var_dump($sweetsThief($kitchen));{% endhighlight %}
         </p>
 
         <p>
-            I've built a simple benchmark to profile the "setup" step for this trick over a million iterations:
+            I've built a simple benchmark to profile the "setup" step for this trick over 100000 iterations:
         </p>
 
         {% highlight php %}<?php
@@ -142,7 +142,7 @@ for ($i = 0; $i < 100000; $i += 1) {
         </p>
 
         <p>
-            That's completely un-interesting though, since nobody will ever instantiate a million reflection properties,
+            That's completely un-interesting though, since nobody will ever instantiate 100000 reflection properties,
             or at least I cannot find a good reason to do that.
         </p>
 
