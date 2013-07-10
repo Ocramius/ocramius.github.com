@@ -1,3 +1,9 @@
+@media (min-width: 981px) {
+    body {
+        padding-top: 60px;
+    }
+}
+
 body {
   font-size: 1em;
   line-height:1.3em;
