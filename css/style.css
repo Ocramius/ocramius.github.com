@@ -18,3 +18,7 @@ pre {
 .post-contributions-bar .btn {
     vertical-align: top;
 }
+
+.twitter-tweet.twitter-tweet-rendered {
+    width: 100%;
+}
