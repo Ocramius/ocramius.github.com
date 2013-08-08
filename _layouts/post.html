@@ -4,9 +4,6 @@ layout: default
 
 <div class="content">
     {% include post_header.html %}
-    {% if page.tweet %}
-    <div data-tweet-id="{{page.tweet}}" class="twitter-tweet"></div>
-    {% endif %}
     {{ content }}
 </div>
 
@@ -28,7 +25,11 @@ layout: default
     </div>
 </div>
 
+{% if page.tweet %}
+<div data-tweet-id="{{page.tweet}}" class="twitter-tweet"></div>
+{% else %}
 <hr/>
+{% endif %}
 
 <div class="row">
     <div class="span12 columns">
