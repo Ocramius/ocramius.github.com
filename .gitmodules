@@ -10,3 +10,6 @@
 [submodule "presentations/doctrine2-zf2-introduction"]
 	path = presentations/doctrine2-zf2-introduction
 	url = https://github.com/Ocramius/doctrine2-zf2-introduction.git
+[submodule "presentations/doctrine-orm-and-zend-framework-2"]
+	path = presentations/doctrine-orm-and-zend-framework-2
+	url = https://github.com/Ocramius/doctrine-orm-and-zendframework-2.git
