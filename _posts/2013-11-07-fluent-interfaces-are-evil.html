@@ -1,0 +1,619 @@
+---
+layout: post
+title: Fluent Interfaces are Evil
+category: PHP
+tags: php oop
+year: 2013
+month: 8
+day: 9
+published: true
+summary: Fluent Interfaces are Evil
+description: Fluent Interfaces break encapsulation, diff
+tweet: ---TODO---
+---
+
+<!--
+11:59:15      ocramius | 1) they break encapsulation                                                 │ ph88
+11:59:30      ocramius | 2) they are not needed except for building DSLs                             │ Pierre
+11:59:40      ocramius | 3) they are less readable                                                   │ psc
+11:59:44      ocramius | 4) they are hard to mock
+12:00:23           psc | 1) how does                                                                 │ schmittjoh
+12:00:23           psc | $em->flush();                                                               │ Seldaek
+12:00:23           psc | $em->perist();                                                              │ stodan
+12:00:23           psc | break less encapsulation from                                               │ Stof_
+12:00:23           psc | $em->persist()->flush();                                                    │ thomasez
+12:00:23           psc | ?                                                                           │ tystr
+12:00:47      ocramius | psc: $em->persist()->flush() doesn't guarantee that `flush()` is called on  │
+| `$em`                                                                       │
+12:00:51           psc | 2) they are needed for shorter code                                         │
+12:01:08           psc | 3) subjective                                                               │
+12:01:14           psc | 4) if they 1)                                                               │
+12:01:14           psc | ;)
+12:03:20           psc | okay 4.1. for mocks is a fair point                                         │@ChanServ
+12:03:25      ocramius | fluent interfaces work because of the wrong assumption that the return      │ AdrienB__
+| value is the same instance of the object on which you're calling the method │ AdrienBrault
+12:03:43      ocramius | a return value only guarantees (and not even that in PHP) the TYPE of the   │ Akii
+| returned value                                                              │ alex88
+12:03:45      ocramius | not the instance                                                            │ armetiz
+12:03:57      ocramius | a good example is $object2 = $em->merge($object1);                          │ asm89
+12:04:10      ocramius | $object2 may or may not be $object1 depending on different cases            │ bashusr
+12:04:13      ocramius | you don't know                                                              │ beberlei
+12:04:14        alex88 | ok, that's fair                                                             │ bendavies
+12:04:16      ocramius | you just know the type                                                      │ Bittarman
+12:04:25      ocramius | same goes for fluent interfaces                                             │ Brett19
+12:04:28        alex88 | so you have to rely on your own local variables                             │ CaMason
+12:04:44      ocramius | otherwise you'd have to write $em =                                         │ DavidBadura
+| $em->persist($o1)->persist($o2)->flush();                                   │ dazs2
+12:04:55      ocramius | which is the only way to do it safely, and honestly is terrible :)          │ deeky666
+12:05:41           psc | i agree with your point of view                                             │ Felicitus
+12:06:02           psc | but lets say persist and flush SHOULD be writable in a one-liner            │ Garfield-fr
+12:06:09      ocramius | why?                                                                        │ hacfi
+12:06:17           psc | because i want it                                                           │ henrikbjorn
+12:06:21      ocramius | it's two different operations                                               │ hzilla
+12:06:22      ocramius | not one                                                                     │ jakoch
+12:06:25           psc | its my axiom                                                                │ JeroenDeDauw
+12:06:37      ocramius | if you want to do it in a one-liner, then write a utility method called     │ jmikola
+| `->save()`                                                                  │ johannes_
+12:06:42      ocramius | which is what you're doing                                                  │ jpauli
+12:06:49           psc | okay that was my question :;P                                               │ jrdn
+12:06:55      ocramius | but persisting and flushing are 2 operations                                │ jsor
+12:07:30      ocramius | just a note: rage against fluent interfaces came from writing my proxying   │ lstrojny
+| lib                                                                         │ mac_nibblet
+12:07:42      ocramius | it's just such a mess to deal in any way with fluent interfaces :(          │ merk
+12:08:42           psc | :)                                                                          │ micahg-work
+12:08:51      ocramius | even simple decorators are broken by it                                     │ mouyang
+12:12:46           psc | it makes sense in your world, if you discard setters as well :)             │ muzzy
+12:13:07      ocramius | psc: I have setters not being fluent                                        │ naderman
+12:13:11      ocramius | works like a charm anyway                                                   │ netiul
+12:14:22           psc | what about setting 5 plain values on a value object?                        │ ocramius
+12:14:35           psc | do you write 5 lines? or do you have a "bigger" setter for this?            │ ph88
+12:15:11      ocramius | I either write 5 lines (also helps when changing stuff, since it doesn't    │ Pierre
+| screw up the diffs)                                                         │ psc
+12:15:13      ocramius | or use a hydrator                                                           │ redeemer
+12:16:15           psc | its about codestyle to not screw up diffs in chainables                     │ rooster
+12:16:26      ocramius | no, it's not about code style                                               │ rosstuck
+12:16:36      ocramius | reducing diffs helps avoiding collisions with other changes                 │ schmittjoh
+12:16:44      ocramius | and makes reviews easier (one comment per operation)                        │ Seldaek
+12:17:09      ocramius | additionally, when having the var name and the method, even on 20           │ stodan
+| subsequent calls, you know immediately what it is about                     │ Stof_
+12:17:26      ocramius | in a diff that may not show the first line of a chained call, you have a    │ thomasez
+| problem understanding what is going on
+-->
+
+<!--
+
+$em
+    ->persist($object)
+    ->flush();
+
+        // more stuff
+$em
+    ->persist($object2)
+    ->flush();
+
+
+
+$em = $em
+    ->persist($object)
+    ->flush();
+
+$object2 = $em->merge($object1);
+
+class Counter
+{
+    protected $count = 0;
+
+    public function count()
+    {
+        $this->count += 1;
+    }
+
+    public function getCount()
+    {
+        return $this->count;
+    }
+}
+
+
+$obj
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setBar(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+    ->setFoo(foo)
+
+
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+$obj->setFoo(foo);
+
+-->
+
+<div class="row">
+    <div class="span12 columns">
+        <p>
+            Today, I had again a discussion on IRC on why
+            <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
+                Doctrine's EntityManager
+            </a> doesn't (and won't) implement a fluent interface. Here are my thoughts on why that's the case.
+        </p>
+
+        <h2>Recap: What is a Fluent interface?</h2>
+
+        <p>
+            A <a href="http://en.wikipedia.org/wiki/Fluent_interface" target="_blank">Fluent Interface</a>
+            is an object oriented API that provides "more readable" code.
+            <br/>
+            In general, the template for a fluent interface can be like following:
+        </p>
+{% highlight php %}<?php
+
+interface {InterfaceName}
+{
+    /** @return self */
+    public function {MethodName}({Params});
+}{% endhighlight %}
+
+        <p>
+            Obviously, PHP doesn't provide return type hints, which means that I limited myself to define a
+            <code>/** @return self */</code>
+            <a href="http://www.phpdoc.org/docs/latest/for-users/tags/return.html" target="_blank">docblock</a>.
+        </p>
+
+        <p>
+            A fluent interface allows you to chain method calls, which results in less typed characters
+            when applying multiple operations on the same object:
+        </p>
+
+{% highlight php %}<?php
+
+$foo
+    ->doBar()
+    ->doBaz()
+    ->setTaz('taz')
+    ->otherCall()
+    ->allTheThings();{% endhighlight %}
+
+        <h2>Where does a fluent interface make sense?</h2>
+
+        <p>
+            While I think fluent interfaces make sense in some APIs, like the
+            <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
+                QueryBuilder
+            </a>, or in general builder objects, especially when it comes to putting together nodes.
+        </p>
+
+        <p>
+            Here's an example of good usage of a fluent interface:
+        </p>
+
+{% highlight php %}<?php
+
+$queryBuilder
+    ->select('u')
+    ->from('User u')
+    ->where('u.id = :identifier')
+    ->orderBy('u.name', 'ASC')
+    ->setParameter('identifier', 100);{% endhighlight %}
+
+    <h2>What's the problem with fluent interfaces?</h2>
+
+    <p>
+        I've identified some issues while working with fluent interfaces. Here they are listed in
+        descending order of relevance:
+    </p>
+
+    <ol>
+        <li>
+            Fluent Interfaces break
+            <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
+                Encapsulation
+            </a>
+        </li>
+        <li>Fluent Interfaces break Decorators (and sometimes Composition)</li>
+        <li>Fluent Interfaces are harder to Mock</li>
+        <li>Fluent Interfaces make diffs harder to read</li>
+        <li>Fluent Interfaces are less readable (personal feeling)</li>
+    </ol>
+
+    <h2>Fluent Interfaces break Encapsulation</h2>
+
+    <p>
+        The entire idea behind a fluent interface bases on an assumption:
+    </p>
+
+    <blockquote>
+        In a Fluent Interface, the return value of a method will be the same instance on which the method was called.
+    </blockquote>
+
+    <p>
+        First of all, "assuming" facts that are not safely constrained by the language is a mistake.
+        <br/>
+        Additionally, in OOP, you cannot rely on the identity of the returned value of an object, but just on its
+        interface.
+    </p>
+
+    <p>
+        What does that mean? Let's make an example with a <code>Counter</code> interface:
+    </p>
+
+{% highlight php %}<?php
+
+interface Counter
+{
+    /** @return self */
+    public function count();
+
+    /** @return int */
+    public function getCount();
+}{% endhighlight %}
+
+    <p>
+        Here's a fluent implementation of the interface:
+    </p>
+
+{% highlight php %}<?php
+
+class FluentCounter implements Counter
+{
+    private $count = 0;
+
+    public function count()
+    {
+        $this->count += 1;
+    }
+
+    public function getCount()
+    {
+        return $this->count();
+    }
+}{% endhighlight %}
+
+    <p>
+        Here's an Immutable implementation of the interface:
+    </p>
+
+{% highlight php %}<?php
+
+class ImmutableCounter implements Counter
+{
+    private $count;
+    public function __construct($count = 0)
+    {
+        $this->count = (int) $count;
+    }
+
+    public function count()
+    {
+        return new ImmutableCounter($this->count + 1);
+    }
+
+    public function getCount()
+    {
+        return $this->count();
+    }
+}{% endhighlight %}
+
+    <p>
+        Here is how you use <code>FluentCounter</code>:
+    </p>
+
+{% highlight php %}<?php
+
+$counter = new FluentCounter();
+
+echo $counter->count()->count()->count()->getCount(); // 3!{% endhighlight %}
+
+    <p>
+        Here is how you use <code>ImmutableCounter</code>:
+    </p>
+
+{% highlight php %}<?php
+
+$counter = new ImmutableCounter();
+
+$counter = $counter->count()->count()->count();
+
+echo $counter->getCount(); // 3!{% endhighlight %}
+
+        <p>
+            The point is that we managed to implement an immutable counter even though the author of <code>Counter</code>
+            assumed that all implementations should be mutable. The same can be seen in the opposite way, where
+            the interface author may want to have all implementations being immutable, but then people implement
+            a mutable version of it.
+        </p>
+        <p>
+            Turns out that the only correct way of using such an interface is the "immutable" way, so:
+        </p>
+
+{% highlight php %}<?php
+
+$counter = $counter->count()->count()->count();
+
+echo $counter->getCount(); // 3!{% endhighlight %}
+
+        <p>
+            This ensures that <code>FluentCounter#getCount()</code> works as expected, but obviously defeats the
+            purpose of the fluent interface.
+        </p>
+
+        <p>
+            On top of that, there is nothing that the author of <code>Counter</code> can do to enforce either one or
+            the other way of implementing the contract, and that's a limitation of the language itself (and it's
+            most probably for good!).
+        </p>
+
+        <p>
+            I conclude this section by wrapping up and saying that:
+        </p>
+
+        <ol>
+            <li>In OOP, fluent interfaces cannot be guaranteed by a contract</li>
+            <li>Assumptions not backed by a contract are wrong</li>
+            <li>Following wrong assumptions brings to wrong results</li>
+        </ol>
+
+        <p>
+            In my opinion, encapsulation is all about having guarantees about usage of an API, but that's a personal thought.
+        </p>
+
+        <h2>Fluent Interfaces break Decorators (and sometimes Composition)</h2>
+
+        <p>
+            As some of you may know, I'm putting a lot of effort in writing libraries that
+            <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">generate decorators and proxies</a>.
+            <br/>
+            While working on those, I came to a very complex use case where I needed to build a generic wrapper around
+            an object.
+        </p>
+
+        <p>
+            I'm picking the <code>Counter</code> example again:
+        </p>
+
+        {% highlight php %}<?php
+
+interface Counter
+{
+    /** @return self */
+    public function count();
+
+    /** @return int */
+    public function getCount();
+}{% endhighlight %}
+
+        <p>
+            Assuming that the implementor of the wrapper doesn't know anything about the implementations of this
+            interface, he goes on and builds a wrapper.
+        </p>
+        <p>
+            In this example, we simply implement a wrapper that echoes every time one of the methods is called:
+        </p>
+
+{% highlight php %}<?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+    public function __construct(Counter $counter)
+    {
+        $this->counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this->counter->count();
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this->counter->getCount();
+    }
+}{% endhighlight %}
+
+        <p>
+            Let's try it out with our fluent counter:
+        </p>
+
+{% highlight php %}<?php
+
+$counter = new EchoingCounter(new FluentCounter());
+
+$counter = $counter->count()->count()->count()->count();
+
+echo $counter->getCount();{% endhighlight %}
+
+        <p>
+            Noticed anything wrong? Yes, <strong><code>EchoingCounter::count</code> is echoed only once!</strong>
+        </p>
+
+        <p>
+            That happens because we're just trusting the interface, so the <code>FluentCounter</code> instance
+            gets "un-wrapped" when we call <code>EchoingCounter::count()</code>.
+        </p>
+
+        <p>Same happens when using the <code>ImmutableCounter</code></p>
+
+{% highlight php %}<?php
+
+$counter = new EchoingCounter(new ImmutableCounter());
+
+$counter = $counter->count()->count()->count()->count();
+
+echo $counter->getCount();{% endhighlight %}
+
+        <p>Same results. Let's try to fix them:</p>
+{% highlight php %}<?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+    public function __construct(Counter $counter)
+    {
+        $this->counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        $this->counter->count();
+
+        return $this;
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this->counter->getCount();
+    }
+}{% endhighlight %}
+
+        <p>And now let's retry:</p>
+
+{% highlight php %}<?php
+
+$counter = new EchoingCounter(new FluentCounter());
+
+// we're using the "SAFE" solution here
+$counter = $counter->count()->count()->count()->count();
+
+echo $counter->getCount();{% endhighlight %}
+
+        <p>
+            Works! We now see the different <code>EchoingCounter::count</code> being echoed.
+            <br/>
+            What about the immutable implementation?
+        </p>
+
+{% highlight php %}<?php
+
+$counter = new EchoingCounter(new ImmutableCounter());
+
+// we're using the "SAFE" solution here
+$counter = $counter->count()->count()->count()->count();
+
+echo $counter->getCount();{% endhighlight %}
+
+        <p>
+            Seems to work, but if you look closely, the reported count is wrong. Now the wrapper is working,
+            but not the real logic.
+        </p>
+
+        <p>
+            Additionally, we cannot fix this. We don't know if the wrapped instance is supposed to return itself
+            or a new instance. We *can* fix the wrapper though:
+        </p>
+
+{% highlight php %}<?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+    public function __construct(Counter $counter)
+    {
+        $this->counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        $this->counter = $this->counter->count();
+
+        return $this;
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this->counter->getCount();
+    }
+}{% endhighlight %}
+
+        <p>
+            As you can see, we have to apply a lot of patching, checks and so on just to fix the original idea of using
+            a fluent interface.
+            <br/>
+            Additionally, our wrapper is now opinionated on the usage of the <code>count()</code> method, and it is
+            not possible to build a generic wrapper anymore.
+        </p>
+
+        <p>
+            I conclude this section by simply stating that fluent interfaces are problematic for wrappers, and require
+            a lot of assumptions to be catched in order to build clean wrappers. Even more with the number of methods
+            growing.
+        </p>
+
+        <h2>Fluent Interfaces are harder to Mock</h2>
+
+        <!-- @todo -->
+
+        <h2>Fluent Interfaces make diffs harder to read</h2>
+
+        <!-- @todo -->
+
+        <h2>Fluent Interfaces are less readable (personal feeling)</h2>
+
+        <!-- @todo -->
+    </div>
+</div>
