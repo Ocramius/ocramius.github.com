@@ -606,14 +606,185 @@ class EchoingCounter implements Counter
 
         <h2>Fluent Interfaces are harder to Mock</h2>
 
-        <!-- @todo -->
+        <p>
+            Mock classes (at least in PHPUnit) are
+            <a href="http://en.wikipedia.org/wiki/Null_Object_pattern" target="_blank">null objects</a> by default,
+            which means that all the return values of methods have to be manually defined:
+        </p>
+
+{% highlight php %}<?php
+
+$counter = $this->getMock('Counter');
+
+$counter
+    ->expects($this->any())
+    ->method('count')
+    ->will($this->returnValue($counter));{% endhighlight %}
+
+        <p>
+            There are 2 major problems with this:
+        </p>
+
+        <ol>
+            <li>All fluent methods need explicit mocking</li>
+            <li>We are assuming that a fluent interface is implemented, whereas the implementation may be immutable (as shown before)</li>
+        </ol>
+
+        <p>
+            That basically means that we have to code assumptions in our unit tests (bad, and hard to follow) as well
+            as make decisions on the implementation of an object.
+        </p>
+
+        <p>
+            The correct way of mocking the <code>Counter</code> interface would be:
+        </p>
+
+{% highlight php %}<?php
+
+$counter = $this->getMock('Counter');
+
+$counter
+    ->expects($this->any())
+    ->method('count')
+    ->will($this->returnValue($this->getMock('Counter')));{% endhighlight %}
+
+        <p>
+            As you can see, we can break our code by making the mock behave differently, but still respecting the
+            interface. Additionally, we need to mock every fluent method regardless of the parameters or even when
+            we don't have expectations on the API.
+        </p>
 
         <h2>Fluent Interfaces make diffs harder to read</h2>
 
-        <!-- @todo -->
+        <p>
+            The problem with diffs is minor, but it's something that really
+            <a href="http://knowyourmeme.com/memes/that-really-rustled-my-jimmies" target="_blank">rustles my jimmies</a>,
+            especially because people abuse fluent interfaces to write giant chained method calls like:
+        </p>
+
+{% highlight php %}<?php
+
+$foo
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
+    ->addTab('tab');{% endhighlight %}
+
+        <p>
+            Let's assume that a line is changed in the middle of the chain:
+        </p>
+
+{% highlight sh %}$ diff -p left.txt right.txt{% endhighlight %}
+
+{% highlight diff %}
+*** left.txt    Fri Nov  8 15:05:09 2013
+--- right.txt   Fri Nov  8 15:05:22 2013
+*************** $foo
+*** 11,16 ****
+--- 11,17 ----
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz')
++     ->addBaz('tab')
+    ->addTab('tab')
+    ->addBar('bar')
+    ->addBaz('baz'){% endhighlight %}
+
+        <p>
+            Useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
+        </p>
+
+        <p>
+            This may look like nitpicking, but it makes code reviews harder.
+        </p>
 
         <h2>Fluent Interfaces are less readable (personal feeling)</h2>
 
-        <!-- @todo -->
+        <p>
+            This is a personal feeling, but when reading a fluent interface, I cannot recognize if I'm just
+            massively violating the
+            <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a> or applying
+            operations on the same object.
+            <br/>
+            I'm picking an obvious example to show where this may happen:
+        </p>
+
+{% highlight php %}<?php
+return $queryBuilder
+    ->select('u')
+    ->from('User u')
+    ->where('u.id = :identifier')
+    ->orderBy('u.name', 'ASC')
+    ->setFirstResult(5)
+    ->setParameter('identifier', 100)
+    ->getQuery()
+    ->setMaxResults(10)
+    ->getResult();{% endhighlight %}
+
+        <p>
+            This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are producing
+            different objects that have a different API.
+            <br/>
+            The problem occurs when a method does not look like a getter:
+        </p>
+
+
+        {% highlight php %}<?php
+return $someBuilder
+    ->addThing('thing')
+        ->addOtherThing('other thing')
+        ->compile()
+        ->write()
+        ->execute()
+        ->gimme();{% endhighlight %}
+
+        <p>
+            Which of these method calls is part of a fluent interface? Which is instead
+            returning a different object? You can't really tell that...
+        </p>
+
+        <h2>Conclusion</h2>
+
+        <p>
+            I know the article is titled <q>"Fluent Interfaces are Evil"</q>, but that doesn't mean it's an absolute.
+        </p>
+
+        <p>
+            Fluent interfaces are useful, easy to read and use in some contexts. What I am showing here is a set of
+            problems that raise when using them or making every piece of your code fluent.
+        </p>
+
+        <p>
+            I'd just like you to think carefully next time you implement a fluent interface in your code base,
+            especially about the downsides that I have just exposed.
+        </p>
+
+        <p>
+            You must have a <strong>very good reason</strong> to implement a fluent interface, otherwise it's just
+            a problem that you are possibly dragging in your codebase.
+        </p>
     </div>
 </div>
