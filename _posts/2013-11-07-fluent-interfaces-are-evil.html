@@ -21,6 +21,8 @@ tweet: ---TODO---
             </a> doesn't (and won't) implement a fluent interface. Here are my thoughts on why that's the case.
         </p>
 
+        <hr/>
+
         <h2>Recap: What is a Fluent interface?</h2>
 
         <p>
@@ -57,13 +59,16 @@ $foo
     ->otherCall()
     ->allTheThings();{% endhighlight %}
 
-        <h2>Where does a fluent interface make sense?</h2>
+        <hr/>
+
+        <h2>When does a fluent interface make sense?</h2>
 
         <p>
-            While I think fluent interfaces make sense in some APIs, like the
+            Fluent interfaces make sense in some APIs, like the
             <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
                 QueryBuilder
-            </a>, or in general builder objects, especially when it comes to putting together nodes.
+            </a>, or in general builder objects, especially when it comes to putting together nodes into
+            a hierarchical structure.
         </p>
 
         <p>
@@ -79,46 +84,50 @@ $queryBuilder
     ->orderBy('u.name', 'ASC')
     ->setParameter('identifier', 100);{% endhighlight %}
 
-    <h2>What's the problem with fluent interfaces?</h2>
+        <hr/>
 
-    <p>
-        I've identified some issues while working with fluent interfaces. Here they are listed in
-        descending order of relevance:
-    </p>
+        <h2>What's the problem with fluent interfaces?</h2>
 
-    <ol>
-        <li>
-            Fluent Interfaces break
-            <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
-                Encapsulation
-            </a>
-        </li>
-        <li>Fluent Interfaces break Decorators (and sometimes Composition)</li>
-        <li>Fluent Interfaces are harder to Mock</li>
-        <li>Fluent Interfaces make diffs harder to read</li>
-        <li>Fluent Interfaces are less readable (personal feeling)</li>
-    </ol>
+        <p>
+            I've identified some issues while working with fluent interfaces. Here they are listed in
+            descending order of relevance:
+        </p>
 
-    <h2>Fluent Interfaces break Encapsulation</h2>
+        <ol>
+            <li>
+                Fluent Interfaces break
+                <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
+                    Encapsulation
+                </a>
+            </li>
+            <li>Fluent Interfaces break Decorators (and sometimes Composition)</li>
+            <li>Fluent Interfaces are harder to Mock</li>
+            <li>Fluent Interfaces make diffs harder to read</li>
+            <li>Fluent Interfaces are less readable (personal feeling)</li>
+        </ol>
 
-    <p>
-        The entire idea behind a fluent interface bases on an assumption:
-    </p>
+        <hr/>
 
-    <blockquote>
-        In a Fluent Interface, the return value of a method will be the same instance on which the method was called.
-    </blockquote>
+        <h2>Fluent Interfaces break Encapsulation</h2>
 
-    <p>
-        First of all, "assuming" facts that are not safely constrained by the language is a mistake.
-        <br/>
-        Additionally, in OOP, you cannot rely on the identity of the returned value of an object, but just on its
-        interface.
-    </p>
+        <p>
+            The entire idea behind a fluent interface bases on an assumption:
+        </p>
 
-    <p>
-        What does that mean? Let's make an example with a <code>Counter</code> interface:
-    </p>
+        <blockquote>
+            In a Fluent Interface, the return value of a method will be the same instance on which the method was called.
+        </blockquote>
+
+        <p>
+            First of all, "assuming" facts that are not safely constrained by the language is a mistake.
+            <br/>
+            Additionally, in OOP, you cannot rely on the identity of the returned value of an object, but just on its
+            interface.
+        </p>
+
+        <p>
+            What does that mean? Let's make an example with a <code>Counter</code> interface:
+        </p>
 
 {% highlight php %}<?php
 
@@ -131,9 +140,7 @@ interface Counter
     public function getCount();
 }{% endhighlight %}
 
-    <p>
-        Here's a fluent implementation of the interface:
-    </p>
+        <p>Here's a fluent implementation of the interface:</p>
 
 {% highlight php %}<?php
 
@@ -152,15 +159,16 @@ class FluentCounter implements Counter
     }
 }{% endhighlight %}
 
-    <p>
-        Here's an Immutable implementation of the interface:
-    </p>
+        <p>
+            Here's an Immutable implementation of the interface:
+        </p>
 
 {% highlight php %}<?php
 
 class ImmutableCounter implements Counter
 {
     private $count;
+
     public function __construct($count = 0)
     {
         $this->count = (int) $count;
@@ -177,9 +185,9 @@ class ImmutableCounter implements Counter
     }
 }{% endhighlight %}
 
-    <p>
-        Here is how you use <code>FluentCounter</code>:
-    </p>
+        <p>
+            Here is how you use a <code>FluentCounter</code>:
+        </p>
 
 {% highlight php %}<?php
 
@@ -187,9 +195,9 @@ $counter = new FluentCounter();
 
 echo $counter->count()->count()->count()->getCount(); // 3!{% endhighlight %}
 
-    <p>
-        Here is how you use <code>ImmutableCounter</code>:
-    </p>
+        <p>
+            Here is how you use an <code>ImmutableCounter</code>:
+        </p>
 
 {% highlight php %}<?php
 
@@ -200,10 +208,12 @@ $counter = $counter->count()->count()->count();
 echo $counter->getCount(); // 3!{% endhighlight %}
 
         <p>
-            The point is that we managed to implement an immutable counter even though the author of <code>Counter</code>
-            assumed that all implementations should be mutable. The same can be seen in the opposite way, where
-            the interface author may want to have all implementations being immutable, but then people implement
-            a mutable version of it.
+            We managed to implement an immutable counter even though the author of <code>Counter</code> maybe
+            assumed that all implementations should be mutable.
+        </p>
+        <p>
+            The same can be seen in the opposite direction: interface author may want to have all implementations
+            immutable, but then people implement a mutable version of it.
         </p>
         <p>
             Turns out that the only correct way of using such an interface is the "immutable" way, so:
@@ -227,20 +237,22 @@ echo $counter->getCount(); // 3!{% endhighlight %}
         </p>
 
         <p>
-            I conclude this section by wrapping up and saying that:
+            None of the implementors/implementations are wrong. What is wrong here is the interface by trying to
+            force implementation details, therefore breaking encapsulation.
         </p>
 
-        <ol>
-            <li>In OOP, fluent interfaces cannot be guaranteed by a contract</li>
+        <p>Wrapping it up:</p>
+
+        <ul>
+            <li>In OOP, a contract cannot guarantee the identity of a method return value</li>
+            <li>Therefore, In OOP, fluent interfaces cannot be guaranteed by a contract</li>
             <li>Assumptions not backed by a contract are wrong</li>
             <li>Following wrong assumptions brings to wrong results</li>
-        </ol>
+        </ul>
 
-        <p>
-            In my opinion, encapsulation is all about having guarantees about usage of an API, but that's a personal thought.
-        </p>
+        <hr/>
 
-        <h2>Fluent Interfaces break Decorators (and sometimes Composition)</h2>
+        <h2>Fluent Interfaces break Decorators (and Composition)</h2>
 
         <p>
             As some of you may know, I'm putting a lot of effort in writing libraries that
@@ -270,7 +282,7 @@ interface Counter
             interface, he goes on and builds a wrapper.
         </p>
         <p>
-            In this example, we simply implement a wrapper that echoes every time one of the methods is called:
+            In this example, the implementor simply writes a wrapper that echoes every time one of the methods is called:
         </p>
 
 {% highlight php %}<?php
@@ -278,6 +290,7 @@ interface Counter
 class EchoingCounter implements Counter
 {
     private $counter;
+
     public function __construct(Counter $counter)
     {
         $this->counter = $counter;
@@ -311,7 +324,8 @@ $counter = $counter->count()->count()->count()->count();
 echo $counter->getCount();{% endhighlight %}
 
         <p>
-            Noticed anything wrong? Yes, <strong><code>EchoingCounter::count</code> is echoed only once!</strong>
+            Noticed anything wrong? Yes, the string
+            <strong><code>:EchoingCounter::count"</code> is echoed only once!</strong>
         </p>
 
         <p>
@@ -330,11 +344,13 @@ $counter = $counter->count()->count()->count()->count();
 echo $counter->getCount();{% endhighlight %}
 
         <p>Same results. Let's try to fix them:</p>
+
 {% highlight php %}<?php
 
 class EchoingCounter implements Counter
 {
     private $counter;
+
     public function __construct(Counter $counter)
     {
         $this->counter = $counter;
@@ -389,8 +405,11 @@ echo $counter->getCount();{% endhighlight %}
         </p>
 
         <p>
-            Additionally, we cannot fix this. We don't know if the wrapped instance is supposed to return itself
-            or a new instance. We *can* fix the wrapper though:
+            Additionally, we cannot fix this with a generic solution.
+            <br/>
+            We don't know if the wrapped instance is supposed to return itself or a new instance.
+            <br/>
+            We <i>can</i> manually fix the wrapper with some assumptions though:
         </p>
 
 {% highlight php %}<?php
@@ -398,6 +417,7 @@ echo $counter->getCount();{% endhighlight %}
 class EchoingCounter implements Counter
 {
     private $counter;
+
     public function __construct(Counter $counter)
     {
         $this->counter = $counter;
@@ -421,18 +441,20 @@ class EchoingCounter implements Counter
 }{% endhighlight %}
 
         <p>
-            As you can see, we have to apply a lot of patching, checks and so on just to fix the original idea of using
-            a fluent interface.
+            As you can see, we have to manually patch the <code>count()</code> method, but then again, this breaks
+            the case when the API is neither Immutable nor Fluent.
             <br/>
-            Additionally, our wrapper is now opinionated on the usage of the <code>count()</code> method, and it is
+            Additionally, our wrapper is now opinionated about the usage of the <code>count()</code> method, and it is
             not possible to build a generic wrapper anymore.
         </p>
 
         <p>
             I conclude this section by simply stating that fluent interfaces are problematic for wrappers, and require
-            a lot of assumptions to be catched in order to build clean wrappers. Even more with the number of methods
-            growing.
+            a lot of assumptions to be catched by a human decision, which has to be done per-method, based on
+            assumptions.
         </p>
+
+        <hr/>
 
         <h2>Fluent Interfaces are harder to Mock</h2>
 
@@ -461,12 +483,15 @@ $counter
         </ol>
 
         <p>
-            That basically means that we have to code assumptions in our unit tests (bad, and hard to follow) as well
-            as make decisions on the implementation of an object.
+            That basically means that we have to code assumptions in our unit tests (bad, and hard to follow).
         </p>
 
         <p>
-            The correct way of mocking the <code>Counter</code> interface would be:
+            Also, we have to make decisions on the implementation of a mocked object
+        </p>
+
+        <p>
+            The correct way of mocking the <code>Counter</code> interface would be something like:
         </p>
 
 {% highlight php %}<?php
@@ -483,6 +508,12 @@ $counter
             interface. Additionally, we need to mock every fluent method regardless of the parameters or even when
             we don't have expectations on the API.
         </p>
+
+        <p>
+            That is a lot of work, and a lot of <strong>wrong</strong> work to be done.
+        </p>
+
+        <hr/>
 
         <h2>Fluent Interfaces make diffs harder to read</h2>
 
@@ -544,20 +575,22 @@ $foo
     ->addBaz('baz'){% endhighlight %}
 
         <p>
-            Useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
+            Not really useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
         </p>
 
         <p>
-            This may look like nitpicking, but it makes code reviews harder.
+            This may look like nitpicking, but it makes code reviews harder, and I personally do a lot of code reviews.
         </p>
 
-        <h2>Fluent Interfaces are less readable (personal feeling)</h2>
+        <hr/>
+
+        <h2>Fluent Interfaces are less readable</h2>
 
         <p>
-            This is a personal feeling, but when reading a fluent interface, I cannot recognize if I'm just
-            massively violating the
-            <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a> or applying
-            operations on the same object.
+            This is a personal feeling, but when reading a fluent interface, I cannot recognize if what is going on
+            is just a massive violation of the
+            <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a>, or if we're
+            dealing with the same object over and over again.
             <br/>
             I'm picking an obvious example to show where this may happen:
         </p>
@@ -575,7 +608,7 @@ return $queryBuilder
     ->getResult();{% endhighlight %}
 
         <p>
-            This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are producing
+            This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are returning
             different objects that have a different API.
             <br/>
             The problem occurs when a method does not look like a getter:
@@ -585,16 +618,18 @@ return $queryBuilder
         {% highlight php %}<?php
 return $someBuilder
     ->addThing('thing')
-        ->addOtherThing('other thing')
-        ->compile()
-        ->write()
-        ->execute()
-        ->gimme();{% endhighlight %}
+    ->addOtherThing('other thing')
+    ->compile()
+    ->write()
+    ->execute()
+    ->gimme();{% endhighlight %}
 
         <p>
             Which of these method calls is part of a fluent interface? Which is instead
             returning a different object? You can't really tell that...
         </p>
+
+        <hr/>
 
         <h2>Conclusion</h2>
 
@@ -603,12 +638,13 @@ return $someBuilder
         </p>
 
         <p>
-            Fluent interfaces are useful, easy to read and use in some contexts. What I am showing here is a set of
-            problems that raise when using them or making every piece of your code fluent.
+            Fluent interfaces are useful and easy to read in <strong>some contexts</strong>.
+            What I am showing here is a set of problems that raise when inheriting them or making every piece of your
+            code fluent.
         </p>
 
         <p>
-            I'd just like you to think carefully next time you implement a fluent interface in your code base,
+            I just want you to think carefully next time you want fluent interfaces in your libraries,
             especially about the downsides that I have just exposed.
         </p>
 
