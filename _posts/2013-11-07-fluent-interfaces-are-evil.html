@@ -151,11 +151,13 @@ class FluentCounter implements Counter
     public function count()
     {
         $this->count += 1;
+
+        return $this;
     }
 
     public function getCount()
     {
-        return $this->count();
+        return $this->count;
     }
 }{% endhighlight %}
 
@@ -181,7 +183,7 @@ class ImmutableCounter implements Counter
 
     public function getCount()
     {
-        return $this->count();
+        return $this->count;
     }
 }{% endhighlight %}
 
@@ -247,7 +249,7 @@ echo $counter->getCount(); // 3!{% endhighlight %}
             <li>In OOP, a contract cannot guarantee the identity of a method return value</li>
             <li>Therefore, In OOP, fluent interfaces cannot be guaranteed by a contract</li>
             <li>Assumptions not backed by a contract are wrong</li>
-            <li>Following wrong assumptions brings to wrong results</li>
+            <li>Following wrong assumptions leads to wrong results</li>
         </ul>
 
         <hr/>
@@ -325,7 +327,7 @@ echo $counter->getCount();{% endhighlight %}
 
         <p>
             Noticed anything wrong? Yes, the string
-            <strong><code>:EchoingCounter::count"</code> is echoed only once!</strong>
+            <strong><code>"EchoingCounter::count"</code> is echoed only once!</strong>
         </p>
 
         <p>
@@ -409,7 +411,7 @@ echo $counter->getCount();{% endhighlight %}
             <br/>
             We don't know if the wrapped instance is supposed to return itself or a new instance.
             <br/>
-            We <i>can</i> manually fix the wrapper with some assumptions though:
+            We <em>can</em> manually fix the wrapper with some assumptions though:
         </p>
 
 {% highlight php %}<?php
@@ -650,7 +652,7 @@ return $someBuilder
 
         <p>
             You must have a <strong>very good reason</strong> to implement a fluent interface, otherwise it's just
-            a problem that you are possibly dragging in your codebase.
+            a problem that you are possibly dragging into your codebase.
         </p>
     </div>
 </div>
