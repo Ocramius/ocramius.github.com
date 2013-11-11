@@ -477,7 +477,7 @@ $counter = $this->getMock('Counter');
 $counter
     ->expects($this->any())
     ->method('count')
-    ->will($this->returnValue($counter));{% endhighlight %}
+    ->will($this->returnSelf());{% endhighlight %}
 
         <p>
             There are 2 major problems with this:
