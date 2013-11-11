@@ -188,7 +188,7 @@ class ImmutableCounter implements Counter
 }{% endhighlight %}
 
         <p>
-            Here is how you use a <code>FluentCounter</code>:
+            Here is how you <a href="http://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
         </p>
 
 {% highlight php %}<?php
@@ -198,7 +198,7 @@ $counter = new FluentCounter();
 echo $counter->count()->count()->count()->getCount(); // 3!{% endhighlight %}
 
         <p>
-            Here is how you use an <code>ImmutableCounter</code>:
+            Here is how you <a href="http://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
         </p>
 
 {% highlight php %}<?php
@@ -218,7 +218,9 @@ echo $counter->getCount(); // 3!{% endhighlight %}
             immutable, but then people implement a mutable version of it.
         </p>
         <p>
-            Turns out that the only correct way of using such an interface is the "immutable" way, so:
+            Turns out that the only correct way of
+            <a href="http://3v4l.org/fILUc" target="_blank">using such an interface</a>
+            is the "immutable" way, so:
         </p>
 
 {% highlight php %}<?php
@@ -314,7 +316,7 @@ class EchoingCounter implements Counter
 }{% endhighlight %}
 
         <p>
-            Let's try it out with our fluent counter:
+            Let's <a href="http://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
         </p>
 
 {% highlight php %}<?php
@@ -335,7 +337,10 @@ echo $counter->getCount();{% endhighlight %}
             gets "un-wrapped" when we call <code>EchoingCounter::count()</code>.
         </p>
 
-        <p>Same happens when using the <code>ImmutableCounter</code></p>
+        <p>
+            Same happens when
+            <a href="http://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
+        </p>
 
 {% highlight php %}<?php
 
@@ -375,13 +380,12 @@ class EchoingCounter implements Counter
     }
 }{% endhighlight %}
 
-        <p>And now let's retry:</p>
+        <p>And now let's <a href="http://3v4l.org/AilJu" target="_blank">retry</a>:</p>
 
 {% highlight php %}<?php
 
 $counter = new EchoingCounter(new FluentCounter());
 
-// we're using the "SAFE" solution here
 $counter = $counter->count()->count()->count()->count();
 
 echo $counter->getCount();{% endhighlight %}
@@ -402,8 +406,8 @@ $counter = $counter->count()->count()->count()->count();
 echo $counter->getCount();{% endhighlight %}
 
         <p>
-            Seems to work, but if you look closely, the reported count is wrong. Now the wrapper is working,
-            but not the real logic.
+            <a href="http://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
+            the reported count is wrong. Now the wrapper is working, but not the real logic!
         </p>
 
         <p>
