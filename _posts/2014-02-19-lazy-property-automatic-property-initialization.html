@@ -36,22 +36,21 @@ tweet:
 
 class UserService
 {
-    // ... other fields ...
+    // ...
     protected $userRepository;
 
     public function register($user)
     {
         // ...
         $this->getUserRepository()->add($user);
-        // ...
     }
 
     // ...
 
     protected function getUserRepository()
     {
-        // we're not using DI here because of performance implication
-        // normally, people use a service locator here for RAD
+        // we're not using DI here because of performance implications
+        // developers often use a service locator for RAD here
         return $this->userRepository
             ?: $this->userRepository = new MemoryUserRepository();
     }
@@ -60,7 +59,7 @@ class UserService
         <hr/>
 
         <p>
-            This is fairly simple API, and it is perfectly fine to use it when we don't want to be forced
+            This is a fairly simple approach, and it is perfectly fine to use it when we don't want to be forced
             to build the <code>MemoryUserRepository</code> instance for calls to API methods that don't use
             it.
         </p>
@@ -72,7 +71,7 @@ class UserService
         </p>
 
         <p>
-            For example, the following code works only because of a lucky combination of events:
+            For instance, the following code works only because of a lucky combination of events:
         </p>
 
 {% highlight php %}<?php
@@ -89,6 +88,7 @@ class UserService
 
     public function login($userId)
     {
+        // mind this - this is a mistake!
         $this->userRepository->find($userId);
         // ...
     }
@@ -99,12 +99,15 @@ class UserService
 $user = build_user_somehow();
 
 $userService->register($user);
-$userService->login($user->getId());{% endhighlight %}
+$userService->login($user->getId());
+{% endhighlight %}
 
         <p>
             This code will run, but only because <code>UserService#register()</code> was called before
             <code>UserService#login()</code>.
         </p>
+
+        <hr/>
 
         <h2>Possible solutions</h2>
 
@@ -114,15 +117,15 @@ $userService->login($user->getId());{% endhighlight %}
         </p>
 
         <p>
-            Moreover, implementors of subclasses are also experiencing the issue if they try accessing the
-            protected un-initialized property manually, but the fix for that is to just define
+            Moreover, implementors of subclasses will also experience the issue if they try accessing the
+            un-initialized property. The fix for that is to just define
             <code>UserService#$userRepository</code> as <code>private</code> and being very defensive
             about its usage.
         </p>
 
         <p>
             These are all valid solutions, but we still don't get around using a protected getter in our
-            class' scope.
+            class' scope, which I personally consider ugly.
         </p>
 
         <p>
@@ -145,6 +148,7 @@ class UserService
     public function __construct()
     {
         // ...
+        // mind this - we are marking "userRepository" as lazy
         $this->initLazyProperties(['userRepository']);
     }
 
@@ -180,17 +184,19 @@ class UserService
             property access will work the same way, which is pretty cool!
         </p>
 
+        <hr/>
+
         <h2>Under the hood</h2>
 
         <p>
-            So what is going on? I'm simply exploiting an feature of the PHP language on which I've already
+            What is going on? I'm simply exploiting an feature of the PHP language on which I've already
             blogged at <a href="http://ocramius.github.io/blog/intercepting-public-property-access-in-php/" target="_blank">
                 Property Accessors in PHP Userland
             </a>.
         </p>
 
         <p>
-            As a reference, here is the annotated body of <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L37-L58">
+            As a reference, here is the annotated body of <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L37-L58" target="_blank">
                 <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>
             </a>:
         </p>
@@ -209,7 +215,7 @@ private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters 
         // record the properties that were defined as "lazy"
         $this->lazyPropertyAccessors[$lazyProperty] = false;
 
-        // if the property is defined, then ignore it (we don't want to alter object state)
+        // if the property is defined, then ignore it (we don't want to sensibly alter object state)
         if (! isset($this->$lazyProperty)) {
             // unset the property, this allows us to use magic getters
             unset($this->$lazyProperty);
@@ -222,7 +228,7 @@ private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters 
         </p>
 
         <p>
-            The other method defined by the trait is the <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L60-L84">
+            The other method defined by the trait is the <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L60-L84" target="_blank">
                 Magic getter <code>LazyProperty\LazyPropertiesTrait#__get()</code>
             </a>:
         </p>
@@ -257,6 +263,8 @@ public function & __get($name)
 }{% endhighlight %}
     </div>
 
+    <hr/>
+
     <h2>Conclusions</h2>
 
     <p>
@@ -265,21 +273,28 @@ public function & __get($name)
     </p>
 
     <p>
-        Should you use it? Yes, why not?
+        Should you use it? Yes, why not? Do you need it? Usually not. Being defensive about usage of your
+        APIs can actually avoid sloppy mistakes like the ones that I've described in the examples.
     </p>
 
     <p>
-        Do you need it? Usually not: being defensive about usage of your APIs can actually avoid
-        sloppy mistakes like the ones that I've described in the examples.
+        Correctly annotating your properties with <code>/** @var Type|null */</code> also helps tools
+        like <a href="https://github.com/scrutinizer-ci/php-analyzer" target="_blank">PHP Analyzer</a>
+        in discovering such bugs via static analysis.
     </p>
 
     <p>
-        Clean dependency injection and eventually proxying dependencies produces better results than
-        explicit lazy-loading coded in your classes.
+        Clean dependency injection and eventually proxying dependencies also produces better and easier
+        testable results than explicit lazy-loading coded in your classes.
     </p>
 
     <p>
-        The most interesting thing in this experiment is that PHP yet again allows to implement
+        The most interesting result in this experiment is that PHP yet again allows to implement
         language-level features in userland, which is awesome!
+    </p>
+
+    <p>
+        Please let me know if you like this project by giving it a star, or just drop me a tweet if
+        you think it can be enhanced!
     </p>
 </div>
