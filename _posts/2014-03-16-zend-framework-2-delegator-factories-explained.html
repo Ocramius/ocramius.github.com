@@ -235,11 +235,12 @@ class LoggerDelegatorFactory implements DelegatorFactoryInterface
 
 {% highlight php %}<?php
 return [
-    'delegators' => array(
-    'DbLoggingModule\Logger' => array(
-        'LoggerDelegatorFactory',
-        // can add more of these delegator factories here
-    ),
+    'delegators' => [
+        'DbLoggingModule\Logger' => [
+            'LoggerDelegatorFactory',
+            // can add more of these delegator factories here
+        ],
+    ],
 ];{% endhighlight %}
 
 <p>
