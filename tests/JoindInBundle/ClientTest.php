@@ -6,11 +6,9 @@ use PHPUnit_Framework_TestCase;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testThrowsAnExceptionIfGivenAInvalidConfigData()
     {
+        $this->setExpectedException('InvalidArgumentException');
         new Client([]);
     }
 
