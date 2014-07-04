@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>demo3d</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            color: #555;
+            font-size: 13px;
+            text-align: center;
+            background: #fff;
+            margin: 0px;
+            font-family: 'Open Sans', sans-serif;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin: 70px auto 20px auto;
+        }
+
+        .features {
+            margin: 0 auto;
+            width: 900px;
+        }
+
+        .features:after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        .feature {
+            width: 300px;
+            float: left;
+        }
+
+        .container {
+            height: 300px;
+            width: 300px;
+            position: relative;
+        }
+
+        .container canvas {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .circle {
+            height: 200px;
+            width: 200px;
+            border-radius: 200px;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            -webkit-transform-origin: center center;
+            -webkit-transform: translateX(-50%) translateY(-50%);
+            -moz-transform: translateX(-50%) translateY(-50%);
+            -ms-transform: translateX(-50%) translateY(-50%);
+            -o-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+            -webkit-transition: .5s -webkit-transform ease;
+        }
+
+        .text {
+            width: 200px;
+            font-size: 14px;
+            line-height: 21px;
+            margin: -40px auto 0 auto;
+            color: #808080;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 21px;
+        }
+
+        h2 span {
+            color: #95A5A6;
+        }
+
+        .call-to-action {
+            margin-top: 40px;
+        }
+
+        .button {
+            background: #95A5A6;
+            color: #fff;
+            font-weight: 600;
+            display: block;
+            border-radius: 8px;
+            font-size: 18px;
+            height: 50px;
+            line-height: 50px;
+            text-decoration: none;
+            margin: 0 auto;
+            width: 300px;
+        }
+
+        .button:hover {
+            background: #7F8C8D;
+        }
+
+        #info {
+            background: #ECF0F1;
+            height: 50px;
+            text-align: left;
+            line-height: 50px;
+            padding-left: 30px;
+        }
+
+        #credits {
+            display: inline-block;
+            float: right;
+            padding-right: 30px;
+        }
+
+        a {
+            color: #3498DB;
+        }
+
+        a:not(.button):hover {
+            color: #2980B9;
+        }
+
+            /* Shield */
+
+        #shield-container .circle { background: #2c96dd; }
+
+            /* Ball */
+
+        #ball-container .circle { background: #f3c600; }
+
+        #ball-container .shadow {
+            position: absolute;
+            top: 144px;
+            left: 45px;
+            height: 28px;
+            width: 111px;
+            background: url('img/shadow.png') no-repeat center center;
+            opacity: 0.7;
+        }
+
+            /* Dollar */
+
+        #dollar-container .circle { background: #1ecd6d; }
+
+    </style>
+</head>
+<body>
+    <div class="features">
+
+        <div class="feature">
+            <div id="shield-container" class="container">
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div id="ball-container" class="container">
+                <div class="circle">
+                    <div class="shadow"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature">
+            <div id="dollar-container" class="container">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/shifty.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//threejs.org/build/three.min.js"></script>
+    <script>
+    /**
+     * @author mrdoob / http://mrdoob.com/
+     */
+
+    THREE.OBJLoader = function ( manager ) {
+
+        this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+
+    };
+
+    THREE.OBJLoader.prototype = {
+
+        constructor: THREE.OBJLoader,
+
+        load: function ( url, onLoad, onProgress, onError ) {
+
+            var scope = this;
+
+            var loader = new THREE.XHRLoader( scope.manager );
+            loader.setCrossOrigin( this.crossOrigin );
+            loader.load( url, function ( text ) {
+
+                onLoad( scope.parse( text ) );
+
+            } );
+
+        },
+
+        parse: function ( data ) {
+
+            // fixes
+
+            data = data.replace( /\ \\\r\n/g, '' ); // rhino adds ' \\r\n' some times.
+
+            var replacement = '/f$1$2$4\n/f$2$3$4'; // quads to tris
+            data = data.replace( /f( +\d+)( +\d+)( +\d+)( +\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\d+)( +\d+\/\d+)( +\d+\/\d+)( +\d+\/\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\/\d+)( +\d+\/\/\d+)( +\d+\/\/\d+)( +\d+\/\/\d+)/g, replacement );
+
+            //
+
+            function vector( x, y, z ) {
+
+                return new THREE.Vector3( x, y, z );
+
+            }
+
+            function uv( u, v ) {
+
+                return new THREE.Vector2( u, v );
+
+            }
+
+            function face3( a, b, c, normals ) {
+
+                return new THREE.Face3( a, b, c, normals );
+
+            }
+
+            function meshN( meshName, materialName ) {
+
+                if ( geometry.vertices.length > 0 ) {
+
+                    geometry.mergeVertices();
+                    geometry.computeCentroids();
+                    geometry.computeFaceNormals();
+                    geometry.computeBoundingSphere();
+
+                    object.add( mesh );
+
+                    geometry = new THREE.Geometry();
+                    mesh = new THREE.Mesh( geometry, material );
+
+                    verticesCount = 0;
+
+                }
+
+                if ( meshName !== undefined ) mesh.name = meshName;
+                if ( materialName !== undefined ) {
+
+                    material = new THREE.MeshLambertMaterial();
+                    material.name = materialName;
+
+                    mesh.material = material;
+
+                }
+
+            }
+
+            var group = new THREE.Object3D();
+            var object = group;
+
+            var geometry = new THREE.Geometry();
+            var material = new THREE.MeshLambertMaterial();
+            var mesh = new THREE.Mesh( geometry, material );
+
+            var vertices = [];
+            var verticesCount = 0;
+            var normals = [];
+            var uvs = [];
+
+            // v float float float
+
+            var vertex_pattern = /v( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/;
+
+            // vn float float float
+
+            var normal_pattern = /vn( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/;
+
+            // vt float float
+
+            var uv_pattern = /vt( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/
+
+            // f vertex vertex vertex
+
+            var face_pattern1 = /f( +\d+)( +\d+)( +\d+)/
+
+            // f vertex/uv vertex/uv vertex/uv
+
+            var face_pattern2 = /f( +(\d+)\/(\d+))( +(\d+)\/(\d+))( +(\d+)\/(\d+))/;
+
+            // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
+
+            var face_pattern3 = /f( +(\d+)\/(\d+)\/(\d+))( +(\d+)\/(\d+)\/(\d+))( +(\d+)\/(\d+)\/(\d+))/;
+
+            // f vertex//normal vertex//normal vertex//normal
+
+            var face_pattern4 = /f( +(\d+)\/\/(\d+))( +(\d+)\/\/(\d+))( +(\d+)\/\/(\d+))/;
+
+            //
+
+            var lines = data.split( "\n" );
+
+            for ( var i = 0; i < lines.length; i ++ ) {
+
+                var line = lines[ i ];
+                line = line.trim();
+
+                var result;
+
+                if ( line.length === 0 || line.charAt( 0 ) === '#' ) {
+
+                    continue;
+
+                } else if ( ( result = vertex_pattern.exec( line ) ) !== null ) {
+
+                    // ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+
+                    vertices.push( vector(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] ),
+                            parseFloat( result[ 3 ] )
+                    ) );
+
+                } else if ( ( result = normal_pattern.exec( line ) ) !== null ) {
+
+                    // ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+
+                    normals.push( vector(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] ),
+                            parseFloat( result[ 3 ] )
+                    ) );
+
+                } else if ( ( result = uv_pattern.exec( line ) ) !== null ) {
+
+                    // ["vt 0.1 0.2", "0.1", "0.2"]
+
+                    uvs.push( uv(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] )
+                    ) );
+
+                } else if ( ( result = face_pattern1.exec( line ) ) !== null ) {
+
+                    // ["f 1 2 3", "1", "2", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 1 ] ) - 1 ],
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 3 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++
+                    ) );
+
+                } else if ( ( result = face_pattern2.exec( line ) ) !== null ) {
+
+                    // ["f 1/1 2/2 3/3", " 1/1", "1", "1", " 2/2", "2", "2", " 3/3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 5 ] ) - 1 ],
+                            vertices[ parseInt( result[ 8 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++
+                    ) );
+
+                    geometry.faceVertexUvs[ 0 ].push( [
+                                                          uvs[ parseInt( result[ 3 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 6 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 9 ] ) - 1 ]
+                                                      ] );
+
+                } else if ( ( result = face_pattern3.exec( line ) ) !== null ) {
+
+                    // ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 6 ] ) - 1 ],
+                            vertices[ parseInt( result[ 10 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++,
+                            [
+                                normals[ parseInt( result[ 4 ] ) - 1 ],
+                                normals[ parseInt( result[ 8 ] ) - 1 ],
+                                normals[ parseInt( result[ 12 ] ) - 1 ]
+                            ]
+                    ) );
+
+                    geometry.faceVertexUvs[ 0 ].push( [
+                                                          uvs[ parseInt( result[ 3 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 7 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 11 ] ) - 1 ]
+                                                      ] );
+
+                } else if ( ( result = face_pattern4.exec( line ) ) !== null ) {
+
+                    // ["f 1//1 2//2 3//3", " 1//1", "1", "1", " 2//2", "2", "2", " 3//3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 5 ] ) - 1 ],
+                            vertices[ parseInt( result[ 8 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++,
+                            [
+                                normals[ parseInt( result[ 3 ] ) - 1 ],
+                                normals[ parseInt( result[ 6 ] ) - 1 ],
+                                normals[ parseInt( result[ 9 ] ) - 1 ]
+                            ]
+                    ) );
+
+                } else if ( /^o /.test( line ) ) {
+
+                    // object
+
+                    object = new THREE.Object3D();
+                    object.name = line.substring( 2 ).trim();
+                    group.add( object );
+
+                } else if ( /^g /.test( line ) ) {
+
+                    // group
+
+                    meshN( line.substring( 2 ).trim(), undefined );
+
+                } else if ( /^usemtl /.test( line ) ) {
+
+                    // material
+
+                    meshN( undefined, line.substring( 7 ).trim() );
+
+                } else if ( /^mtllib /.test( line ) ) {
+
+                    // mtl file
+
+                } else if ( /^s /.test( line ) ) {
+
+                    // smooth shading
+
+                } else {
+
+                    // console.log( "THREE.OBJLoader: Unhandled line " + line );
+
+                }
+
+            }
+
+            // add the last group
+            meshN( undefined, undefined );
+
+            return group;
+
+        }
+
+    };
+    </script>
+    <script>
+        var container, $container;
+        var renderer, camera, scene, light, pointLight;
+        var shield;
+        var shieldRotation = false,
+            marios = [],
+            currentMario = 0;
+        function initMario() {
+
+            init();
+            animate();
+
+            function init() {
+                var VIEW_ANGLE = 45,
+                    NEAR = 0.1,
+                    FAR = 10000;
+
+                $container = $('#shield-container');
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                camera = new THREE.PerspectiveCamera(VIEW_ANGLE, $container.width() / $container.height(), NEAR, FAR);
+                scene = new THREE.Scene();
+                scene.add(camera);
+                camera.position.x = 30;
+                camera.position.y = 300;
+                renderer.setSize($container.width(), $container.height());
+                $container.append(renderer.domElement);
+                pointLight = new THREE.PointLight(0xFFFFFF);
+                pointLight.position.x = 50;
+                pointLight.position.y = 200;
+                pointLight.position.z = 30;
+                scene.add(pointLight);
+
+                texture = THREE.ImageUtils.loadTexture("logo/mario/mario_tex.png");
+
+                for (var i = 0; i < 12; i += 1) {
+                    // encapsulating in a closure to avoid scope leakages on the iterator value
+                    (function (i) {
+                        (new THREE.OBJLoader())
+                            .load("logo/mario/Frame_" + (i + 1) + ".obj", function(geometries, materials) {
+                                material = new THREE.MeshLambertMaterial({map: texture});
+                                shield   = new THREE.Mesh(geometries.children[0].geometry, material);
+
+                                shield.rotation.y = deg2rad(90);
+                                shield.scale.set(10, 10, 10);
+                                scene.add(shield);
+                                shield.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(1.1, 0.5, 0));
+                                shield.geometry.verticesNeedUpdate = true;
+                                shield.visible = false;
+                                marios[i] = shield;
+                                renderer.render(scene, camera);
+                            });
+                    }(i));
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame( animate);
+                currentMario += 0.2;
+                var currentMarioIndex = parseInt(currentMario) % 12;
+
+                for (var i = 0; i < marios.length; i += 1) {
+                    //marios[i].visible = (i === 0);
+                    marios[i].visible = (i === currentMarioIndex);
+
+                    marios[i].rotation.z += deg2rad(2);
+                    if (marios[i].rotation.z > 2 * Math.PI) {
+                        marios[i].rotation.z = 0;
+                    }
+                }
+
+                if (shieldRotation) {
+                    shield.rotation.y += deg2rad(5);
+                    if (shield.rotation.y > 2 * Math.PI) {
+                        shield.rotation.y = 0;
+                    }
+                }
+                render();
+            }
+
+            function render() {
+                camera.lookAt( scene.position );
+
+                renderer.render( scene, camera );
+            }
+        }
+    </script>
+    <script>
+        window.deg2rad = function(deg) { return deg * (Math.PI / 180); };
+        initMario();
+    </script>
+</body>
+</html>
