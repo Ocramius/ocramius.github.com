@@ -1,0 +1,92 @@
+body {
+    font-family: 'tisaregular';
+    font-size: 17px
+}
+
+/* Main structure */
+.sidebar{
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    position: fixed;
+    background: #0297AF url(../img/texture.jpg) fixed;
+    box-shadow: inset -30px -10px 80px 0 rgba(0, 0, 0, 0.2),
+                inset -10px -10px 20px 0 rgba(0, 0, 0, 0.15),
+                1px 0 0 0 #FFF;
+}
+.mainContent{
+    width: 80%;
+    position: absolute;
+    overflow-y: visible;
+    right: 0;
+}
+    .main-navigator {
+        text-align: center;
+        padding-top: 50px
+    }
+        .main-navigator a{
+            color: #FFFFFF;
+            font-size: 20px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+        .main-navigator a:hover{
+            background-color: #0297AF;
+            color: #000000;
+        }
+
+/* Abstracts */
+.align-center{
+    border-bottom: 1px dashed #AAA;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.logo{
+    text-align: center;
+}
+.logo img{
+    padding-top: 100px;
+    margin: 0 auto;
+}
+
+p.description{
+    font-family: 'Times New Roman';
+    font-style: italic;
+    font-size: 20px;
+    padding-top: 20px
+}
+
+article{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px dashed #AAA
+}
+h4 small
+{
+    display: block;
+    font-size: 60%;
+    color: #888;
+}
+
+.mainContent, footer.container {
+    max-width: 900px;
+}
+
+footer.container {
+    margin-top: 30px;
+    padding: 30px 0;
+    border-top: 1px dashed #aaa;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        padding-top: 30px;
+    }
+}
+@media (min-width: 980px) {
+    body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        padding-bottom: 40px;
+    }
+}
