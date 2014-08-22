@@ -2,6 +2,30 @@ body {
     font-family: 'tisaregular';
     font-size: 17px
 }
+/* Menu */
+.nav{
+    list-style: none;
+    padding: 0;
+}
+
+.nav a{
+    text-decoration: none;
+}
+
+.nav li{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Container content */
+.row-fluid{
+    width: 90% !important;
+    margin: 0 auto;
+}
+/* Intro */
+.intro {
+    text-align: center;
+}
 
 /* Main structure */
 .sidebar{
@@ -21,20 +45,20 @@ body {
     overflow-y: visible;
     right: 0;
 }
-    .main-navigator {
-        text-align: center;
-        padding-top: 50px
-    }
-        .main-navigator a{
-            color: #FFFFFF;
-            font-size: 20px;
-            padding-top: 3px;
-            padding-bottom: 3px;
-        }
-        .main-navigator a:hover{
-            background-color: #0297AF;
-            color: #000000;
-        }
+.main-navigator {
+    text-align: center;
+    padding-top: 50px
+}
+.main-navigator a{
+    color: #FFFFFF;
+    font-size: 20px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+.main-navigator a:hover{
+    background-color: #0297AF;
+    color: #000000;
+}
 
 /* Abstracts */
 .align-center{
@@ -62,6 +86,11 @@ article{
     padding-bottom: 30px;
     border-bottom: 1px dashed #AAA
 }
+article h2 a{
+    text-decoration: none;
+    color: #328CFF
+}
+
 h4 small
 {
     display: block;
@@ -69,7 +98,7 @@ h4 small
     color: #888;
 }
 
-.mainContent, footer.container {
+footer.container {
     max-width: 900px;
 }
 
