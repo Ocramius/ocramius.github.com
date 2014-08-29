@@ -45,7 +45,9 @@ tweet: 270851711395045377
     <br/>
     Take for example the following code:
 </p>
-{% highlight php %}<?php
+
+~~~php
+<?php
 
 class A {}
 
@@ -71,7 +73,8 @@ class HelloWorld
     {
         return 'Hello World';
     }
-}{% endhighlight %}
+}
+~~~
 <p>
     The example is obviously nonsense, but this actually happens in your MVC controllers, where you may have 3 or 4
     actions and none of them using all of the dependencies of the controller itself.
@@ -103,7 +106,8 @@ class HelloWorld
     <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
     within their services:
 </p>
-{% highlight php %}<?php
+~~~php
+<?php
 
 class HelloWorld
 {
@@ -125,7 +129,8 @@ class HelloWorld
 
         $this->d->doSomething();
     }
-}{% endhighlight %}
+}
+~~~
 <p>
     As you have noticed, this solves the performance issue by allowing us to retrieve an instance of <code>D</code>
     <strong>only when we really need it</strong>:
@@ -215,7 +220,8 @@ class HelloWorld
     This is achieved by Doctrine by generating a class that inherits from the original object and faking all of
     its public API and adding the required code to trigger lazy loading:
 </p>
-{% highlight php %}<?php
+~~~php
+<?php
 
 class UserProxy extends User
 {
@@ -229,7 +235,8 @@ class UserProxy extends User
 
         return parent::getUsername();
     }
-}{% endhighlight %}
+}
+~~~
 <p>
     The previous snippet is just a simplified example, and isn't very flexible, but as you may know, Doctrine is a
     set of libraries focusing on persistence of data, and the
@@ -243,7 +250,8 @@ class UserProxy extends User
     because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
     used as initialization logic holders:
 </p>
-{% highlight php %}<?php
+~~~php
+<?php
 
 class UserProxy extends User
 {
@@ -263,7 +271,8 @@ class UserProxy extends User
 
         return parent::getUsername();
     }
-}{% endhighlight %}
+}
+~~~
 <p>
     Using a <a href="http://php.net/manual/en/class.closure.php" target="_blank">Closure</a> as an initializer
     now enables us to swap the initialization logic used for our proxy object. I won't get into details, but this
@@ -279,7 +288,8 @@ class UserProxy extends User
     Let's get back to the example with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>,
     <code>HelloWorld</code>, but we'll introduce a proxy now:
 </p>
-{% highlight php linenums %}<?php
+~~~php
+<?php
 
 class A {}
 
@@ -342,7 +352,8 @@ class HelloWorld
     {
         return $this->d->doSomething();
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Wait... What? Ok, let's slow this down a bit:

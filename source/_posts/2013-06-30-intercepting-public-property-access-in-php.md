@@ -41,12 +41,14 @@ tweet: 351660814790438913
     Here's a very simple example:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class Foo
 {
     public $publicProperty = 'baz';
-}{% endhighlight %}
+}
+~~~
 
 <p>
     What we want is some way to know whenever somebody writes or reads property <code>$publicProperty</code>
@@ -59,7 +61,8 @@ class Foo
     we have this wrapper extending <code>Foo</code>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class FooWrapper extends Foo
 {
@@ -67,17 +70,20 @@ class FooWrapper extends Foo
     {
         unset($this->publicProperty);
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     That's it so far! Let's try it out:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $foo = new FooWrapper();
 
-echo $foo->publicProperty;{% endhighlight %}
+echo $foo->publicProperty;
+~~~
 
 <p>
     Weirdly, this <a href="http://3v4l.org/gRtoj" target="_blank">will produce</a>
@@ -94,7 +100,8 @@ echo $foo->publicProperty;{% endhighlight %}
     Let's use this at our own advantage by tweaking <code>FooWrapper</code> a bit:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class FooWrapper extends Foo
 {
@@ -120,27 +127,32 @@ class FooWrapper extends Foo
 
         return $this->wrapped->$name = $value;
     }
-}{% endhighlight %}
+}
+~~~
 <p>
     And here again, let us try it out:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $foo = new FooWrapper(new Foo());
 
 echo $foo->publicProperty;
 echo PHP_EOL;
-echo $foo->publicProperty = 'test';{% endhighlight %}
+echo $foo->publicProperty = 'test';
+~~~
 
 <p>
     This <a href="http://3v4l.org/mmMZU" target="_blank">will produce</a> following output:
 </p>
 
-{% highlight sh %}Getting property publicProperty
+~~~sh
+Getting property publicProperty
 baz
 Setting property publicProperty to test
-test{% endhighlight %}
+test
+~~~
 
 <p>
     Cool, huh? And the same works with <code>__isset</code> and <code>__unset</code> too!
@@ -167,7 +179,8 @@ test{% endhighlight %}
     Here's how the code from before rewritten using ProxyManager 0.4:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 use ProxyManager\Configuration;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory as Factory;
@@ -196,7 +209,8 @@ $foo = $factory->createProxy(
 
 echo $foo->publicProperty;
 echo PHP_EOL;
-echo $foo->publicProperty = 'test';{% endhighlight %}
+echo $foo->publicProperty = 'test';
+~~~
 
 <p>
     Give it a try and drop me a line if you like it or hate it!

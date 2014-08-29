@@ -43,7 +43,8 @@ summary: A tutorial to start using assets from your modules within your ZF2 appl
     <a href="http://getcomposer.org/" target="_blank">Composer</a>:
 </p>
 
-{% highlight sh %}~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+~~~sh
+~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
 Cloning into 'ZendSkeletonApplication'...
 
 ~$ cd ZendSkeletonApplication
@@ -66,19 +67,22 @@ Updating dependencies
     Downloading: 100%
 
 Writing lock file
-Generating autoload files{% endhighlight %}
+Generating autoload files
+~~~
 
 <hr/>
 
 <p>Don't forget to enable the module in your <code>config/application.config.php</code>!</p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 return array(
     'modules' => array(
         'AssetManager',
         'Application',
     ),
-    // ... other configs ... {% endhighlight %}
+    // ... other configs ...
+~~~
 
 <h2>Assets</h2>
 <p>
@@ -88,7 +92,9 @@ return array(
     dir does not yet exist in the skeleton application, you will need to create it):
 </p>
 
-{% highlight css %}* {color: green;}{% endhighlight %}
+~~~css
+* {color: green;}
+~~~
 
 <p>
     We now need to teach the AssetManager where to look for our assets. To do so, we will
@@ -97,7 +103,8 @@ return array(
     add following configuration:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 return array(
     'asset_manager' => array(
         'resolver_configs' => array(
@@ -106,7 +113,8 @@ return array(
             ),
         ),
     ),
-);{% endhighlight %}
+);
+~~~
 
 <p>
     This basically means that any request that couldn't be routed to a controller will
@@ -134,9 +142,11 @@ return array(
     <code>module/Application/view/layout/layout.phtml</code> as following if you want:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
     echo $this->headLink()->prependStylesheet($this->basePath() . '/test-asset.css');
-?>{% endhighlight %}
+?>
+~~~
 
 <p>
     Enjoy! You can now build your modules to ship any images, js or generally assets!

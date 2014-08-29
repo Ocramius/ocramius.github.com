@@ -30,7 +30,8 @@ tweet: 436184062487953408
     Let's make a simple example:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class UserService
 {
@@ -52,7 +53,8 @@ class UserService
         return $this->userRepository
             ?: $this->userRepository = new MemoryUserRepository();
     }
-}{% endhighlight %}
+}
+~~~
 
 <hr/>
 
@@ -72,7 +74,8 @@ class UserService
     For instance, the following code works only because of a lucky combination of events:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class UserService
 {
@@ -90,15 +93,17 @@ class UserService
         $this->userRepository->find($userId);
         // ...
     }
-}{% endhighlight %}
+}
+~~~
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $user = build_user_somehow();
 
 $userService->register($user);
 $userService->login($user->getId());
-{% endhighlight %}
+~~~
 
 <p>
     This code will run, but only because <code>UserService#register()</code> was called before
@@ -135,7 +140,8 @@ $userService->login($user->getId());
     Let's see how this is done with the library:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class UserService
 {
@@ -169,7 +175,8 @@ class UserService
         return $this->userRepository
             ?: $this->userRepository = new MemoryUserRepository();
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     By calling <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>, we've made sure
@@ -199,7 +206,8 @@ class UserService
     </a>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters = true)
 {
@@ -219,7 +227,8 @@ private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters 
             unset($this->$lazyProperty);
         }
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Quite simple! Nothing really incredible going on here. When is the property actually initialized?
@@ -231,7 +240,8 @@ private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters 
     </a>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 // returning a reference is required,
 // otherwise (for example) array properties accessed for writes will fail
@@ -258,7 +268,8 @@ public function & __get($name)
     $this->$name = $this->{'get' . $name}();
 
     return $this->$name;
-}{% endhighlight %}
+}
+~~~
 
 <hr/>
 

@@ -63,7 +63,8 @@ tweet: 236012181685170177
     PHPUnit is able to generate log files in an XML format called <strong>clover</strong>. You will need to setup
     PHPUnit as following to generate a correct clover report:
 </p>
-{% highlight xml %}<?xml version="1.0"?>
+~~~xml
+<?xml version="1.0"?>
 <!-- works fine with PHPUnit-3.6.10 -->
 <phpunit>
     <!-- you can keep your own options in these elements -->
@@ -77,13 +78,15 @@ tweet: 236012181685170177
         <!-- and this is where your report will be written -->
         <log type="coverage-clover" target="./clover.xml"/>
     </logging>
-</phpunit>{% endhighlight %}
+</phpunit>
+~~~
 
 <p>
     Now let's try to run our test suite... you will get a <code>clover.xml</code> file like following:
 </p>
 
-{% highlight xml %}<?xml version="1.0" encoding="UTF-8"?>
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
     <coverage generated="1345080270">
         <project timestamp="1345080270"></project>
             <file name="/home/ocramius/Desktop/ZendSkeletonApplication/vendor/rwoverdijk/assetmanager/src/ClassName.php">
@@ -97,7 +100,8 @@ tweet: 236012181685170177
                 <line num="18" type="stmt" count="0"/>
                 <line num="19" type="stmt" count="0"/>
                 <line num="20" type="stmt" count="0"/>
-                <-- ... [continues] ... -->{% endhighlight %}
+                <-- ... [continues] ... -->
+~~~
 
 <p>
     You can read more about this on the
@@ -118,7 +122,8 @@ tweet: 236012181685170177
     to us and extract them from the XML.
 </p>
 
-{% highlight php linenums %}<?php
+~~~php
+<?php
 // coverage-checker.php
 $inputFile  = $argv[1];
 $percentage = min(100, max(0, (int) $argv[2]));
@@ -148,25 +153,29 @@ if ($coverage < $percentage) {
     exit(1);
 }
 
-echo 'Code coverage is ' . $coverage . '% - OK!' . PHP_EOL;{% endhighlight %}
+echo 'Code coverage is ' . $coverage . '% - OK!' . PHP_EOL;
+~~~
 
 <p>
     The script basically asks for two  input arguments. One is the clover file path and one is the minimum
     percentage of code coverage we want. Usage is like following:
 </p>
 
-{% highlight sh %}~$ php coverage-checker.php clover.xml 80
+~~~sh
+~$ php coverage-checker.php clover.xml 80
 Code coverage is 74.32%, which is below the accepted 80%
 
 ~$ php coverage-checker.php clover.xml 70
-Code coverage is 74.32% - OK!{% endhighlight %}
+Code coverage is 74.32% - OK!
+~~~
 
 <h2>Putting it in our CI environment</h2>
 <p>
     And here's the simple <code>.travis.yml</code> configuration to make everything work!
 </p>
 
-{% highlight yaml %}language: php
+~~~yaml
+language: php
 
 php:
   - 5.3
@@ -174,7 +183,8 @@ php:
 
 script:
   - phpunit
-  - php coverage-checker.php clover.xml 75{% endhighlight %}
+  - php coverage-checker.php clover.xml 75
+~~~
 
 <p>
     Was it hard? Quite impressive for such a simple script combined with what PHPUnit can do! If you don't want to

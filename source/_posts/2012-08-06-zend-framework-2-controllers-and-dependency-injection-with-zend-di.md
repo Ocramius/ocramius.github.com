@@ -56,9 +56,11 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
     module provided by ZendSkeletonApplication, but you should apply these concepts only for your own modules!
 </p>
 
-{% highlight sh %}~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+~~~sh
+~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
 ~$ cd ZendSkeletonApplication
-~$ ./composer.phar install{% endhighlight %}
+~$ ./composer.phar install
+~~~
 
 <p>
     <span class="label label-info">For the lazy:</span> If you just prefer to look at the code and run it
@@ -87,7 +89,9 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
 <p>
     A simple repository that fetches a random greeting message from an array.
 </p>
-{% highlight php %}<?php
+
+~~~php
+<?php
 // module/Application/src/Application/Repository/StaticGreetingRepository.php
 
 namespace Application\Repository;
@@ -101,14 +105,16 @@ class StaticGreetingRepository
     {
         return $this->availableGreetings[array_rand($this->availableGreetings)];
     }
-}{% endhighlight %}
+}
+~~~
 
 <h4>Greetings service (consumes repository):</h4>
 <p>
     A service that assembles the entire message by picking a random greeting from a given repository and a
     provided name.
 </p>
-{% highlight php %}<?php
+~~~php
+<?php
 // module/Application/src/Application/Service/GreetingService.php
 
 namespace Application\Service;
@@ -136,13 +142,16 @@ class GreetingService
     {
         return $this->repository->getRandomGreeting() . ' ' . $name . '!';
     }
-}{% endhighlight %}
+}
+~~~
 
 <h4>Greetings controller (consumes service):</h4>
 <p>
     A controller we use to collect a <code>GET</code> request and return the message to the end user.
 </p>
-{% highlight php %}<?php
+
+~~~php
+<?php
 // module/Application/src/Application/Controller/GreetingController.php
 
 namespace Application\Controller;
@@ -172,12 +181,15 @@ class GreetingController extends AbstractActionController
 
         return new ViewModel(array('greeting' => $this->greetingService->greet($name)));
     }
-}{% endhighlight %}
+}
+~~~
 
 <h4>And then a view to see some output:</h4>
-{% highlight php %}<?php
+~~~php 
+<?php
 // module/Application/view/application/greeting/hello.phtml
-echo '<h1>' . $this->escapeHtml($this->greeting) . '</h1>';{% endhighlight %}
+echo '<h1>' . $this->escapeHtml($this->greeting) . '</h1>';
+~~~
 
 <hr/>
 
@@ -188,7 +200,8 @@ echo '<h1>' . $this->escapeHtml($this->greeting) . '</h1>';{% endhighlight %}
     a route to allow access to our controller (and a couple of fixes required to inject inherited dependencies).
 </p>
 
-{% highlight php %}<?php
+~~~php 
+<?php
 
 return array(
     'di' => array(
@@ -225,7 +238,8 @@ return array(
     ),
 
     // remaining config
-);{% endhighlight %}
+);
+~~~
 
 <hr/>
 
@@ -279,7 +293,8 @@ return array(
     Otherwise, simply do following in your configuration once you are sure your dependencies won't change much:
 </p>
 
-{% highlight php %}<?php
+~~~php 
+<?php
 
 return array(
     'controllers' => array(
@@ -295,7 +310,8 @@ return array(
     ),
 
     // remaining config
-);{% endhighlight %}
+);
+~~~
 
 <p>
     This basically removes all the overhead, but also removes the flexibility of <code>Zend\Di</code>, since

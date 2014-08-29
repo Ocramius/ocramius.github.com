@@ -49,7 +49,8 @@ tweet: 445250469188083713
 </p>
 
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class LoggerFactory implements FactoryInterface
 {
@@ -68,7 +69,8 @@ class LoggerFactory implements FactoryInterface
 
         return $logger;
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     This is awesome and clean, but then we want to be able to log all errors by
@@ -81,7 +83,8 @@ class LoggerFactory implements FactoryInterface
 </p>
 
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class MyLoggerFactory implements FactoryInterface
 {
@@ -105,7 +108,8 @@ class MyLoggerFactory implements FactoryInterface
 
         return $logger;
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     This is fine, but our <code>MyLoggerFactory</code> <strong>duplicates a lot of code</strong> from
@@ -121,7 +125,8 @@ class MyLoggerFactory implements FactoryInterface
     We can be mitigate this issue by using an initializer instead:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class MyLoggerInitializer implements InitializerInterface
 {
@@ -132,7 +137,8 @@ class MyLoggerInitializer implements InitializerInterface
             $logger->addFormatter(new HttpRequestContextFormatter());
         }
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     This is a much cleaner approach, but there are major disadvantages as well:
@@ -174,13 +180,16 @@ class MyLoggerInitializer implements InitializerInterface
     In pseudo-code, a delegator-factory is doing following:
 </p>
 
-{% highlight js %}service = delegatorFactory(factory());{% endhighlight %}
+~~~javascript
+service = delegatorFactory(factory());
+~~~
 
 <p>
     This is the interface for a delegator factory:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 namespace Zend\ServiceManager;
 
@@ -192,7 +201,8 @@ interface DelegatorFactoryInterface
         $requestedName,
         $callback
     );
-}{% endhighlight %}
+}
+~~~
 
 <hr/>
 
@@ -203,7 +213,8 @@ interface DelegatorFactoryInterface
 </p>
 
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class LoggerDelegatorFactory implements DelegatorFactoryInterface
 {
@@ -220,7 +231,8 @@ class LoggerDelegatorFactory implements DelegatorFactoryInterface
 
         return $logger;
     }
-}{% endhighlight %}
+}
+~~~
 
 <p class="alert alert-info">
     <span class="label label-info">Note:</span> We are not using the first 3 parameters,
@@ -233,7 +245,8 @@ class LoggerDelegatorFactory implements DelegatorFactoryInterface
     whenever the service <code>"DbLoggingModule\Logger"</code> is requested:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 return [
     'delegators' => [
         'DbLoggingModule\Logger' => [
@@ -241,7 +254,8 @@ return [
             // can add more of these delegator factories here
         ],
     ],
-];{% endhighlight %}
+];
+~~~
 
 <p>
     This will make the <code>Zend\ServiceManager</code> call the the

@@ -29,13 +29,15 @@ tweet: 399854614503108608
     <br/>
     In general, the template for a fluent interface can be like following:
 </p>
-{% highlight php %}<?php
+~~~php
+<?php
 
 interface {InterfaceName}
 {
     /** @return self */
     public function {MethodName}({Params});
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Obviously, PHP doesn't provide return type hints, which means that I limited myself to define a
@@ -48,14 +50,16 @@ interface {InterfaceName}
     when applying multiple operations on the same object:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $foo
     ->doBar()
     ->doBaz()
     ->setTaz('taz')
     ->otherCall()
-    ->allTheThings();{% endhighlight %}
+    ->allTheThings();
+~~~
 
 <hr/>
 
@@ -73,14 +77,16 @@ $foo
     Here's an example of good usage of a fluent interface:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $queryBuilder
     ->select('u')
     ->from('User u')
     ->where('u.id = :identifier')
     ->orderBy('u.name', 'ASC')
-    ->setParameter('identifier', 100);{% endhighlight %}
+    ->setParameter('identifier', 100);
+~~~
 
 <hr/>
 
@@ -127,7 +133,8 @@ $queryBuilder
     What does that mean? Let's make an example with a <code>Counter</code> interface:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 interface Counter
 {
@@ -136,11 +143,13 @@ interface Counter
 
     /** @return int */
     public function getCount();
-}{% endhighlight %}
+}
+~~~
 
 <p>Here's a fluent implementation of the interface:</p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class FluentCounter implements Counter
 {
@@ -157,13 +166,15 @@ class FluentCounter implements Counter
     {
         return $this->count;
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Here's an Immutable implementation of the interface:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class ImmutableCounter implements Counter
 {
@@ -183,29 +194,34 @@ class ImmutableCounter implements Counter
     {
         return $this->count;
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Here is how you <a href="http://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new FluentCounter();
 
-echo $counter->count()->count()->count()->getCount(); // 3!{% endhighlight %}
+echo $counter->count()->count()->count()->getCount(); // 3!
+~~~
 
 <p>
     Here is how you <a href="http://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new ImmutableCounter();
 
 $counter = $counter->count()->count()->count();
 
-echo $counter->getCount(); // 3!{% endhighlight %}
+echo $counter->getCount(); // 3!
+~~~
 
 <p>
     We managed to implement an immutable counter even though the author of <code>Counter</code> maybe
@@ -221,11 +237,13 @@ echo $counter->getCount(); // 3!{% endhighlight %}
     is the "immutable" way, so:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = $counter->count()->count()->count();
 
-echo $counter->getCount(); // 3!{% endhighlight %}
+echo $counter->getCount(); // 3!
+~~~
 
 <p>
     This ensures that <code>FluentCounter#getCount()</code> works as expected, but obviously defeats the
@@ -268,7 +286,8 @@ echo $counter->getCount(); // 3!{% endhighlight %}
     I'm picking the <code>Counter</code> example again:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 interface Counter
 {
@@ -277,7 +296,8 @@ interface Counter
 
     /** @return int */
     public function getCount();
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Assuming that the implementor of the wrapper doesn't know anything about the implementations of this
@@ -287,7 +307,8 @@ interface Counter
     In this example, the implementor simply writes a wrapper that echoes every time one of the methods is called:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class EchoingCounter implements Counter
 {
@@ -311,19 +332,22 @@ class EchoingCounter implements Counter
 
         return $this->counter->getCount();
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     Let's <a href="http://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new EchoingCounter(new FluentCounter());
 
 $counter = $counter->count()->count()->count()->count();
 
-echo $counter->getCount();{% endhighlight %}
+echo $counter->getCount();
+~~~
 
 <p>
     Noticed anything wrong? Yes, the string
@@ -340,17 +364,20 @@ echo $counter->getCount();{% endhighlight %}
     <a href="http://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new EchoingCounter(new ImmutableCounter());
 
 $counter = $counter->count()->count()->count()->count();
 
-echo $counter->getCount();{% endhighlight %}
+echo $counter->getCount();
+~~~
 
 <p>Same results. Let's try to fix them:</p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class EchoingCounter implements Counter
 {
@@ -376,17 +403,20 @@ class EchoingCounter implements Counter
 
         return $this->counter->getCount();
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>And now let's <a href="http://3v4l.org/AilJu" target="_blank">retry</a>:</p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new EchoingCounter(new FluentCounter());
 
 $counter = $counter->count()->count()->count()->count();
 
-echo $counter->getCount();{% endhighlight %}
+echo $counter->getCount();
+~~~
 
 <p>
     Works! We now see the different <code>EchoingCounter::count</code> being echoed.
@@ -394,14 +424,16 @@ echo $counter->getCount();{% endhighlight %}
     What about the immutable implementation?
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = new EchoingCounter(new ImmutableCounter());
 
 // we're using the "SAFE" solution here
 $counter = $counter->count()->count()->count()->count();
 
-echo $counter->getCount();{% endhighlight %}
+echo $counter->getCount();
+~~~
 
 <p>
     <a href="http://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
@@ -416,7 +448,8 @@ echo $counter->getCount();{% endhighlight %}
     We <em>can</em> manually fix the wrapper with some assumptions though:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 class EchoingCounter implements Counter
 {
@@ -442,7 +475,8 @@ class EchoingCounter implements Counter
 
         return $this->counter->getCount();
     }
-}{% endhighlight %}
+}
+~~~
 
 <p>
     As you can see, we have to manually patch the <code>count()</code> method, but then again, this breaks
@@ -468,14 +502,16 @@ class EchoingCounter implements Counter
     which means that all the return values of methods have to be manually defined:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = $this->getMock('Counter');
 
 $counter
     ->expects($this->any())
     ->method('count')
-    ->will($this->returnSelf());{% endhighlight %}
+    ->will($this->returnSelf());
+~~~
 
 <p>
     There are 2 major problems with this:
@@ -498,14 +534,16 @@ $counter
     The correct way of mocking the <code>Counter</code> interface would be something like:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $counter = $this->getMock('Counter');
 
 $counter
     ->expects($this->any())
     ->method('count')
-    ->will($this->returnValue($this->getMock('Counter')));{% endhighlight %}
+    ->will($this->returnValue($this->getMock('Counter')));
+~~~
 
 <p>
     As you can see, we can break our code by making the mock behave differently, but still respecting the
@@ -527,7 +565,8 @@ $counter
     especially because people abuse fluent interfaces to write giant chained method calls like:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 
 $foo
     ->addBar('bar')
@@ -556,15 +595,18 @@ $foo
     ->addTab('tab')
     ->addBar('bar')
     ->addBaz('baz')
-    ->addTab('tab');{% endhighlight %}
+    ->addTab('tab');
+~~~
 
 <p>
     Let's assume that a line is changed in the middle of the chain:
 </p>
 
-{% highlight sh %}$ diff -p left.txt right.txt{% endhighlight %}
+~~~sh
+$ diff -p left.txt right.txt
+~~~
 
-{% highlight diff %}
+~~~diff
 *** left.txt    Fri Nov  8 15:05:09 2013
 --- right.txt   Fri Nov  8 15:05:22 2013
 ***************
@@ -576,7 +618,8 @@ $foo
 +     ->addBaz('tab')
     ->addTab('tab')
     ->addBar('bar')
-    ->addBaz('baz'){% endhighlight %}
+    ->addBaz('baz')
+~~~
 
 <p>
     Not really useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
@@ -599,7 +642,8 @@ $foo
     I'm picking an obvious example to show where this may happen:
 </p>
 
-{% highlight php %}<?php
+~~~php
+<?php
 return $queryBuilder
     ->select('u')
     ->from('User u')
@@ -609,7 +653,8 @@ return $queryBuilder
     ->setParameter('identifier', 100)
     ->getQuery()
     ->setMaxResults(10)
-    ->getResult();{% endhighlight %}
+    ->getResult();
+~~~
 
 <p>
     This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are returning
@@ -619,14 +664,16 @@ return $queryBuilder
 </p>
 
 
-{% highlight php %}<?php
+~~~php
+<?php
 return $someBuilder
     ->addThing('thing')
     ->addOtherThing('other thing')
     ->compile()
     ->write()
     ->execute()
-    ->gimme();{% endhighlight %}
+    ->gimme();
+~~~
 
 <p>
     Which of these method calls is part of a fluent interface? Which is instead
