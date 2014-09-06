@@ -7,14 +7,14 @@ title: About me, Marco Pivetta, aka Ocramius
 <article class="vcard">
     <p>
         Hi, my name is <a class="fn url" href="http://ocramius.gihub.io/">
-            <span class="given-name">Marco</span> <span class="family-name">Marco</span>
+            <span class="given-name">Marco</span> <span class="family-name">Pivetta</span>
         </a>,
-        and I'm a software consultant working for <a class="roave org" href="http://roave.com/">Roave</a>.
+        and I'm a software consultant working for <a class="roave url org" href="http://roave.com/">Roave</a>.
     </p>
 
-    <p>
+    <p class="adr">
         My current location is near <span class="locality">Frankfurt</span>, in
-        <span class="type">Germany</span>.
+        <span class="country-name">Germany</span>.
     </p>
 
     <p>
@@ -28,15 +28,15 @@ title: About me, Marco Pivetta, aka Ocramius
     </p>
 
     <p>
-        I am part of the <a href="http://www.doctrine-project.org/" class="doctrine org">Doctrine Project</a>
+        I am part of the <a href="http://www.doctrine-project.org/" class="doctrine url org">Doctrine Project</a>
         core team: we build the well known
         <a href="https://github.com/doctrine/doctrine2">Doctrine 2 Object Relational Mapper</a>.
     </p>
 
     <p>
-        If you dig in my <a href="https://github.com/Ocramius" rel="me" class="github">Github account</a>,
+        If you dig in my <a href="https://github.com/Ocramius" rel="me" class="github url">Github account</a>,
         you will also find out that I am part of the
-        <a href="https://github.com/zendframework/" class="zendframework org">ZendFramework CR team</a>,
+        <a href="https://github.com/zendframework/" class="zendframework url org">ZendFramework CR team</a>,
         helping maintaining one of the most used, stable and secure enterprise-grade available PHP libraries.
     </p>
 
