@@ -51,7 +51,8 @@ array(1) {
 </p>
 
 
-~~~php<?php
+~~~php
+<?php
 
 class Foo
 {
