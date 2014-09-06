@@ -30,8 +30,8 @@ var mario = (function (marioDir) {
             return;
         }
 
-        var rotation = deg2rad(((timestamp / 1000) * rotationsPerSecond * 360) % 360),
-            currentMarioIndex = parseInt((timestamp / 1000) * marioFramesPerSecond) % MARIO_COUNT;
+        var rotation = (((timestamp / 1000) * rotationsPerSecond * 360) % 360) * (Math.PI / 180),
+            currentMarioIndex = parseInt((timestamp / 1000) * marioFramesPerSecond % MARIO_COUNT);
 
         for (var i in marios) {
             if (marios.hasOwnProperty(i)) {
@@ -88,7 +88,6 @@ var mario = (function (marioDir) {
                         shield.scale.set(10, 10, 10);
                         scene.add(shield);
                         shield.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(1.1, 0.5, 0));
-                        shield.geometry.verticesNeedUpdate = true;
                         shield.visible = false;
 
                         marios[i] = shield;
