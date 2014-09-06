@@ -18,6 +18,26 @@
         <style>
         pre code { background-color: inherit; }
         .logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
+        .twitter  {
+            background-image: url('{{ site.url}}/img/twitter.svg');
+            padding-left: 15%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            display: block;
+        }
+        .github  {
+            background-image: url('{{ site.url}}/img/github.svg');
+            padding-left: 15%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            display: block;
+        }
+
+        a.github, a.twitter, a.github:hover, a.twitter:hover {
+            color: rgba(0, 0, 0, 0);
+        }
         </style>
     </head>
     <body>
@@ -27,12 +47,6 @@
                     <p id="shield-container" class="logo-cont"></p>
                     <ul class="nav">
                         <li><a href="{{ site.url }}/">Home</a></li>
-                        {% if site.twitter %}
-                        <li class="twitter"><a href="https://twitter.com/{{ site.twitter }}">{{ site.twitter }}</a></li>
-                        {% endif %}
-                        {% if site.github %}
-                        <li class="github"><a href="https://twitter.com/{{ site.github }}">{{ site.github }}</a></li>
-                        {% endif %}
                         <li><a href="{{ site.url }}/blog">Archive</a></li>
                         {# not needed for now
                         <li><a href="{{ site.url }}/blog/categories">Categories</a></li>
@@ -40,6 +54,29 @@
                         #}
                         <li><a href="{{ site.url }}/about">About</a></li>
                     </ul>
+                    {% if site.twitter %}
+                    <li>
+                        <a
+                            class="twitter"
+                            href="https://twitter.com/{{ site.twitter }}"
+                            rel="me" title="{{ site.twitter }} twitter profile"
+                        >
+                            {{ site.twitter }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if site.github %}
+                    <li>
+                        <a
+                            class="github"
+                            href="https://twitter.com/{{ site.github }}"
+                            rel="me"
+                            rel="me" title="{{ site.twitter }} github profile"
+                        >
+                            {{ site.github }}
+                        </a>
+                    </li>
+                    {% endif %}
                 </div>
             </div>
         </header>
