@@ -5,11 +5,11 @@ var mario = (function (marioDir) {
         camera,
         scene,
         marios = [],
-        currentMario = 0,
-        MARIO_COUNT = 12;
-
-    init();
-    animate();
+        MARIO_COUNT = 12,
+        rotationsPerSecond = 0.3,
+        marioFramesPerSecond = 9,
+        skippedFrames = 2,
+        currentFrame = 0;
 
     function deg2rad(deg) {
         return deg * (Math.PI / 180);
@@ -21,22 +21,26 @@ var mario = (function (marioDir) {
         renderer.render(scene, camera);
     }
 
-    function animate() {
-        currentMario += 0.2;
-        var currentMarioIndex = parseInt(currentMario) % MARIO_COUNT;
+    function animate(timestamp) {
+        currentFrame += 1;
 
-        for (var i = 0; i < marios.length; i += 1) {
-            marios[i].visible = (i === currentMarioIndex);
+        if (! (currentFrame % skippedFrames)) {
+            requestAnimationFrame(animate, renderer.domElement);
 
-            marios[i].rotation.z += deg2rad(2);
+            return;
+        }
 
-            if (marios[i].rotation.z > 2 * Math.PI) {
-                marios[i].rotation.z = 0;
+        var rotation = deg2rad(((timestamp / 1000) * rotationsPerSecond * 360) % 360),
+            currentMarioIndex = parseInt((timestamp / 1000) * marioFramesPerSecond) % MARIO_COUNT;
+
+        for (var i in marios) {
+            if (marios.hasOwnProperty(i)) {
+                marios[i].visible    = (i == currentMarioIndex);
+                marios[i].rotation.z = rotation;
             }
         }
 
         render();
-
         requestAnimationFrame(animate, renderer.domElement);
     }
 
@@ -94,4 +98,6 @@ var mario = (function (marioDir) {
 
         requestAnimationFrame(animate, renderer.domElement);
     }
+
+    init();
 });
