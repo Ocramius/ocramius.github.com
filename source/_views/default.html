@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{{ page.title }}{% endblock %} &mdash; {{ site.title }} &mdash; {{ site.subtitle }}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ site.url }}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ site.url }}/components/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ site.url }}/font/stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="{{ site.url }}/components/highlightjs/styles/github.css" />
+        <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/atom.xml" title="{{ site.title }} activity feed" />
+        <style>
+        /** quick fix because bootstrap <pre> has a background-color. */
+        pre code { background-color: inherit; }
+        .container.logo-cont {height: 250px; width: 250px; background: transparent;}
+        .container.logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="sidebar">
+
+                <div class="logo">
+                    <div id="shield-container" class="container logo-cont"></div>
+                </div>
+
+                <div class="main-navigator">
+                    <ul class="nav">
+                        <li><a href="{{ site.url }}/">Home</a></li>
+                        <li><a href="{{ site.url }}/blog">Archive</a></li>
+                        <li><a href="{{ site.url }}/blog/categories">Categories</a></li>
+                        <li><a href="{{ site.url }}/blog/tags">Tags</a></li>
+                        <li><a href="{{ site.url }}/about">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="mainContent container">
+            <div class="row-fluid">
+                <div class="span11 text-center">
+                    <h1>Marco Pivetta</h1>
+                    <p><i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A asperiores amet odit quo praesentium, commodi dicta voluptatem eius totam, quasi perferendis quaerat! Ratione quos iusto, incidunt porro, quod beatae eligendi.</i></p>   
+                </div>
+                <div class="span11 align-center">
+                    <h1>{{ site.title }}</h1>
+                    <p class="description"> {{ site.description }} </p>
+                </div>
+                <div class="span11">
+                    {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+                </div>
+                <div class="span4 si debar"></div>
+            </div>
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="{{ site.url }}/js/shifty.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{{ site.url }}/components/jquery/jquery.min.js"><\/script>')</script>
+        <script src="{{ site.url }}/components/bootstrap/js/bootstrap.min.js"></script>
+        {% block scripts %}
+        {% endblock %}
+
+        {% if site.google_analytics_tracking_id %}
+
+        <script type="text/javascript">
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', '{site.google_analytics_tracking_id}', 'auto');
+            ga('send', 'pageview');
+        </script>
+        {% endif %}
+        <script src="{{ site.url }}/components/highlightjs/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+           <script>
+    /**
+     * @author mrdoob / http://mrdoob.com/
+     */
+
+    THREE.OBJLoader = function ( manager ) {
+
+        this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+
+    };
+    THREE.OBJLoader.prototype = {
+
+        constructor: THREE.OBJLoader,
+
+        load: function ( url, onLoad, onProgress, onError ) {
+
+            var scope = this;
+
+            var loader = new THREE.XHRLoader( scope.manager );
+            loader.setCrossOrigin( this.crossOrigin );
+            loader.load( url, function ( text ) {
+
+                onLoad( scope.parse( text ) );
+
+            } );
+
+        },
+
+        parse: function ( data ) {
+
+            // fixes
+
+            data = data.replace( /\ \\\r\n/g, '' ); // rhino adds ' \\r\n' some times.
+
+            var replacement = '/f$1$2$4\n/f$2$3$4'; // quads to tris
+            data = data.replace( /f( +\d+)( +\d+)( +\d+)( +\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\d+)( +\d+\/\d+)( +\d+\/\d+)( +\d+\/\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)( +\d+\/\d+\/\d+)/g, replacement );
+            data = data.replace( /f( +\d+\/\/\d+)( +\d+\/\/\d+)( +\d+\/\/\d+)( +\d+\/\/\d+)/g, replacement );
+
+            //
+
+            function vector( x, y, z ) {
+
+                return new THREE.Vector3( x, y, z );
+
+            }
+
+            function uv( u, v ) {
+
+                return new THREE.Vector2( u, v );
+
+            }
+
+            function face3( a, b, c, normals ) {
+
+                return new THREE.Face3( a, b, c, normals );
+
+            }
+
+            function meshN( meshName, materialName ) {
+
+                if ( geometry.vertices.length > 0 ) {
+
+                    geometry.mergeVertices();
+                    geometry.computeCentroids();
+                    geometry.computeFaceNormals();
+                    geometry.computeBoundingSphere();
+
+                    object.add( mesh );
+
+                    geometry = new THREE.Geometry();
+                    mesh = new THREE.Mesh( geometry, material );
+
+                    verticesCount = 0;
+
+                }
+
+                if ( meshName !== undefined ) mesh.name = meshName;
+                if ( materialName !== undefined ) {
+
+                    material = new THREE.MeshLambertMaterial();
+                    material.name = materialName;
+
+                    mesh.material = material;
+
+                }
+
+            }
+
+            var group = new THREE.Object3D();
+            var object = group;
+
+            var geometry = new THREE.Geometry();
+            var material = new THREE.MeshLambertMaterial();
+            var mesh = new THREE.Mesh( geometry, material );
+
+            var vertices = [];
+            var verticesCount = 0;
+            var normals = [];
+            var uvs = [];
+
+            // v float float float
+
+            var vertex_pattern = /v( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/;
+
+            // vn float float float
+
+            var normal_pattern = /vn( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/;
+
+            // vt float float
+
+            var uv_pattern = /vt( +[\d|\.|\+|\-|e]+)( +[\d|\.|\+|\-|e]+)/
+
+            // f vertex vertex vertex
+
+            var face_pattern1 = /f( +\d+)( +\d+)( +\d+)/
+
+            // f vertex/uv vertex/uv vertex/uv
+
+            var face_pattern2 = /f( +(\d+)\/(\d+))( +(\d+)\/(\d+))( +(\d+)\/(\d+))/;
+
+            // f vertex/uv/normal vertex/uv/normal vertex/uv/normal
+
+            var face_pattern3 = /f( +(\d+)\/(\d+)\/(\d+))( +(\d+)\/(\d+)\/(\d+))( +(\d+)\/(\d+)\/(\d+))/;
+
+            // f vertex//normal vertex//normal vertex//normal
+
+            var face_pattern4 = /f( +(\d+)\/\/(\d+))( +(\d+)\/\/(\d+))( +(\d+)\/\/(\d+))/;
+
+            //
+
+            var lines = data.split( "\n" );
+
+            for ( var i = 0; i < lines.length; i ++ ) {
+
+                var line = lines[ i ];
+                line = line.trim();
+
+                var result;
+
+                if ( line.length === 0 || line.charAt( 0 ) === '#' ) {
+
+                    continue;
+
+                } else if ( ( result = vertex_pattern.exec( line ) ) !== null ) {
+
+                    // ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+
+                    vertices.push( vector(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] ),
+                            parseFloat( result[ 3 ] )
+                    ) );
+
+                } else if ( ( result = normal_pattern.exec( line ) ) !== null ) {
+
+                    // ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
+
+                    normals.push( vector(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] ),
+                            parseFloat( result[ 3 ] )
+                    ) );
+
+                } else if ( ( result = uv_pattern.exec( line ) ) !== null ) {
+
+                    // ["vt 0.1 0.2", "0.1", "0.2"]
+
+                    uvs.push( uv(
+                            parseFloat( result[ 1 ] ),
+                            parseFloat( result[ 2 ] )
+                    ) );
+
+                } else if ( ( result = face_pattern1.exec( line ) ) !== null ) {
+
+                    // ["f 1 2 3", "1", "2", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 1 ] ) - 1 ],
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 3 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++
+                    ) );
+
+                } else if ( ( result = face_pattern2.exec( line ) ) !== null ) {
+
+                    // ["f 1/1 2/2 3/3", " 1/1", "1", "1", " 2/2", "2", "2", " 3/3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 5 ] ) - 1 ],
+                            vertices[ parseInt( result[ 8 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++
+                    ) );
+
+                    geometry.faceVertexUvs[ 0 ].push( [
+                      uvs[ parseInt( result[ 3 ] ) - 1 ],
+                      uvs[ parseInt( result[ 6 ] ) - 1 ],
+                      uvs[ parseInt( result[ 9 ] ) - 1 ]
+                    ] );
+
+                } else if ( ( result = face_pattern3.exec( line ) ) !== null ) {
+
+                    // ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 6 ] ) - 1 ],
+                            vertices[ parseInt( result[ 10 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++,
+                            [
+                                normals[ parseInt( result[ 4 ] ) - 1 ],
+                                normals[ parseInt( result[ 8 ] ) - 1 ],
+                                normals[ parseInt( result[ 12 ] ) - 1 ]
+                            ]
+                    ) );
+
+                    geometry.faceVertexUvs[ 0 ].push( [
+                                                          uvs[ parseInt( result[ 3 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 7 ] ) - 1 ],
+                                                          uvs[ parseInt( result[ 11 ] ) - 1 ]
+                                                      ] );
+
+                } else if ( ( result = face_pattern4.exec( line ) ) !== null ) {
+
+                    // ["f 1//1 2//2 3//3", " 1//1", "1", "1", " 2//2", "2", "2", " 3//3", "3", "3"]
+
+                    geometry.vertices.push(
+                            vertices[ parseInt( result[ 2 ] ) - 1 ],
+                            vertices[ parseInt( result[ 5 ] ) - 1 ],
+                            vertices[ parseInt( result[ 8 ] ) - 1 ]
+                    );
+
+                    geometry.faces.push( face3(
+                            verticesCount ++,
+                            verticesCount ++,
+                            verticesCount ++,
+                            [
+                                normals[ parseInt( result[ 3 ] ) - 1 ],
+                                normals[ parseInt( result[ 6 ] ) - 1 ],
+                                normals[ parseInt( result[ 9 ] ) - 1 ]
+                            ]
+                    ) );
+
+                } else if ( /^o /.test( line ) ) {
+
+                    // object
+
+                    object = new THREE.Object3D();
+                    object.name = line.substring( 2 ).trim();
+                    group.add( object );
+
+                } else if ( /^g /.test( line ) ) {
+
+                    // group
+
+                    meshN( line.substring( 2 ).trim(), undefined );
+
+                } else if ( /^usemtl /.test( line ) ) {
+
+                    // material
+
+                    meshN( undefined, line.substring( 7 ).trim() );
+
+                } else if ( /^mtllib /.test( line ) ) {
+
+                    // mtl file
+
+                } else if ( /^s /.test( line ) ) {
+
+                    // smooth shading
+
+                } else {
+
+                    // console.log( "THREE.OBJLoader: Unhandled line " + line );
+
+                }
+
+            }
+
+            // add the last group
+            meshN( undefined, undefined );
+
+            return group;
+
+        }
+
+    };
+    </script>
+    <script>
+        var container, $container;
+        var renderer, camera, scene, light, pointLight;
+        var shield;
+        var shieldRotation = false,
+            marios = [],
+            currentMario = 0;
+        function initMario() {
+
+            init();
+            animate();
+
+            function init() {
+                var VIEW_ANGLE = 45,
+                    NEAR = 0.1,
+                    FAR = 10000;
+
+                $container = $('#shield-container');
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setClearColor( 0x000000, 0 );
+                camera = new THREE.PerspectiveCamera(VIEW_ANGLE, $container.width() / $container.height(), NEAR, FAR);
+                scene = new THREE.Scene();
+                scene.add(camera);
+                camera.position.x = 30;
+                camera.position.y = 300;
+                renderer.setSize($container.width(), $container.height());
+                $container.append(renderer.domElement);
+                pointLight = new THREE.PointLight(0xFFFFFF);
+                pointLight.position.x = 50;
+                pointLight.position.y = 200;
+                pointLight.position.z = 30;
+                scene.add(pointLight);
+
+                texture = THREE.ImageUtils.loadTexture("{{ site.url }}/logo/mario/mario_tex.png");
+
+                for (var i = 0; i < 12; i += 1) {
+                    // encapsulating in a closure to avoid scope leakages on the iterator value
+                    (function (i) {
+                        (new THREE.OBJLoader())
+                            .load("{{ site.url }}/logo/mario/Frame_" + (i + 1) + ".obj", function(geometries, materials) {
+                                material = new THREE.MeshLambertMaterial({map: texture});
+                                shield   = new THREE.Mesh(geometries.children[0].geometry, material);
+
+                                shield.rotation.y = deg2rad(90);
+                                shield.scale.set(10, 10, 10);
+                                scene.add(shield);
+                                shield.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(1.1, 0.5, 0));
+                                shield.geometry.verticesNeedUpdate = true;
+                                shield.visible = false;
+                                marios[i] = shield;
+                                renderer.render(scene, camera);
+                            });
+                    }(i));
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame( animate);
+                currentMario += 0.2;
+                var currentMarioIndex = parseInt(currentMario) % 12;
+
+                for (var i = 0; i < marios.length; i += 1) {
+                    //marios[i].visible = (i === 0);
+                    marios[i].visible = (i === currentMarioIndex);
+
+                    marios[i].rotation.z += deg2rad(2);
+                    if (marios[i].rotation.z > 2 * Math.PI) {
+                        marios[i].rotation.z = 0;
+                    }
+                }
+
+                if (shieldRotation) {
+                    shield.rotation.y += deg2rad(5);
+                    if (shield.rotation.y > 2 * Math.PI) {
+                        shield.rotation.y = 0;
+                    }
+                }
+                render();
+            }
+
+            function render() {
+                camera.lookAt( scene.position );
+
+                renderer.render( scene, camera );
+            }
+        }
+    </script>
+    <script>
+        window.deg2rad = function(deg) { return deg * (Math.PI / 180); };
+        initMario();
+    </script>
+    </body>
+</html>
