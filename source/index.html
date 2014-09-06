@@ -13,7 +13,7 @@ use:
             <h3><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h3>
         </header>
         <div>
-            {{ post.description|raw }}
+            {{ post.summary|raw }}
         </div>
         {# commented out for now, as we don't need tags
         {% if post.meta.tags %}
