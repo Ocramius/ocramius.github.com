@@ -17,19 +17,15 @@
         <style>
         /** quick fix because bootstrap <pre> has a background-color. */
         pre code { background-color: inherit; }
-        .container.logo-cont {height: 250px; width: 250px; background: transparent;}
-        .container.logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
+        /*.container.logo-cont {height: 250px; width: 250px; background: transparent;}*/
+        .logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
         </style>
     </head>
     <body>
         <header>
             <div class="sidebar">
-
-                <div class="logo">
-                    <div id="shield-container" class="container logo-cont"></div>
-                </div>
-
                 <div class="main-navigator">
+                    <p id="shield-container" class="logo-cont"></p>
                     <ul class="nav">
                         <li><a href="{{ site.url }}/">Home</a></li>
                         <li><a href="{{ site.url }}/blog">Archive</a></li>
@@ -79,11 +75,7 @@
         <script src="{{ site.url }}/components/highlightjs/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
         <script src="{{ site.url }}/js/three-js-object-loader.js"></script>
-        <script>var marioDir = "{{ site.url }}/logo/mario";</script>
         <script src="{{ site.url }}/js/mario.js"></script>
-
-    </script>
-    <script>
-    </script>
+        <script>mario($('#shield-container'), "{{ site.url }}/logo/mario");</script>
     </body>
 </html>

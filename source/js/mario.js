@@ -1,5 +1,5 @@
 "use strict";
-var mario = (function (marioDir) {
+var mario = (function ($container, marioDir) {
     var container,
         renderer,
         camera,
@@ -40,30 +40,42 @@ var mario = (function (marioDir) {
             }
         }
 
-        render();
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+
         requestAnimationFrame(animate, renderer.domElement);
+    }
+
+    function resizeContainer() {
+        var width = $container.width(),
+            height = width;
+
+        camera.aspect = width / height;
+
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
     }
 
     function init() {
         var VIEW_ANGLE = 45,
             NEAR = 0.1,
             FAR = 10000,
-            $container = $('#shield-container'),
-            pointLight = new THREE.PointLight(0xFFFFFF);
+            pointLight = new THREE.PointLight(0xFFFFFF),
+            width = $container.width(),
+            height = width;
 
         renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 
         renderer.setClearColor(0x000000, 0);
 
-        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, $container.width() / $container.height(), NEAR, FAR);
+        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, width / height, NEAR, FAR);
         scene  = new THREE.Scene();
 
         scene.add(camera);
 
         camera.position.x = 30;
         camera.position.y = 300;
-
-        renderer.setSize($container.width(), $container.height());
 
         $container.append(renderer.domElement);
 
@@ -95,6 +107,9 @@ var mario = (function (marioDir) {
             }(i));
         }
 
+        $(window).resize(resizeContainer);
+
+        resizeContainer();
         requestAnimationFrame(animate, renderer.domElement);
     }
 
