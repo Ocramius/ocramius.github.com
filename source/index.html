@@ -8,7 +8,7 @@ use:
     - posts
 ---
 {% for post in page.pagination.items %}
-    <article>
+    <article class="overview">
         <header>
             <h3><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h3>
         </header>
@@ -19,6 +19,17 @@ use:
                 {{ post.summary }}
             {% endif %}
         </p>
+        <footer class="small">
+            <small>
+                <time datetime="{{ post.year }}-{{ post.month }}-{{ post.day }}">
+                    Published {{ post.year }}-{{ post.month }}-{{ post.day }}
+                </time>
+            </small>
+            {#
+            -
+            # comments
+            #}
+        </footer>
         {# commented out for now, as we don't need tags
         {% if post.meta.tags %}
             <p class="tags">
