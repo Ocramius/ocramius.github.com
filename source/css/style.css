@@ -119,21 +119,44 @@ footer.container {
     }
 }
 
-pre code { background-color: inherit; }
-.logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
-.twitter  {
-    background-image: url('../img/twitter.svg');
-    padding-left: 1em;
-    background-repeat: no-repeat;
-    background-position: left;
-    background-size: contain;
+pre code {
+    background-color: inherit;
 }
-.github  {
-    background-image: url('../img/github.svg');
-    padding-left: 1em;
+
+.logo-cont canvas {
+    z-index: 2;
+    pointer-events: none;
+    background: transparent;
+}
+
+.twitter, .github, .roave, .zendframework, .doctrine {
+    padding-left: 1.5em;
     background-repeat: no-repeat;
     background-position: left;
     background-size: contain;
+    /*background-size: 2em auto;*/
+}
+
+.twitter {
+    background-image: url('../img/github.svg');
+}
+
+.github {
+    background-image: url('../img/twitter.svg');
+}
+
+.roave {
+    background-image: url('../img/roave.svg');
+}
+
+.zendframework {
+    background-image: url('../img/zendframework.png');
+    padding-left: 2.5em;
+}
+
+.doctrine {
+    background-image: url('../img/doctrine.svg');
+    padding-left: 1em;
 }
 
 .sidebar a.github, .sidebar a.twitter, .sidebar a.github:hover, .sidebar a.twitter:hover {
