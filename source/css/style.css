@@ -129,7 +129,7 @@ pre code {
     background: transparent;
 }
 
-.twitter, .github, .roave, .zendframework, .doctrine {
+.ocramius, .twitter, .github, .roave, .zendframework, .doctrine {
     padding-left: 1.5em;
     background-repeat: no-repeat;
     background-position: left;
@@ -137,12 +137,16 @@ pre code {
     /*background-size: 2em auto;*/
 }
 
+.ocramius {
+    background-image: url('../img/marco-pivetta-ocramius.gif');
+}
+
 .twitter {
-    background-image: url('../img/github.svg');
+    background-image: url('../img/twitter.svg');
 }
 
 .github {
-    background-image: url('../img/twitter.svg');
+    background-image: url('../img/github.svg');
 }
 
 .roave {
@@ -156,7 +160,7 @@ pre code {
 
 .doctrine {
     background-image: url('../img/doctrine.svg');
-    padding-left: 1em;
+    padding-left: 1.2em;
 }
 
 .sidebar a.github, .sidebar a.twitter, .sidebar a.github:hover, .sidebar a.twitter:hover {
