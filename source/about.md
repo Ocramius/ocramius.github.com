@@ -6,7 +6,7 @@ title: About me, Marco Pivetta, aka Ocramius
 
 <article class="vcard">
     <p>
-        Hi, my name is <a class="fn url" href="http://ocramius.gihub.io/">
+        Hi, my name is <a class="ocramius fn url" href="http://ocramius.gihub.io/">
             <span class="given-name">Marco</span> <span class="family-name">Pivetta</span>
         </a>,
         and I'm a software consultant working for <a class="roave fn url org" href="http://roave.com/">Roave</a>.
