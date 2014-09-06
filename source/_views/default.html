@@ -83,10 +83,12 @@
         </header>
         <div class="mainContent container">
             <div class="row-fluid">
+                {#
                 <div class="span11 align-center">
                     <h1>{{ site.title }}</h1>
                     <p class="description"> {{ site.description }} </p>
                 </div>
+                #}
                 <div class="span11">
                     {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
                 </div>
