@@ -1,9 +1,8 @@
 sculpin: sculpin.json sculpin.lock
-	curl -O https://download.sculpin.io/sculpin.phar
-	chmod +x sculpin.phar
+	curl -sS https://getcomposer.org/installer | php
 
 install: source/
-	php sculpin.phar install
+	php vendor/bin/sculpin install
 
 setup: .sculpin
-	php sculpin.phar generate --watch --server
+	php vendor/bin/sculpin generate --watch --server
