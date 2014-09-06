@@ -166,5 +166,4 @@ pre code {
 .sidebar a.github, .sidebar a.twitter, .sidebar a.github:hover, .sidebar a.twitter:hover {
     color: rgba(0, 0, 0, 0);
     background-position: center;
-    display: block;
 }
