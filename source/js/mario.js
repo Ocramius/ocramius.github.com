@@ -1,7 +1,6 @@
 "use strict";
 var mario = (function ($container, marioDir) {
-    var container,
-        renderer,
+    var renderer,
         camera,
         scene,
         marios = [],
