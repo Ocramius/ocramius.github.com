@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title %}{{ page.title }}{% endblock %} &mdash; {{ site.title }} &mdash; {{ site.subtitle }}</title>
+        <title>{% block title %}{{ page.title }}{% endblock %}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% if page.description %}
+
+        <meta name="description" content="{{ page.description }}">
+        {% endif%}
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/font/stylesheet.css" rel="stylesheet" type="text/css" />
@@ -23,6 +27,12 @@
                     <p id="shield-container" class="logo-cont"></p>
                     <ul class="nav">
                         <li><a href="{{ site.url }}/">Home</a></li>
+                        {% if site.twitter %}
+                        <li class="twitter"><a href="https://twitter.com/{{ site.twitter }}">{{ site.twitter }}</a></li>
+                        {% endif %}
+                        {% if site.github %}
+                        <li class="github"><a href="https://twitter.com/{{ site.github }}">{{ site.github }}</a></li>
+                        {% endif %}
                         <li><a href="{{ site.url }}/blog">Archive</a></li>
                         {# not needed for now
                         <li><a href="{{ site.url }}/blog/categories">Categories</a></li>
