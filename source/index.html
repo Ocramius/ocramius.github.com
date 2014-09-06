@@ -3,18 +3,19 @@ layout: default
 title: Home
 generator: pagination
 pagination:
-    max_per_page: 3
+    max_per_page: 5
 use:
     - posts
 ---
 {% for post in page.pagination.items %}
     <article>
         <header>
-            <h2><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h2>
+            <h3><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></h3>
         </header>
         <div>
-            {{ post.blocks.content|raw }}
+            {{ post.description|raw }}
         </div>
+        {# commented out for now, as we don't need tags
         {% if post.meta.tags %}
             <p class="tags">
             Tags:
@@ -23,6 +24,7 @@ use:
             {% endfor %}
             </p>
         {% endif %}
+        #}
     </article>
 {% endfor %}
 {% if page.pagination.previous_page or page.pagination.next_page %}
