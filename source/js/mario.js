@@ -1,15 +1,14 @@
 "use strict";
-(function () {
+var mario = (function (marioDir) {
     var container,
         $container,
         renderer,
         camera,
         scene,
-        pointLight,
         shield,
-        shieldRotation = false,
         marios = [],
-        currentMario = 0;
+        currentMario = 0,
+        MARIO_COUNT = 12;
 
     function initMario() {
         init();
@@ -34,19 +33,22 @@
             camera.position.y = 300;
             renderer.setSize($container.width(), $container.height());
             $container.append(renderer.domElement);
-            pointLight = new THREE.PointLight(0xFFFFFF);
+
+            var pointLight = new THREE.PointLight(0xFFFFFF);
+
             pointLight.position.x = 50;
             pointLight.position.y = 200;
             pointLight.position.z = 30;
+
             scene.add(pointLight);
 
-            var texture = THREE.ImageUtils.loadTexture(window.marioDir + "/mario_tex.png");
+            var texture = THREE.ImageUtils.loadTexture(marioDir + "/mario_tex.png");
 
-            for (var i = 0; i < 12; i += 1) {
+            for (var i = 0; i < MARIO_COUNT; i += 1) {
                 // encapsulating in a closure to avoid scope leakages on the iterator value
                 (function (i) {
                     (new THREE.OBJLoader())
-                        .load(window.marioDir + "/logo/mario/Frame_" + (i + 1) + ".obj", function(geometries) {
+                        .load(marioDir + "/Frame_" + (i + 1) + ".obj", function(geometries) {
                             var material = new THREE.MeshLambertMaterial({map: texture});
                             shield       = new THREE.Mesh(geometries.children[0].geometry, material);
 
@@ -56,8 +58,8 @@
                             shield.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(1.1, 0.5, 0));
                             shield.geometry.verticesNeedUpdate = true;
                             shield.visible = false;
+
                             marios[i] = shield;
-                            renderer.render(scene, camera);
                         });
                 }(i));
             }
@@ -72,7 +74,7 @@
         function animate() {
             requestAnimationFrame(animate);
             currentMario += 0.2;
-            var currentMarioIndex = parseInt(currentMario) % 12;
+            var currentMarioIndex = parseInt(currentMario) % MARIO_COUNT;
 
             for (var i = 0; i < marios.length; i += 1) {
                 marios[i].visible = (i === currentMarioIndex);
@@ -84,15 +86,9 @@
                 }
             }
 
-            if (shieldRotation) {
-                shield.rotation.y += deg2rad(5);
-                if (shield.rotation.y > 2 * Math.PI) {
-                    shield.rotation.y = 0;
-                }
-            }
             render();
         }
     }
 
     initMario();
-}());
+});
