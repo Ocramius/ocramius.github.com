@@ -1,13 +1,17 @@
 "use strict";
 (function () {
-    var container, $container;
-    var renderer, camera, scene, light, pointLight;
-    var shield;
-    var shieldRotation = false,
+    var container,
+        $container,
+        renderer,
+        camera,
+        scene,
+        pointLight,
+        shield,
+        shieldRotation = false,
         marios = [],
         currentMario = 0;
-    function initMario() {
 
+    function initMario() {
         init();
         animate();
 
@@ -36,13 +40,13 @@
             pointLight.position.z = 30;
             scene.add(pointLight);
 
-            var texture = THREE.ImageUtils.loadTexture("{{ site.url }}/logo/mario/mario_tex.png");
+            var texture = THREE.ImageUtils.loadTexture(window.marioDir + "/mario_tex.png");
 
             for (var i = 0; i < 12; i += 1) {
                 // encapsulating in a closure to avoid scope leakages on the iterator value
                 (function (i) {
                     (new THREE.OBJLoader())
-                        .load("{{ site.url }}/logo/mario/Frame_" + (i + 1) + ".obj", function(geometries) {
+                        .load(window.marioDir + "/logo/mario/Frame_" + (i + 1) + ".obj", function(geometries) {
                             var material = new THREE.MeshLambertMaterial({map: texture});
                             shield       = new THREE.Mesh(geometries.children[0].geometry, material);
 
@@ -59,13 +63,18 @@
             }
         }
 
+        function render() {
+            camera.lookAt( scene.position );
+
+            renderer.render( scene, camera );
+        }
+
         function animate() {
             requestAnimationFrame(animate);
             currentMario += 0.2;
             var currentMarioIndex = parseInt(currentMario) % 12;
 
             for (var i = 0; i < marios.length; i += 1) {
-                //marios[i].visible = (i === 0);
                 marios[i].visible = (i === currentMarioIndex);
 
                 marios[i].rotation.z += deg2rad(2);
@@ -83,15 +92,7 @@
             }
             render();
         }
-
-        function render() {
-            camera.lookAt( scene.position );
-
-            renderer.render( scene, camera );
-        }
     }
-
-    window.
 
     initMario();
 }());
