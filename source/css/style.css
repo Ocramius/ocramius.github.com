@@ -118,3 +118,26 @@ footer.container {
         padding-bottom: 40px;
     }
 }
+
+pre code { background-color: inherit; }
+.logo-cont canvas {z-index: 2; pointer-events: none; background: transparent;}
+.twitter  {
+    background-image: url('../img/twitter.svg');
+    padding-left: 1em;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+.github  {
+    background-image: url('../img/github.svg');
+    padding-left: 1em;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+}
+
+.sidebar a.github, .sidebar a.twitter, .sidebar a.github:hover, .sidebar a.twitter:hover {
+    color: rgba(0, 0, 0, 0);
+    background-position: center;
+    display: block;
+}
