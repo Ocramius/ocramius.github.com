@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "~5.5",
+        "knplabs/github-api": "1.0.*@DEV",
         "sculpin/sculpin": "2.0.*@DEV",
         "composer/composer": "1.0.*@DEV",
         "dflydev/embedded-composer-console": "1.0.*@DEV",
