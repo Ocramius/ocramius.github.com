@@ -24,7 +24,7 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
 
     /**
      * Generate and replace content of pages with (github: repositories)
-     * on header and '{github}' on content.
+     * on header and '{replace_on_content}' on content.
      *
      * @param SourceSetEvent $sourceSetEvent
      */
@@ -33,21 +33,34 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
         $config = require dirname(dirname(__DIR__)) . '/config.php';
         $client = $this->createClientObject($config);
 
-        $repositories = $client->api('user')->repositories('malukenho');
+        $repositories = $client->api('user')->repositories($client['github']['user']);
         $sourceSet = $sourceSetEvent->sourceSet();
 
         foreach ($sourceSet->updatedSources() as $source) {
             if ($source->data()->get('github')
                 && 'repositories' == $source->data()->get('github')) {
 
-                $content = str_ireplace('{github}', $config['github']['render']($repositories), $source->content());
+                $content = str_ireplace(
+                    $config['github']['replace_on_content'],
+                    $config['github']['render']($repositories),
+                    $source->content()
+                );
+
                 $source->setContent($content);
                 $source->setIsGenerated();
             }
         }
     }
 
-    public function createClientObject($config)
+    /**
+     * Create a github object configures with information
+     * stored on config.php
+     *
+     * @param $config
+     *
+     * @return GithubClient
+     */
+    private function createClientObject($config)
     {
 
         $client = new GithubClient(new HttpClient(array(

@@ -6,4 +6,4 @@ github: repositories
 ---
 &nbsp;
 
-{github}
+{GITHUB_REPOSITORIES}

@@ -4,6 +4,7 @@ return [
       'user' => 'User Name',
       'token' => 'Token Key',
       'user_agent' => 'Custom User Agent',
+      'replace_on_content' => '{GITHUB_REPOSITORIES}',
       'render' => function($repositories) {
               $content = [];
               foreach ($repositories as $repository) {
