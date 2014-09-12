@@ -2,9 +2,6 @@
 
 namespace GithubBundle;
 
-use Buzz\Browser;
-use Buzz\Client\Curl;
-use Sculpin\Core\Sculpin;
 use Github\HttpClient\HttpClient;
 use Github\Client as GithubClient;
 use Sculpin\Core\Event\SourceSetEvent;
@@ -60,7 +57,7 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
      *
      * @return GithubClient
      */
-    private function createClientObject($config)
+    private function createClientObject(array $config)
     {
 
         $client = new GithubClient(new HttpClient(array(

@@ -1,16 +1,16 @@
 <?php
 return [
   'github' => [
-      'user' => 'User Name',
-      'token' => 'Token Key',
-      'user_agent' => 'Custom User Agent',
+      'user'               => 'User Name',
+      'token'              => 'Token Key',
+      'user_agent'         => 'Custom User Agent',
       'replace_on_content' => '{GITHUB_REPOSITORIES}',
-      'render' => function($repositories) {
-              $content = [];
-              foreach ($repositories as $repository) {
+      'render'             => function($repositories) {
+          $content = [];
+          foreach ($repositories as $repository) {
 
-                  $date = new DateTime($repository['updated_at']);
-                  $content[] = <<<EOF
+              $date = new DateTime($repository['updated_at']);
+              $content[] = <<<EOF
 <div class="span11 github-repository">
     <h3>{$repository['name']}</h3>
     <p><small><a href="{$repository['html_url']}" target="_blank">
@@ -19,7 +19,7 @@ return [
 </div>
 EOF;
               }
-              return implode(' ', $content);
+          return implode(' ', $content);
       }
   ]
 ];
