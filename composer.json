@@ -26,6 +26,9 @@
         "components/jquery": "~1.9.1",
         "components/highlightjs": "~7.3.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*@DEV"
+    },
     "config": {
         "component-dir": "source/components"
     },

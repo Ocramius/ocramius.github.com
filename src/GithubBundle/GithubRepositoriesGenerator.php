@@ -2,6 +2,7 @@
 
 namespace GithubBundle;
 
+use Sculpin\Core\Sculpin;
 use Github\HttpClient\HttpClient;
 use Github\Client as GithubClient;
 use Sculpin\Core\Event\SourceSetEvent;
@@ -9,6 +10,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GithubRepositoriesGenerator implements EventSubscriberInterface
 {
+    /**
+     * @var array
+     */
+    private $config = [];
+
+    /**
+     * Constructor.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -27,10 +43,9 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
      */
     public function beforeRun(SourceSetEvent $sourceSetEvent)
     {
-        $config = require dirname(dirname(__DIR__)) . '/config.php';
-        $client = $this->createClientObject($config);
+        $client = $this->createClientObject($this->config);
 
-        $repositories = $client->api('user')->repositories($client['github']['user']);
+        $repositories = $client->api('user')->repositories($this->config['github']['user']);
         $sourceSet = $sourceSetEvent->sourceSet();
 
         foreach ($sourceSet->updatedSources() as $source) {
@@ -38,8 +53,8 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
                 && 'repositories' == $source->data()->get('github')) {
 
                 $content = str_ireplace(
-                    $config['github']['replace_on_content'],
-                    $config['github']['render']($repositories),
+                    $this->config['github']['replace_on_content'],
+                    $this->config['github']['render']($repositories),
                     $source->content()
                 );
 
