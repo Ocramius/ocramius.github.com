@@ -1,5 +1,7 @@
 <?php
-namespace GithubBundle;
+namespace GithubBundleTest;
+
+use GithubBundle\GithubRepositoriesGenerator;
 
 class GitHubRepositoriesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -7,7 +9,7 @@ class GitHubRepositoriesGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $github = new GithubRepositoriesGenerator([]);
         $this->assertInstanceOf(
-            __NAMESPACE__ . '\\GitHubRepositoriesGenerator',
+            GitHubRepositoriesGenerator::class,
             $github
         );
     }
@@ -15,11 +17,11 @@ class GitHubRepositoriesGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCanCreateAInstanceOfGithubClient()
     {
         $github = new GithubRepositoriesGenerator([]);
-        $class = new \ReflectionClass(__NAMESPACE__ . '\\GitHubRepositoriesGenerator');
+        $class = new \ReflectionClass(GitHubRepositoriesGenerator::class);
         $method = $class->getMethod('createClientObject');
         $method->setAccessible(true);
         $output = $method->invoke($github, array());
 
-        $this->assertInstanceOf('Github\Client', $output);
+        $this->assertInstanceOf(\Github\Client::class, $output);
     }
 }
