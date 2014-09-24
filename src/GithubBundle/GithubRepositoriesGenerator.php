@@ -59,12 +59,12 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
             if ($source->data()->get('github')
                 && 'repositories' == $source->data()->get('github')
             ) {
-
                 $content = str_ireplace(
                     $this->config['github']['replace_on_content'],
                     $this->config['github']['render']($repositories),
                     $source->content()
                 );
+
 
                 $source->setContent($content);
                 $source->setIsGenerated();
