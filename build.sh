@@ -18,9 +18,9 @@ git clone git@github.com:Ocramius/ocramius.github.com.git ./gh-pages-deployment
 cd gh-pages-deployment
 #git submodule update --init
 #cp -r ./presentations ./../output_prod/presentations
-git checkout gh-pages
-git checkout -b gh-pages
+git checkout master
+git checkout -b master
 
 rsync --quiet --archive --filter="P .git*" --exclude=".*.sw*" --exclude=".*.un~" --delete ../output_prod/ ./
 git add -A :/
-git commit -a -m "Deploying sculpin-generated pages to \`gh-pages\` branch"
+git commit -a -m "Deploying sculpin-generated pages to \`master\` branch"
