@@ -1,0 +1,2759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[]]></title>
+    <link href="/atom.xml" rel="self"/>
+    <link href="/"/>
+    <updated>2014-10-05T02:52:11+00:00</updated>
+    <id>/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Delegator Factories in Zend Framework 2]]></title>
+            <link href="/blog/zend-framework-2-delegator-factories-explained"/>
+            <updated>2014-03-16T00:00:00+00:00</updated>
+            <id>/blog/zend-framework-2-delegator-factories-explained</id>
+            <content type="html"><![CDATA[<p>
+    Last year, I
+    <a href="https://github.com/zendframework/zf2/pull/4145" target="_blank">worked on a feature</a>
+    for ZF2 called
+    <a href="http://framework.zend.com/manual/2.3/en/modules/zend.service-manager.delegator-factories.html" target="_blank">
+        "Delegator Service Factories"
+    </a>, which was included in Zend Framework 2.2.0.
+</p>
+
+<p>
+    It seems to me that many ZF2 developers either don't fully understand the feature,
+    or do not know it.
+</p>
+
+<p>
+    This article analyzes the feature in depth and tries to explain what these do, and why you may need them.
+</p>
+
+<hr/>
+
+<h2>The Problem</h2>
+
+<p>
+    While working with <code>Zend\ServiceManager</code>, we often find ourselves in the need
+    of overriding services provided by third-party modules that we use.
+</p>
+
+<p>
+    Let's make a practical example and assume that we are using a <code>DbLoggingModule</code>.
+    provided by a friendly open-source developer.
+</p>
+
+<p>
+    The developer of <code>DbLoggingModule</code> provided us with an awesome service
+    called <code>"DbLoggingModule\Logger"</code>, which is created by a service factory
+    <code>DbLoggingModule\Factory\LoggerFactory</code>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class LoggerFactory implements FactoryInterface
+{
+    public function createService(ServiceLocatorInterface $sm)
+    {
+        $config = $sm-&gt;get('Config');
+        $db     = new DB($config['db_logging']['dsn']);
+
+        // more db configuration here
+
+        $logger = new Logger($db);
+
+        $logger-&gt;addFilter(new ErrorFilter());
+
+        // more logger configuration here
+
+        return $logger;
+    }
+}
+</code></pre>
+
+<p>
+    This is awesome and clean, but then we want to be able to log all errors by
+    removing the pre-configured filters, or we want to add a formatter to our logger to add
+    contextual information to the logged messages.
+</p>
+
+<p>
+    This becomes tricky, since we now have to define our own factory for that logger:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class MyLoggerFactory implements FactoryInterface
+{
+    public function createService(ServiceLocatorInterface $sl)
+    {
+        $config = $sl-&gt;get('Config');
+        $db     = new DB($config['db_logging']['dsn']);
+
+        // more db configuration here
+
+        $logger = new Logger($db);
+
+        // removing this: we don't filters
+        // $logger-&gt;addFilter(new ErrorFilter());
+
+        // this will add some context from the HTTP globals
+        // ("eeew", but useful for our logged messages)
+        $logger-&gt;addFormatter(new HttpRequestContextFormatter());
+
+        // more logger configuration here
+
+        return $logger;
+    }
+}
+</code></pre>
+
+<p>
+    This is fine, but our <code>MyLoggerFactory</code> <strong>duplicates a lot of code</strong> from
+    <code>LoggerFactory</code>, and we now have to also strictly monitor any updates
+    by the original developer of <code>DbLoggingModule</code>.
+</p>
+
+<p class="alert alert-danger">
+    Code duplication is a huge problem, especially when we're localizing
+    code from external dependencies.
+</p>
+
+<p>
+    We can be mitigate this issue by using an initializer instead:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class MyLoggerInitializer implements InitializerInterface
+{
+    public function initialize($instance, ServiceLocatorInterface $sl)
+    {
+        if ($instance instanceof Logger) {
+            $logger-&gt;clearFilters();
+            $logger-&gt;addFormatter(new HttpRequestContextFormatter());
+        }
+    }
+}
+</code></pre>
+
+<p>
+    This is a much cleaner approach, but there are major disadvantages as well:
+</p>
+
+<ul>
+    <li>
+        This initializer is being called <strong>once per each instantiated service</strong>,
+        and that can lead to hundreds (seriously!) of useless method calls per request,
+        and that for a single object that we wanted to change.
+    </li>
+    <li>
+        <strong>All</strong> of our <code>Logger</code> instances are going to be affected
+        by the change, and that is a big problem if we have more than one logger in the
+        application.
+    </li>
+</ul>
+
+<p class="alert alert-danger">
+    That's pretty much <strong>technical debt</strong> that we are building up.
+    We are being lazy, and we will pay for that if we go down this route.
+</p>
+
+<p>
+    The solution for this particular problem is using "delegator factories".
+</p>
+
+<hr/>
+
+<h2>What are delegator factories?</h2>
+
+<p class="alert alert-success">
+    A delegator factory is pretty much a wrapper around a real factory: it allows us
+    to either replace the real service with a "delegate", or interact with an object
+    produced by a factory before it is returned by the <code>Zend\ServiceManager</code>.
+</p>
+
+<p>
+    In pseudo-code, a delegator-factory is doing following:
+</p>
+
+<pre><code class="javascript">service = delegatorFactory(factory());
+</code></pre>
+
+<p>
+    This is the interface for a delegator factory:
+</p>
+
+<pre><code class="php">&lt;?php
+
+namespace Zend\ServiceManager;
+
+interface DelegatorFactoryInterface
+{
+    public function createDelegatorWithName(
+        ServiceLocatorInterface $serviceLocator,
+        $name,
+        $requestedName,
+        $callback
+    );
+}
+</code></pre>
+
+<hr/>
+
+<h2>Delegator Factories applied to the Logger problem</h2>
+
+<p>
+    This is how we would use it to modify our <code>"DbLoggingModule\Logger"</code> service:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class LoggerDelegatorFactory implements DelegatorFactoryInterface
+{
+    public function createDelegatorWithName(
+        ServiceLocatorInterface $serviceLocator,
+        $name,
+        $requestedName,
+        $callback
+    ) {
+        $logger = $callback();
+
+        $logger-&gt;clearFilters();
+        $logger-&gt;addFormatter(new HttpRequestContextFormatter());
+
+        return $logger;
+    }
+}
+</code></pre>
+
+<p class="alert alert-info">
+    <span class="label label-info">Note:</span> We are not using the first 3 parameters,
+    which may be useful in different contexts (for example, when configuration is needed).
+</p>
+
+<p>
+    We then add it to our service manager configuration to instruct the
+    <code>Zend\ServiceManager</code> that we want our delegator factory to be used
+    whenever the service <code>"DbLoggingModule\Logger"</code> is requested:
+</p>
+
+<pre><code class="php">&lt;?php
+return [
+    'delegators' =&gt; [
+        'DbLoggingModule\Logger' =&gt; [
+            'LoggerDelegatorFactory',
+            // can add more of these delegator factories here
+        ],
+    ],
+];
+</code></pre>
+
+<p>
+    This will make the <code>Zend\ServiceManager</code> call the the
+    <code>LoggerDelegatorFactory#createDelegatorWithName()</code> method
+    whenever the service <code>"DbLoggingModule\Logger"</code> is instantiated,
+    regardless if it is built via invokable, factory, peering service manager or
+    abstract factory.
+</p>
+
+<p class="alert alert-info">
+    <span class="label label-info">Hint:</span> You can define more of these delegator
+    service factories for a single service, which allow you to override service
+    instantiation logic in different modules and multiple
+    times, leading to a very fine-grained configuration flexibility.
+</p>
+
+<p class="alert alert-info">
+    <span class="label label-info">Hint:</span> Assuming that you want to completely replace the
+    <code>"DbLoggingModule\Logger"</code> with your own custom implementation depending on
+    context, you could also completely avoid using the provided <code>$callback</code>.
+    This way, the original service won't even be instantiated.
+</p>
+
+<h2>On naming</h2>
+
+<p>
+    The name <q>delegator factory</q> is actually something I'm not happy with, since
+    they are actually just wrappers around an existing factory.
+</p>
+
+<p class="alert alert-error">
+    <span class="label label-warning">Warning:</span> Since I'm the first guy
+    <a href="https://twitter.com/Ocramius/status/441673095662018561" target="_blank">to shout out at Laravel Facades</a>,
+    I want to make it clear that the naming "Delegator Factory" is wrong, that
+    it was my mistake, and I will likely fix it for ZendFramework 3.x.
+</p>
+
+<p>
+    I initially designed these factories to solve a different problem, which is
+    <a href="http://framework.zend.com/manual/2.3/en/modules/zend.service-manager.lazy-services.html" target="_blank">Lazy Services</a>.
+</p>
+
+<p>
+    In the context of lazy services and decorators, the instance returned by these factories
+    is indeed a
+    "<a href="http://en.wikipedia.org/wiki/Delegation_pattern" target="_blank">delegate</a>",
+    therefore I came up with the name "delegator factory".
+</p>
+
+<p>
+    Only later on I realized that these factories are actually much more powerful than
+    what I originally designed them for, therefore the "delegator factory" name became inadequate.
+</p>
+
+<hr/>
+
+<h2>Conclusions</h2>
+
+<p>
+    Delegator factories are vital to any ZF2 hacker. Any developer working with <code>Zend\ServiceManager</code>
+    should also be familiar with this functionality and its usage.
+</p>
+
+<p>
+    Delegator factories are not a new concept. For instance, Pimple introduced this concept
+    a while ago and (in a limited form): it is called
+    "<a href="https://github.com/fabpot/Pimple#modifying-services-after-creation" target="_blank">extending a service</a>".
+</p>
+
+<p>
+    The entire functionality was introduced by accident while I was working on an implementation of
+    <a href="http://ocramius.github.io/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies/" target="_blank">Lazy Services</a>,
+    and they surely need a rename. This will not happen in Zend Framework 2.x.
+</p>
+
+<p>
+    I hope this helps you with your day-to-day hacking around your ZF2 apps!
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[LazyProperty - Automatic property initialization for PHP]]></title>
+            <link href="/blog/lazy-property-automatic-property-initialization"/>
+            <updated>2014-02-19T00:00:00+00:00</updated>
+            <id>/blog/lazy-property-automatic-property-initialization</id>
+            <content type="html"><![CDATA[<p>
+    Yesterday, I worked on yet another interesting little experiment, which is called
+    <a href="https://github.com/Ocramius/LazyProperty" target="_blank">
+        LazyProperty
+    </a>.
+</p>
+
+<h2>The problem with "lazy" properties</h2>
+
+<p>
+    The idea is very simple: avoid manually checking object properties to see if they were initialized.
+</p>
+
+<p>
+    Let's make a simple example:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class UserService
+{
+    // ...
+    protected $userRepository;
+
+    public function register($user)
+    {
+        // ...
+        $this-&gt;getUserRepository()-&gt;add($user);
+    }
+
+    // ...
+
+    protected function getUserRepository()
+    {
+        // we're not using DI here because of performance implications
+        // developers often use a service locator for RAD here
+        return $this-&gt;userRepository
+            ?: $this-&gt;userRepository = new MemoryUserRepository();
+    }
+}
+</code></pre>
+
+<hr/>
+
+<p>
+    This is a fairly simple approach, and it is perfectly fine to use it when we don't want to be forced
+    to build the <code>MemoryUserRepository</code> instance for calls to API methods that don't use
+    it.
+</p>
+
+<p>
+    There is a problem though, which is that any direct access to <code>UserService#$userRepository</code>
+    has to be avoided: all of the class' implementation as well as its subclasses have to rely on the
+    protected getter in order to access the repository instance.
+</p>
+
+<p>
+    For instance, the following code works only because of a lucky combination of events:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class UserService
+{
+    // ...
+    protected $userValidator;
+
+    public function register($user)
+    {
+        $this-&gt;getUserRepository()-&gt;add($user);
+    }
+
+    public function login($userId)
+    {
+        // mind this - this is a mistake!
+        $this-&gt;userRepository-&gt;find($userId);
+        // ...
+    }
+}
+</code></pre>
+
+<pre><code class="php">&lt;?php
+
+$user = build_user_somehow();
+
+$userService-&gt;register($user);
+$userService-&gt;login($user-&gt;getId());
+</code></pre>
+
+<p>
+    This code will run, but only because <code>UserService#register()</code> was called before
+    <code>UserService#login()</code>.
+</p>
+
+<hr/>
+
+<h2>Possible solutions</h2>
+
+<p>
+    The code in the examples exposes a silly bug, and it should be fixed by avoiding any property
+    access to <code>UserService#$userRepository</code>.
+</p>
+
+<p>
+    Moreover, implementors of subclasses will also experience the issue if they try accessing the
+    un-initialized property. The fix for that is to just define
+    <code>UserService#$userRepository</code> as <code>private</code> and being very defensive
+    about its usage.
+</p>
+
+<p>
+    These are all valid solutions, but we still don't get around using a protected getter in our
+    class' scope, which I personally consider ugly.
+</p>
+
+<p>
+    That's where I had this possibly crazy idea: making the property itself "lazy" and avoiding the
+    getter call completely, making the getter an implementation detail.
+</p>
+
+<p>
+    Let's see how this is done with the library:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class UserService
+{
+    use \LazyProperty\LazyPropertiesTrait;
+
+    protected $userRepository;
+
+    public function __construct()
+    {
+        // ...
+        // mind this - we are marking "userRepository" as lazy
+        $this-&gt;initLazyProperties(['userRepository']);
+    }
+
+    public function register($user)
+    {
+        // ...
+        // now use the property directly
+        $this-&gt;userRepository-&gt;add($user);
+        // ...
+    }
+
+    public function login($userId)
+    {
+        $this-&gt;userRepository-&gt;find($userId);
+        // ...
+    }
+
+    protected function getUserRepository()
+    {
+        return $this-&gt;userRepository
+            ?: $this-&gt;userRepository = new MemoryUserRepository();
+    }
+}
+</code></pre>
+
+<p>
+    By calling <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>, we've made sure
+    that any access to the un-initialized <code>UserService#$userRepository</code> will actually
+    trigger a call to <code>UserService#getUserRepository()</code>, and therefore initialize it.
+</p>
+
+<p>
+    With that, we don't need to actually worry about calling the getter: both the getter call and
+    property access will work the same way, which is pretty cool!
+</p>
+
+<hr/>
+
+<h2>Under the hood</h2>
+
+<p>
+    What is going on? I'm simply exploiting an feature of the PHP language on which I've already
+    blogged at <a href="http://ocramius.github.io/blog/intercepting-public-property-access-in-php/" target="_blank">
+        Property Accessors in PHP Userland
+    </a>.
+</p>
+
+<p>
+    As a reference, here is the annotated body of <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L37-L58" target="_blank">
+        <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>
+    </a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters = true)
+{
+    foreach ($lazyPropertyNames as $lazyProperty) {
+
+        // verify that a getter is available for the given lazy property
+        if ($checkLazyGetters &amp;&amp; ! method_exists($this, 'get' . $lazyProperty)) {
+            throw MissingLazyPropertyGetterException::fromGetter($this, 'get' . $lazyProperty, $lazyProperty);
+        }
+
+        // record the properties that were defined as "lazy"
+        $this-&gt;lazyPropertyAccessors[$lazyProperty] = false;
+
+        // if the property is defined, then ignore it (we don't want to sensibly alter object state)
+        if (! isset($this-&gt;$lazyProperty)) {
+            // unset the property, this allows us to use magic getters
+            unset($this-&gt;$lazyProperty);
+        }
+    }
+}
+</code></pre>
+
+<p>
+    Quite simple! Nothing really incredible going on here. When is the property actually initialized?
+</p>
+
+<p>
+    The other method defined by the trait is the <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L60-L84" target="_blank">
+        Magic getter <code>LazyProperty\LazyPropertiesTrait#__get()</code>
+    </a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+// returning a reference is required,
+// otherwise (for example) array properties accessed for writes will fail
+public function &amp; __get($name)
+{
+    // disallow access to non-existing properties
+    if (! isset($this-&gt;lazyPropertyAccessors[$name])) {
+        throw InvalidLazyProperty::nonExistingLazyProperty($this, $name);
+    }
+
+    // retrieve the object that is trying to access the lazy property
+    $caller = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT)[1];
+
+    // disallow access from invalid scope
+    // basically reproduces property visibility in userland
+    if (! isset($caller['object']) || $caller['object'] !== $this) {
+        AccessScopeChecker::checkCallerScope($caller, $this, $name);
+    }
+
+    // set the property to `null` (disables notices)
+    $this-&gt;$name = null;
+
+    // initialize the property
+    $this-&gt;$name = $this-&gt;{'get' . $name}();
+
+    return $this-&gt;$name;
+}
+</code></pre>
+
+<hr/>
+
+<h2>Conclusions</h2>
+
+<p>
+    This "hack" is simple, clean, easily tested and doesn't cause any problems.
+    It works on PHP 5.4, 5.5, 5.6 and even on HHVM, which I wasn't expecting.
+</p>
+
+<p>
+    Can you use it? Yes, why not? Do you need it? Usually not. Being defensive about usage of your
+    APIs can actually avoid sloppy mistakes like the ones that I've described in the examples.
+</p>
+
+<p>
+    Correctly annotating your properties with <code>/** @var Type|null */</code> also helps tools
+    like <a href="https://github.com/scrutinizer-ci/php-analyzer" target="_blank">PHP Analyzer</a>
+    in discovering such bugs via static analysis.
+</p>
+
+<p>
+    Clean dependency injection and eventually proxying dependencies also produces better and easier
+    testable results than explicit lazy-loading coded in your classes.
+</p>
+
+<p>
+    The most interesting result in this experiment is that PHP yet again allows to implement
+    language-level features in userland, which is awesome!
+</p>
+
+<p>
+    Please let me know if you like this project by giving it a
+    <a href="https://github.com/Ocramius/LazyProperty" target="_blank">star</a>, or just drop me a tweet if
+    you think it can be enhanced!
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Fluent Interfaces are Evil]]></title>
+            <link href="/blog/fluent-interfaces-are-evil"/>
+            <updated>2013-11-07T00:00:00+00:00</updated>
+            <id>/blog/fluent-interfaces-are-evil</id>
+            <content type="html"><![CDATA[<p>
+    Today, I had again a discussion on IRC on why
+    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
+        Doctrine's EntityManager
+    </a> doesn't (and won't) implement a fluent interface. Here are my thoughts on why that's the case.
+</p>
+
+<hr/>
+
+<h2>Recap: What is a Fluent interface?</h2>
+
+<p>
+    A <a href="http://en.wikipedia.org/wiki/Fluent_interface" target="_blank">Fluent Interface</a>
+    is an object oriented API that provides "more readable" code.
+    <br/>
+    In general, the template for a fluent interface can be like following:
+</p>
+
+<pre><code class="php">&lt;?php
+
+interface {InterfaceName}
+{
+    /** @return self */
+    public function {MethodName}({Params});
+}
+</code></pre>
+
+<p>
+    Obviously, PHP doesn't provide return type hints, which means that I limited myself to define a
+    <code>/** @return self */</code>
+    <a href="http://www.phpdoc.org/docs/latest/for-users/tags/return.html" target="_blank">docblock</a>.
+</p>
+
+<p>
+    A fluent interface allows you to chain method calls, which results in less typed characters
+    when applying multiple operations on the same object:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$foo
+    -&gt;doBar()
+    -&gt;doBaz()
+    -&gt;setTaz('taz')
+    -&gt;otherCall()
+    -&gt;allTheThings();
+</code></pre>
+
+<hr/>
+
+<h2>When does a fluent interface make sense?</h2>
+
+<p>
+    Fluent interfaces make sense in some APIs, like the
+    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
+        QueryBuilder
+    </a>, or in general builder objects, especially when it comes to putting together nodes into
+    a hierarchical structure.
+</p>
+
+<p>
+    Here's an example of good usage of a fluent interface:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$queryBuilder
+    -&gt;select('u')
+    -&gt;from('User u')
+    -&gt;where('u.id = :identifier')
+    -&gt;orderBy('u.name', 'ASC')
+    -&gt;setParameter('identifier', 100);
+</code></pre>
+
+<hr/>
+
+<h2>What's the problem with fluent interfaces?</h2>
+
+<p>
+    I've identified some issues while working with fluent interfaces. Here they are listed in
+    descending order of relevance:
+</p>
+
+<ol>
+    <li>
+        Fluent Interfaces break
+        <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
+            Encapsulation
+        </a>
+    </li>
+    <li>Fluent Interfaces break Decorators (and sometimes Composition)</li>
+    <li>Fluent Interfaces are harder to Mock</li>
+    <li>Fluent Interfaces make diffs harder to read</li>
+    <li>Fluent Interfaces are less readable (personal feeling)</li>
+</ol>
+
+<hr/>
+
+<h2>Fluent Interfaces break Encapsulation</h2>
+
+<p>
+    The entire idea behind a fluent interface bases on an assumption:
+</p>
+
+<blockquote>
+    In a Fluent Interface, the return value of a method will be the same instance on which the method was called.
+</blockquote>
+
+<p>
+    First of all, "assuming" facts that are not safely constrained by the language is a mistake.
+    <br/>
+    Additionally, in OOP, you cannot rely on the identity of the returned value of an object, but just on its
+    interface.
+</p>
+
+<p>
+    What does that mean? Let's make an example with a <code>Counter</code> interface:
+</p>
+
+<pre><code class="php">&lt;?php
+
+interface Counter
+{
+    /** @return self */
+    public function count();
+
+    /** @return int */
+    public function getCount();
+}
+</code></pre>
+
+<p>Here's a fluent implementation of the interface:</p>
+
+<pre><code class="php">&lt;?php
+
+class FluentCounter implements Counter
+{
+    private $count = 0;
+
+    public function count()
+    {
+        $this-&gt;count += 1;
+
+        return $this;
+    }
+
+    public function getCount()
+    {
+        return $this-&gt;count;
+    }
+}
+</code></pre>
+
+<p>
+    Here's an Immutable implementation of the interface:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class ImmutableCounter implements Counter
+{
+    private $count;
+
+    public function __construct($count = 0)
+    {
+        $this-&gt;count = (int) $count;
+    }
+
+    public function count()
+    {
+        return new ImmutableCounter($this-&gt;count + 1);
+    }
+
+    public function getCount()
+    {
+        return $this-&gt;count;
+    }
+}
+</code></pre>
+
+<p>
+    Here is how you <a href="http://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new FluentCounter();
+
+echo $counter-&gt;count()-&gt;count()-&gt;count()-&gt;getCount(); // 3!
+</code></pre>
+
+<p>
+    Here is how you <a href="http://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new ImmutableCounter();
+
+$counter = $counter-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount(); // 3!
+</code></pre>
+
+<p>
+    We managed to implement an immutable counter even though the author of <code>Counter</code> maybe
+    assumed that all implementations should be mutable.
+</p>
+
+<p>
+    The same can be seen in the opposite direction: interface author may want to have all implementations
+    immutable, but then people implement a mutable version of it.
+</p>
+
+<p>
+    Turns out that the only correct way of
+    <a href="http://3v4l.org/fILUc" target="_blank">using such an interface</a>
+    is the "immutable" way, so:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = $counter-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount(); // 3!
+</code></pre>
+
+<p>
+    This ensures that <code>FluentCounter#getCount()</code> works as expected, but obviously defeats the
+    purpose of the fluent interface.
+</p>
+
+<p>
+    On top of that, there is nothing that the author of <code>Counter</code> can do to enforce either one or
+    the other way of implementing the contract, and that's a limitation of the language itself (and it's
+    most probably for good!).
+</p>
+
+<p>
+    None of the implementors/implementations are wrong. What is wrong here is the interface by trying to
+    force implementation details, therefore breaking encapsulation.
+</p>
+
+<p>Wrapping it up:</p>
+
+<ul>
+    <li>In OOP, a contract cannot guarantee the identity of a method return value</li>
+    <li>Therefore, In OOP, fluent interfaces cannot be guaranteed by a contract</li>
+    <li>Assumptions not backed by a contract are wrong</li>
+    <li>Following wrong assumptions leads to wrong results</li>
+</ul>
+
+<hr/>
+
+<h2>Fluent Interfaces break Decorators (and Composition)</h2>
+
+<p>
+    As some of you may know, I'm putting a lot of effort in writing libraries that
+    <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">generate decorators and proxies</a>.
+    <br/>
+    While working on those, I came to a very complex use case where I needed to build a generic wrapper around
+    an object.
+</p>
+
+<p>
+    I'm picking the <code>Counter</code> example again:
+</p>
+
+<pre><code class="php">&lt;?php
+
+interface Counter
+{
+    /** @return self */
+    public function count();
+
+    /** @return int */
+    public function getCount();
+}
+</code></pre>
+
+<p>
+    Assuming that the implementor of the wrapper doesn't know anything about the implementations of this
+    interface, he goes on and builds a wrapper.
+</p>
+
+<p>
+    In this example, the implementor simply writes a wrapper that echoes every time one of the methods is called:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+
+    public function __construct(Counter $counter)
+    {
+        $this-&gt;counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this-&gt;counter-&gt;count();
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this-&gt;counter-&gt;getCount();
+    }
+}
+</code></pre>
+
+<p>
+    Let's <a href="http://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new EchoingCounter(new FluentCounter());
+
+$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount();
+</code></pre>
+
+<p>
+    Noticed anything wrong? Yes, the string
+    <strong><code>"EchoingCounter::count"</code> is echoed only once!</strong>
+</p>
+
+<p>
+    That happens because we're just trusting the interface, so the <code>FluentCounter</code> instance
+    gets "un-wrapped" when we call <code>EchoingCounter::count()</code>.
+</p>
+
+<p>
+    Same happens when
+    <a href="http://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new EchoingCounter(new ImmutableCounter());
+
+$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount();
+</code></pre>
+
+<p>Same results. Let's try to fix them:</p>
+
+<pre><code class="php">&lt;?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+
+    public function __construct(Counter $counter)
+    {
+        $this-&gt;counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        $this-&gt;counter-&gt;count();
+
+        return $this;
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this-&gt;counter-&gt;getCount();
+    }
+}
+</code></pre>
+
+<p>And now let's <a href="http://3v4l.org/AilJu" target="_blank">retry</a>:</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new EchoingCounter(new FluentCounter());
+
+$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount();
+</code></pre>
+
+<p>
+    Works! We now see the different <code>EchoingCounter::count</code> being echoed.
+    <br/>
+    What about the immutable implementation?
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = new EchoingCounter(new ImmutableCounter());
+
+// we're using the "SAFE" solution here
+$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
+
+echo $counter-&gt;getCount();
+</code></pre>
+
+<p>
+    <a href="http://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
+    the reported count is wrong. Now the wrapper is working, but not the real logic!
+</p>
+
+<p>
+    Additionally, we cannot fix this with a generic solution.
+    <br/>
+    We don't know if the wrapped instance is supposed to return itself or a new instance.
+    <br/>
+    We <em>can</em> manually fix the wrapper with some assumptions though:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class EchoingCounter implements Counter
+{
+    private $counter;
+
+    public function __construct(Counter $counter)
+    {
+        $this-&gt;counter = $counter;
+    }
+
+    public function count()
+    {
+        echo __METHOD__ . "\n";
+
+        $this-&gt;counter = $this-&gt;counter-&gt;count();
+
+        return $this;
+    }
+
+    public function getCount()
+    {
+        echo __METHOD__ . "\n";
+
+        return $this-&gt;counter-&gt;getCount();
+    }
+}
+</code></pre>
+
+<p>
+    As you can see, we have to manually patch the <code>count()</code> method, but then again, this breaks
+    the case when the API is neither Immutable nor Fluent.
+    <br/>
+    Additionally, our wrapper is now opinionated about the usage of the <code>count()</code> method, and it is
+    not possible to build a generic wrapper anymore.
+</p>
+
+<p>
+    I conclude this section by simply stating that fluent interfaces are problematic for wrappers, and require
+    a lot of assumptions to be catched by a human decision, which has to be done per-method, based on
+    assumptions.
+</p>
+
+<hr/>
+
+<h2>Fluent Interfaces are harder to Mock</h2>
+
+<p>
+    Mock classes (at least in PHPUnit) are
+    <a href="http://en.wikipedia.org/wiki/Null_Object_pattern" target="_blank">null objects</a> by default,
+    which means that all the return values of methods have to be manually defined:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = $this-&gt;getMock('Counter');
+
+$counter
+    -&gt;expects($this-&gt;any())
+    -&gt;method('count')
+    -&gt;will($this-&gt;returnSelf());
+</code></pre>
+
+<p>
+    There are 2 major problems with this:
+</p>
+
+<ol>
+    <li>All fluent methods need explicit mocking</li>
+    <li>We are assuming that a fluent interface is implemented, whereas the implementation may be immutable (as shown before)</li>
+</ol>
+
+<p>
+    That basically means that we have to code assumptions in our unit tests (bad, and hard to follow).
+</p>
+
+<p>
+    Also, we have to make decisions on the implementation of a mocked object
+</p>
+
+<p>
+    The correct way of mocking the <code>Counter</code> interface would be something like:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$counter = $this-&gt;getMock('Counter');
+
+$counter
+    -&gt;expects($this-&gt;any())
+    -&gt;method('count')
+    -&gt;will($this-&gt;returnValue($this-&gt;getMock('Counter')));
+</code></pre>
+
+<p>
+    As you can see, we can break our code by making the mock behave differently, but still respecting the
+    interface. Additionally, we need to mock every fluent method regardless of the parameters or even when
+    we don't have expectations on the API.
+</p>
+
+<p>
+    That is a lot of work, and a lot of <strong>wrong</strong> work to be done.
+</p>
+
+<hr/>
+
+<h2>Fluent Interfaces make diffs harder to read</h2>
+
+<p>
+    The problem with diffs is minor, but it's something that really
+    <a href="http://knowyourmeme.com/memes/that-really-rustled-my-jimmies" target="_blank">rustles my jimmies</a>,
+    especially because people abuse fluent interfaces to write giant chained method calls like:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$foo
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+    -&gt;addTab('tab');
+</code></pre>
+
+<p>
+    Let's assume that a line is changed in the middle of the chain:
+</p>
+
+<pre><code class="sh">$ diff -p left.txt right.txt
+</code></pre>
+
+<pre><code class="diff">*** left.txt    Fri Nov  8 15:05:09 2013
+--- right.txt   Fri Nov  8 15:05:22 2013
+***************
+*** 11,16 ****
+--- 11,17 ----
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
++     -&gt;addBaz('tab')
+    -&gt;addTab('tab')
+    -&gt;addBar('bar')
+    -&gt;addBaz('baz')
+</code></pre>
+
+<p>
+    Not really useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
+</p>
+
+<p>
+    This may look like nitpicking, but it makes code reviews harder, and I personally do a lot of code reviews.
+</p>
+
+<hr/>
+
+<h2>Fluent Interfaces are less readable</h2>
+
+<p>
+    This is a personal feeling, but when reading a fluent interface, I cannot recognize if what is going on
+    is just a massive violation of the
+    <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a>, or if we're
+    dealing with the same object over and over again.
+    <br/>
+    I'm picking an obvious example to show where this may happen:
+</p>
+
+<pre><code class="php">&lt;?php
+return $queryBuilder
+    -&gt;select('u')
+    -&gt;from('User u')
+    -&gt;where('u.id = :identifier')
+    -&gt;orderBy('u.name', 'ASC')
+    -&gt;setFirstResult(5)
+    -&gt;setParameter('identifier', 100)
+    -&gt;getQuery()
+    -&gt;setMaxResults(10)
+    -&gt;getResult();
+</code></pre>
+
+<p>
+    This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are returning
+    different objects that have a different API.
+    <br/>
+    The problem occurs when a method does not look like a getter:
+</p>
+
+<pre><code class="php">&lt;?php
+return $someBuilder
+    -&gt;addThing('thing')
+    -&gt;addOtherThing('other thing')
+    -&gt;compile()
+    -&gt;write()
+    -&gt;execute()
+    -&gt;gimme();
+</code></pre>
+
+<p>
+    Which of these method calls is part of a fluent interface? Which is instead
+    returning a different object? You can't really tell that...
+</p>
+
+<hr/>
+
+<h2>Conclusion</h2>
+
+<p>
+    I know the article is titled <q>"Fluent Interfaces are Evil"</q>, but that doesn't mean it's an absolute.
+</p>
+
+<p>
+    Fluent interfaces are useful and easy to read in <strong>some contexts</strong>.
+    What I am showing here is a set of problems that raise when inheriting them or making every piece of your
+    code fluent.
+</p>
+
+<p>
+    I just want you to think carefully next time you want fluent interfaces in your libraries,
+    especially about the downsides that I have just exposed.
+</p>
+
+<p>
+    You must have a <strong>very good reason</strong> to implement a fluent interface, otherwise it's just
+    a problem that you are possibly dragging into your codebase.
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Fast PHP Object to Array conversion]]></title>
+            <link href="/blog/fast-php-object-to-array-conversion"/>
+            <updated>2013-08-09T00:00:00+00:00</updated>
+            <id>/blog/fast-php-object-to-array-conversion</id>
+            <content type="html"><![CDATA[<p>
+    A couple of months ago, I found a forgotten feature of PHP itself.
+</p>
+
+<p>
+    Apparently, it is possible to cast objects to arrays like following:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class Foo
+{
+    public $bar = 'barValue';
+}
+
+$foo = new Foo();
+
+$arrayFoo = (array) $foo;
+
+var_dump($arrayFoo);
+</code></pre>
+
+<p>
+    This <a href="http://3v4l.org/dj6Ei" target="_blank">will produce</a> something like:
+</p>
+
+<pre><code class="php">array(1) {
+    ["bar"]=&gt; string(8) "barValue"
+}
+</code></pre>
+
+<h2>Private and Protected properties</h2>
+
+<p>
+    If we start adding private and protected properties to our <code>Foo</code> class, things get
+    very interesting:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class Foo
+{
+    public $bar = 'barValue';
+    protected $baz = 'bazValue';
+    private $tab = 'tabValue';
+}
+
+$foo = new Foo();
+
+$arrayFoo = (array) $foo;
+
+var_dump($arrayFoo);
+</code></pre>
+
+<p>
+    The output <a href="http://3v4l.org/vK1t6" target="_blank">will be</a> like following in this case:
+</p>
+
+<pre><code class="php">array(3) {
+    ["bar"]=&gt; string(8) "barValue"
+    ["*baz"]=&gt; string(8) "bazValue"
+    ["Footab"]=&gt; string(8) "tabValue"
+}
+</code></pre>
+
+<p>
+    Weird, so <code>$baz</code> is copied to array key <code>'*baz'</code> and <code>$tab</code>
+    is copied to <code>Footab</code>...
+</p>
+
+<p>Let's try accessing those keys:</p>
+
+<pre><code class="php">&lt;?php
+
+var_dump($arrayFoo['*baz']);
+var_dump($arrayFoo['Footab']);
+</code></pre>
+
+<p>
+    Something even more strange happens here:
+    <a href="http://3v4l.org/JimNP" target="_blank">we get two notices</a>.
+</p>
+
+<pre><code class="php">Notice: Undefined index: *baz in [...] on line [...]
+NULL
+
+Notice: Undefined index: Footab in [...] on line [...]
+NULL
+</code></pre>
+
+<p>
+    I actually spent some time trying to understand why this was happening, and even the debugger was failing
+    me! Then I tried using
+    <a href="http://www.php.net/manual/en/function.var-export.php" target="_blank"><code>var_export</code></a>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+var_export($arrayFoo);
+</code></pre>
+
+<p>
+    The <a href="http://3v4l.org/UQlb0" target="_blank">output</a> is quite interesting:
+</p>
+
+<pre><code class="php">array (
+    'bar' =&gt; 'barValue',
+    '' . "\0" . '*' . "\0" . 'baz' =&gt; 'bazValue',
+    '' . "\0" . 'Foo' . "\0" . 'tab' =&gt; 'tabValue',
+)
+</code></pre>
+
+<p>
+    Null characters are used as delimiters between the visibility scope of a particular property and its name!
+</p>
+
+<p>
+    That's some really strange results, and they give us some insight on how PHP actually keeps us from
+    accessing private and protected properties.
+</p>
+
+<h2>Direct property read attempt</h2>
+
+<p>
+    What happens if we try to directly access the <code>$foo</code> properties with this new trick?
+</p>
+
+<pre><code class="php">&lt;?php
+
+var_dump($foo-&gt;{"\0*\0baz"});
+var_dump($foo-&gt;{"\0Foo\0tab"});
+</code></pre>
+
+<p>
+    Looks like the engine was patched after PHP 5.1 to fix this (un-documented break),
+    since <a href="http://3v4l.org/e5hWG" target="_blank">we get a fatal</a>:
+</p>
+
+<pre><code class="php">Fatal error: Cannot access property started with '\0' in [...] on line [...]
+</code></pre>
+
+<p>
+    Too bad! That would have had interesting use cases. The change makes sense though, since we shouldn't
+    modify internal state without explicitly using an API that cries out "I do things with your objects state!".
+</p>
+
+<h2>Some notes and suggestions</h2>
+
+<ul>
+    <li>
+        This way of accessing properties via array conversion is quite useful when it actually makes sense to
+        access object internal state. Don't use it otherwise.
+    </li>
+    <li>
+        It is safe to use since an eventual behaviour change has to be documented. I provided a
+        <a href="https://github.com/php/php-src/pull/358" target="_blank">test for PHP-SRC in a pull request</a>
+        to protect this kind of usage.
+    </li>
+    <li>
+        You should probably not re-map the private properties to simple names such as
+        <code>baz</code>, since multiple inheritance levels may cause collisions in key names.
+    </li>
+    <li>
+        You may have already noticed that I work a lot with internal object states: that doesn't mean that you
+        should too.
+    </li>
+</ul>
+
+<p>
+    I'm currently writing a small library called
+    <a href="https://github.com/Ocramius/GeneratedHydrator" target="_blank">GeneratedHydrator</a>
+    to take advantage of this behaviour and the one that I described in my
+    <a href="">previous blog post</a>. That should prevent you from doing this
+    kind of dangerous things with PHP :-)
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Accessing private PHP class members without reflection]]></title>
+            <link href="/blog/accessing-private-php-class-members-without-reflection"/>
+            <updated>2013-07-10T00:00:00+00:00</updated>
+            <id>/blog/accessing-private-php-class-members-without-reflection</id>
+            <content type="html"><![CDATA[<p>
+    A couple of weeks ago I was working on a
+    <a href="https://github.com/Ocramius/ProxyManager/issues/62" target="_blank">very tricky issue</a> on
+    <a href="https://github.com/Ocramius/ProxyManager" target="_blank">ProxyManager</a>.
+</p>
+
+<p>
+    The problem is simple: instantiating
+    <a href="http://php.net/manual/en/class.reflectionclass.php" target="_blank">ReflectionClass</a> or
+    <a href="http://php.net/manual/en/class.reflectionproperty.php" target="_blank">ReflectionProperty</a> is
+    slow, and by slow, I mean <strong>really slow!</strong>
+</p>
+
+<p>
+    The reason for this reasearch is that I'm trying to optimize a
+    "<a href="http://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
+    to work with larger data-sets by still keeping a low initialization overhead.
+</p>
+
+<hr/>
+
+<h2>PHP 5.4 to the rescue!</h2>
+
+<p>
+    PHP 5.4 comes with a new API for Closures, which is
+    <a href="http://php.net/manual/en/closure.bind.php" target="_blank"><code>Closure#bind()</code></a>.
+</p>
+
+<p>
+    <code>Closure#bind()</code> basically allows you to get an instance of a closure with the scope of a given
+    object or class. Neat! That's basically like adding APIs to existing objects!
+</p>
+
+<p>
+    Let's break some OOP encapsulation to fit our needs.
+</p>
+
+<p>
+    The techniques to access private members are already explained on the PHP manual, but I am going to make a
+    simplified example anyway.
+</p>
+
+<p>
+    Here's what you have to do to steal <code>Kitchen#yummy</code> from following object:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class Kitchen
+{
+    private $yummy = 'cake';
+}
+</code></pre>
+
+<p>
+    First of all, let's define a closure to read the property as if we had access to it:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$sweetsThief = function (Kitchen $kitchen) {
+    return $kitchen-&gt;yummy;
+}
+</code></pre>
+
+<p>
+    Let's use it to steal some <code>yummy</code> stuff from the <code>Kitchen</code>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$kitchen = new Kitchen();
+
+var_dump($sweetsThief($kitchen));
+</code></pre>
+
+<p>
+    Sadly, this <a href="http://3v4l.org/ET06l" target="_blank">will result</a> in <code>$sweetsThief</code>
+    being caught with a fatal error that looks like following:
+</p>
+
+<pre><code class="php">Fatal error: Cannot access private property Kitchen::$yummy in [...] on line [...]
+</code></pre>
+
+<p>
+    Let's use <code>Closure#bind()</code> to make our thief smarter:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$kitchen = new Kitchen();
+
+// Closure::bind() actually creates a new instance of the closure
+$sweetsThief = Closure::bind($sweetsThief, null, $kitchen);
+
+var_dump($sweetsThief($kitchen));
+</code></pre>
+
+<p>
+    <a href="http://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
+</p>
+
+<hr/>
+
+<h2>Changing closure scope vs. Reflection: performance</h2>
+
+<p>
+    How does this technique compare with <code>ReflectionProperty#getValue()</code>? Is it actually faster?
+</p>
+
+<p>
+    I've built a simple benchmark to profile the "setup" step for this trick over 100000 iterations:
+</p>
+
+<pre><code class="php">&lt;?php
+
+for ($i = 0; $i &lt; 100000; $i += 1) {
+    $sweetsThief = Closure::bind(function (Kitchen $kitchen) {
+        return $kitchen-&gt;yummy;
+    }, null, 'Kitchen');
+}
+</code></pre>
+
+<pre><code class="php">&lt;?php
+
+for ($i = 0; $i &lt; 100000; $i += 1) {
+    $sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
+    $sweetsThief-&gt;setAccessible(true);
+}
+</code></pre>
+
+<p>
+    On a freshly compiled PHP 5.5 (Ubuntu 13.04 amd64 box), the fist script takes around
+    <strong>0.325</strong> seconds to run, while the second one requires <strong>0.658</strong> seconds.
+</p>
+
+<p>
+    <strong>Reflection is much slower</strong> here.
+</p>
+
+<p>
+    That's completely un-interesting though, since nobody will ever instantiate 100000 reflection properties,
+    or at least I cannot find a good reason to do that.
+</p>
+
+<p>
+    What seems to be more interesting is how <strong>accessing properties</strong> compares. I've profiled
+    that too:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$kitchen = new Kitchen();
+
+$sweetsThief = Closure::bind(function (Kitchen $kitchen) {
+    return $kitchen-&gt;yummy;
+}, null, 'Kitchen');
+
+for ($i = 0; $i &lt; 100000; $i += 1) {
+    $sweetsThief($kitchen);
+}
+</code></pre>
+
+<pre><code class="php">&lt;?php
+
+$kitchen = new Kitchen();
+
+$sweetsThief = new ReflectionProperty('Kitchen', 'yummy');
+$sweetsThief-&gt;setAccessible(true);
+
+for ($i = 0; $i &lt; 100000; $i += 1) {
+    $sweetsThief-&gt;getValue($kitchen);
+}
+</code></pre>
+
+<p>
+    The first script took <strong>~ 0.110</strong> seconds to run, while the second one needed
+    <strong>~ 0.199</strong> seconds!
+</p>
+
+<p>
+    We are actually <strong>much faster than reflection</strong>! Impressive!
+</p>
+
+<hr/>
+
+<h2>Accessing private class properties by reference</h2>
+
+<p>
+    There's actually one big advantage in using a Closure instead of ReflectionProperty, which is that you can
+    now <a href="http://3v4l.org/W12Hf" target="_blank">retrieve a private property by reference</a>!
+</p>
+
+<pre><code class="php">&lt;?php
+
+$sweetsThief = Closure::bind(function &amp; (Kitchen $kitchen) {
+    return $kitchen-&gt;yummy;
+}, null, $kitchen);
+
+
+$cake = &amp; $sweetsThief($kitchen);
+$cake = 'lie';
+
+var_dump('the cake is a ' . $sweetsThief($kitchen));
+</code></pre>
+
+<hr/>
+
+<h2>A generic property reader abstraction</h2>
+
+<p>
+    With all these new concepts we can write a very simplified accessor that allows us to read any property
+    of any object:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$reader = function &amp; ($object, $property) {
+    $value = &amp; Closure::bind(function &amp; () use ($property) {
+        return $this-&gt;$property;
+    }, $object, $object)-&gt;__invoke();
+
+    return $value;
+};
+
+$kitchen = new Kitchen();
+$cake    = &amp; $reader($kitchen, 'cake');
+$cake    = 'sorry, I ate it!';
+
+var_dump($kitchen);
+</code></pre>
+
+<p>
+    Here's the <a href="http://3v4l.org/JE0eX" target="_blank">working example</a>.
+</p>
+
+<p>
+    That's it: accessing any property, anywhere, and that even by reference! Success! We have broken the rules
+    once again!
+</p>
+
+<p>
+    I won't cover the "writing properties" part, nor handling inherited private properties,
+    since that's just details of this basic trick that need more code and are un-interesting to us.
+</p>
+
+<hr/>
+
+<h2>Conclusion</h2>
+
+<p>
+    Yet another time, PHP shows its best and worst aspects all together. It's a horrible language with a
+    horrible syntax, but it allows us to write amazing code and to run around a huge number of language
+    limitations by just providing new and awesome features at every release!
+</p>
+
+<p>
+    I won't use this technique myself, but it was interesting to dive into it, and it will become useful again
+    if I need to get references to private/protected class members in my crazy proxy projects.
+</p>
+
+<p>
+    I should hereby add a disclaimer: <strong>use with caution!</strong>
+</p>
+
+<h2>Errata</h2>
+
+<p>
+    In the first version of the article that was published 2013-07-10, I actually stated that Reflection
+    was faster: that's not true and is the result of a mistake that I made while running the tests, since
+    I was running a PHP version with loads of extensions that were affecting the results.
+</p>
+
+<p>
+    I have created a virtual machine with a clean 5.5 PHP build to get accurate results, which demonstrate
+    that <strong>Reflection is actually slower than closures in every case</strong>.
+</p>
+
+<p>
+    I also wrote a very small set of benchmarks that you may find
+    <a href="https://github.com/Ocramius/ocramius.github.com/tree/master/benchmarks/2013-07-10-accessing-private-php-class-members-without-reflection" target="_blank">
+    in the blog repository</a>
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Property Accessors in PHP Userland]]></title>
+            <link href="/blog/intercepting-public-property-access-in-php"/>
+            <updated>2013-06-30T00:00:00+00:00</updated>
+            <id>/blog/intercepting-public-property-access-in-php</id>
+            <content type="html"><![CDATA[<p>
+    Some time ago many people were disappointed by the fact that
+    <a href="https://wiki.php.net/rfc/propertygetsetsyntax-v1.2" target="_blank">PHP wasn't going to have
+    property accessors</a>, which are a very cool feature and would have helped a lot in reducing
+    boilerplate code in a lot of applications and frameworks.
+</p>
+
+<p>
+    Last October I learned from
+    <a href="https://twitter.com/lsmith" target="_blank">Lukas Smith</a>
+    about a trick that he used to discover when a public property of an object was being accessed.
+    <br/>
+    He mainly used the trick that I'm going to show to handle lazy-loading within
+    <a href="https://github.com/doctrine/phpcr-odm" target="_blank">PHPCR ODM</a>.
+</p>
+
+<p>
+    The trick basically allows to implement property accessors in userland code by exploiting how PHP
+    handles object properties internally.
+</p>
+
+<p>
+    I never got back to writing a blogpost about it, but here it finally is!
+</p>
+
+<p>
+    Here's a very simple example:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class Foo
+{
+    public $publicProperty = 'baz';
+}
+</code></pre>
+
+<p>
+    What we want is some way to know whenever somebody writes or reads property <code>$publicProperty</code>
+    from our object.
+</p>
+
+<p>
+    In order to do so, we can use a simple wrapper for our <code>Foo</code> object. Because we want to
+    respect the <a title="Liskov Substitution Principle" href="http://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank">LSP</a>,
+    we have this wrapper extending <code>Foo</code>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class FooWrapper extends Foo
+{
+    public function __construct()
+    {
+        unset($this-&gt;publicProperty);
+    }
+}
+</code></pre>
+
+<p>
+    That's it so far! Let's try it out:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$foo = new FooWrapper();
+
+echo $foo-&gt;publicProperty;
+</code></pre>
+
+<p>
+    Weirdly, this <a href="http://3v4l.org/gRtoj" target="_blank">will produce</a>
+    something like following:
+</p>
+
+<pre class="prettyprint linenums">Notice: Undefined property: FooWrapper::$publicProperty in [...]</pre>
+
+<p>
+    That basically means the property was not just set to <code>NULL</code>, but completely removed!
+</p>
+
+<p>
+    Let's use this at our own advantage by tweaking <code>FooWrapper</code> a bit:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class FooWrapper extends Foo
+{
+    private $wrapped;
+
+    public function __construct(Foo $wrapped)
+    {
+        $this-&gt;wrapped = $wrapped;
+
+        unset($this-&gt;publicProperty);
+    }
+
+    public function __get($name)
+    {
+        echo 'Getting property ' . $name . PHP_EOL;
+
+        return $this-&gt;wrapped-&gt;$name;
+    }
+
+    public function __set($name, $value)
+    {
+        echo 'Setting property ' . $name . ' to ' . $value . PHP_EOL;
+
+        return $this-&gt;wrapped-&gt;$name = $value;
+    }
+}
+</code></pre>
+
+<p>
+    And here again, let us try it out:
+</p>
+
+<pre><code class="php">&lt;?php
+
+$foo = new FooWrapper(new Foo());
+
+echo $foo-&gt;publicProperty;
+echo PHP_EOL;
+echo $foo-&gt;publicProperty = 'test';
+</code></pre>
+
+<p>
+    This <a href="http://3v4l.org/mmMZU" target="_blank">will produce</a> following output:
+</p>
+
+<pre><code class="sh">Getting property publicProperty
+baz
+Setting property publicProperty to test
+test
+</code></pre>
+
+<p>
+    Cool, huh? And the same works with <code>__isset</code> and <code>__unset</code> too!
+</p>
+
+<p>
+    This doesn't really replace property accessors, but it gives us a way of protecting access to public
+    properties via composition, inheritance and a bit of hacking.
+</p>
+
+<p>
+    There's not many use cases for this right now, since you have to write a lot of boilerplate code for
+    it to work correctly.
+</p>
+
+<p>
+    It is worth mentioning that this logic has been used to make
+    <a href="http://doctrine-project.org/" target="_blank">Doctrine 2.4</a> even more awesome.
+    I also wrote a component called
+    <a href="https://github.com/Ocramius/ProxyManager" target="_blank">ProxyManager</a>,
+    which avoids you from writing all the boilerplate code over and over again, so check it out!
+</p>
+
+<p>
+    Here's how the code from before rewritten using ProxyManager 0.4:
+</p>
+
+<pre><code class="php">&lt;?php
+
+use ProxyManager\Configuration;
+use ProxyManager\Factory\AccessInterceptorValueHolderFactory as Factory;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+class Foo
+{
+    public $publicProperty = 'baz';
+}
+
+$config  = new Configuration();
+$factory = new Factory($config);
+
+$foo = $factory-&gt;createProxy(
+    new Foo(),
+    array(
+        '__get' =&gt; function ($proxy, $instance, $method, $params) {
+            echo 'Getting property ' . $params['name'] . PHP_EOL;
+        },
+        '__set' =&gt; function ($proxy, $instance, $method, $params) {
+            echo 'Setting property ' . $params['name'] . ' to ' . $params['value'] . PHP_EOL;
+        }
+    )
+);
+
+echo $foo-&gt;publicProperty;
+echo PHP_EOL;
+echo $foo-&gt;publicProperty = 'test';
+</code></pre>
+
+<p>
+    Give it a try and drop me a line if you like it or hate it!
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[A tutorial for Doctrine 2 ORM with Zend Framework 2]]></title>
+            <link href="/blog/doctrine-2-orm-zf2-tutorial"/>
+            <updated>2013-02-14T00:00:00+00:00</updated>
+            <id>/blog/doctrine-2-orm-zf2-tutorial</id>
+            <content type="html"><![CDATA[<p>
+    A couple of weeks ago, I spoke about integrating
+    <a href="https://github.com/doctrine/doctrine2" target="_blank">Doctrine 2 ORM</a> in
+    <a href="https://github.com/zendframework/zf2" target="_blank">Zend Framework 2</a> applications in a
+    <a href="http://www.zend.com/en/webinars/recorded/show/336_doctrine%202%20orm%20and%20zend%20framework%202%20an%20introduction%20to%20doctrinemodule" target="_blank">webinar</a>
+    that I prepared for <a href="http://twitter.com/webinarsatzend" target="_blank">@webinarsatzend</a>.
+</p>
+
+<p>
+    You can find my slides at
+    <a href="http://marco-pivetta.com/doctrine-orm-zf2-tutorial/" target="_blank" title="Doctrine 2 ORM ZF2 tutorial">
+    http://marco-pivetta.com/doctrine-orm-zf2-tutorial/</a>.
+</p>
+
+<p>
+    Here's the presentation (consider reading the slides, since I will keep them updated):
+    <br/>
+    <object
+        width="800"
+        height="600"
+        wmode="transparent"
+        data="http://www.zend.com/static-assets/js/jwplayer/jwplayer.flash.swf?file=http://files.zend.com/webinar/70170000000byWK-ZF2-Doctrine2-20130214.flv&amp;autoStart=true"
+        type="application/x-shockwave-flash"
+    >
+        <param
+            value="http://www.zend.com/static-assets/js/jwplayer/jwplayer.flash.swf?file=http://files.zend.com/webinar/70170000000byWK-ZF2-Doctrine2-20130214.flv&amp;autoStart=true"
+            name="movie"
+        />
+        <param
+            value="transparent"
+            name="wmode"
+        />
+    </object>
+</p>
+
+<p>
+    The covered topics are all about
+    <a href="https://github.com/doctrine/DoctrineModule" target="_blank">DoctrineModule</a>,
+    <a href="https://github.com/doctrine/DoctrineORMModule" target="_blank">DoctrineORMModule</a> and
+    <a href="https://github.com/doctrine/DoctrineMongoODMModule" target="_blank">DoctrineMongoODMModule</a>,
+    which provide the thin integration layer between ZF2 and the ORM or generally Doctrine's persistence
+    oriented projects.
+</p>
+
+<p>
+    If you have suggestions or spot any problems/mistakes, please open an issue
+    or a pull request at <a href="https://github.com/Ocramius/doctrine-orm-zf2-tutorial" target="_blank">
+    https://github.com/Ocramius/doctrine-orm-zf2-tutorial</a>.
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[The Proxy Pattern in PHP]]></title>
+            <link href="/blog/proxy-pattern-in-php"/>
+            <updated>2013-01-20T00:00:00+00:00</updated>
+            <id>/blog/proxy-pattern-in-php</id>
+            <content type="html"><![CDATA[<p>
+    Last week, I spoke about Proxies and the Proxy Pattern (in OOP)
+    at the <a href="http://www.phpugffm.de/?p=999" target="_blank">PHP User Group Frankfurt</a>.
+</p>
+
+<p>
+    You can find my slides at
+    <a href="http://marco-pivetta.com/proxy-pattern-in-php/" target="_blank" title="The Proxy OOP pattern in PHP">
+    http://marco-pivetta.com/proxy-pattern-in-php/</a>.
+</p>
+
+<p>
+    The covered topics were:
+</p>
+
+<ul>
+    <li>Where and when to use proxies</li>
+    <li>Lazy Loading proxies</li>
+    <li>Virtual object proxy</li>
+    <li>Value Holder proxies</li>
+    <li>Ghost objects</li>
+    <li>Remote object proxies</li>
+    <li>Smart reference proxies</li>
+    <li>Null object proxies</li>
+    <li>Requirements of a proxy generator implementation</li>
+</ul>
+
+<p>
+    If you have suggestions or spot any problems/mistakes, please open an issue
+    or a pull request at <a href="https://github.com/Ocramius/proxy-pattern-in-php" target="_blank">
+    https://github.com/Ocramius/proxy-pattern-in-php</a>.
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[Dependency Injection slowness solved by Doctrine Proxies]]></title>
+            <link href="/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies"/>
+            <updated>2012-11-19T00:00:00+00:00</updated>
+            <id>/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies</id>
+            <content type="html"><![CDATA[<h2>Dependency Injection Containers and Performance</h2>
+
+<p>
+    <a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank">Dependency Injection Containers</a>
+    are a vital tool for developers of complex and modular applications.
+    <br/>
+    Using a Dependency Injection Container in your application brings you great benefits, allowing you to compose
+    complex object graphs without compromises or unnecessary ugliness (i.e. static methods).
+</p>
+
+<p>
+    By using a Dependency Injection Container you automatically gain some unlocked benefits:
+</p>
+
+<dl>
+    <dt><strong>Absence of hardcoded dependencies</strong>:</dt>
+    <dd>
+        Your objects do not handle instantiation of their dependencies, so you have one less problem to handle.
+    </dd>
+    <dt><strong>Better separation of concerns</strong>:</dt>
+        <dd>
+            Splitting problems across multiple objects becomes easier as the container helps you gluing them all
+            together.
+        </dd>
+    <dt><strong>Mocking is much easier</strong>:</dt>
+    <dd>
+        Since you compose your instances with other dependencies that solve
+        small problems, mocking those objects becomes really easy, and so writing tests for your application.
+    </dd>
+</dl>
+
+<p>
+    But there is one major pitfall: since your objects do not handle instantiation of their dependencies anymore
+    <strong>you are now building huge object graphs, even if you're not using all of those objects</strong>.
+    <br/>
+    Take for example the following code:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class A {}
+
+class B {}
+
+class C {}
+
+class D {
+    public function __construct(A $a, B $b, C $c)
+    {
+        // ...
+    }
+}
+
+class HelloWorld
+{
+    public function __construct(D $d)
+    {
+        // ...
+    }
+
+    public function sayHello()
+    {
+        return 'Hello World';
+    }
+}
+</code></pre>
+
+<p>
+    The example is obviously nonsense, but this actually happens in your MVC controllers, where you may have 3 or 4
+    actions and none of them using all of the dependencies of the controller itself.
+</p>
+
+<p>
+    As you notice, to call <code>HelloWorld#sayHello()</code> we are required to instantiate 5 objects:
+    <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>HelloWorld</code>.
+</p>
+
+<p>
+    While this is robust code that will hardly break if <code>A</code>, <code>B</code>, <code>C</code> and
+    <code>D</code> are correctly unit-tested, we are obviously having performance issues.
+    <br/>
+    Those issues become particularly noticeable when one of these objects needs to allocate a lot of resources or
+    to perform costly operations such as opening a file or a socket to a remote machine.
+</p>
+
+<p>
+    Using pure dependency injection yields stability, but introduces performance drawbacks, especially in
+    PHP, where the object graph is rebuilt on each dispatched request.
+</p>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>Service Location (to the rescue?)</h2>
+
+<p>
+    To solve the performance issues, some may be tempted to start using a
+    <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
+    within their services:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class HelloWorld
+{
+    public function __construct(ServiceLocator $serviceLocator)
+    {
+        $this-&gt;serviceLocator = $serviceLocator;
+    }
+
+    public function sayHello()
+    {
+        return 'Hello World';
+    }
+
+    public function doSomethingWithD()
+    {
+        if ( ! $this-&gt;d) {
+            $this-&gt;d = $this-&gt;serviceLocator-&gt;get('D');
+        }
+
+        $this-&gt;d-&gt;doSomething();
+    }
+}
+</code></pre>
+
+<p>
+    As you have noticed, this solves the performance issue by allowing us to retrieve an instance of <code>D</code>
+    <strong>only when we really need it</strong>:
+    <br/>
+    performance!
+</p>
+
+<p>
+    Anyway, by doing so we introduced some new problems:
+</p>
+
+<dl>
+    <dt><strong>Our object cannot exist without a service locator</strong>:</dt>
+    <dd>
+        makes testability hard, since we will need to mock the service locator in order to test
+        <code>HelloWorld</code>, and mocking a service locator is not so easy.
+    </dd>
+    <dt><strong>Our object depends on the implementation of the service locator</strong>:</dt>
+    <dd>
+        portability of our code is reduced, since it will work only with a specific service locator implementing the
+        <code>ServiceLocator</code> contract.
+    </dd>
+    <dt><strong>Instantiation of dependencies moved to our code</strong>:</dt>
+    <dd>
+        instantiation of <code>D</code> should not be a problem solved by our code. We introduced it in our code
+        now, so we must test it.
+    </dd>
+    <dt><strong>Hardcoded service name in our code</strong>:</dt>
+    <dd>
+        This makes our class very error prone if we don't write extensive integration tests each time we ship our
+        code. Also, it makes our code incompatible with anything sharing the same
+        <code>ServiceLocator</code> instance and requiring an instance named <code>'D'</code>, but with different
+        expectations.
+    </dd>
+</dl>
+
+<p>
+    We solved a performance problem to introduce at least <strong>4 new ones!</strong>
+    <br/>
+    Not really nice, eh? Not at all.
+</p>
+
+<p>
+    If you are already using service location, <strong>STOP DOING IT NOW</strong> and please read the rest of this
+    post.
+</p>
+
+<p>
+    There must be a <em>better</em> solution... After all, what we want to avoid is instantiating
+    <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> alltogether if we aren't using them.
+    <br/>
+    Doesn't sound to be so hard!
+</p>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>Doctrine Proxies to the rescue!</h2>
+
+<p>
+    The idea is not new, and <a href="http://pooteeweet.org/" target="_blank">Lukas Smith</a> already
+    <a href="https://github.com/symfony/symfony/issues/5012" target="_blank">discussed it on the Symfony2 issue
+    tracker</a>.
+</p>
+
+<p>
+    Since I was already playing around with code generation for doctrine, I decided to implement those concepts
+    with <strong>Doctrine Proxies</strong>.
+</p>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>What are Doctrine Proxies?</h2>
+
+<p>
+    <a href="https://github.com/Ocramius/common/blob/DCOM-96/lib/Doctrine/Common/Proxy/Proxy.php"
+    target="_blank">Doctrine Proxies</a> are a PHP implementation of the
+    <a href="http://en.wikipedia.org/wiki/Proxy_pattern" target="_blank">proxy pattern</a> used to achieve
+    <a href="http://www.martinfowler.com/eaaCatalog/lazyLoad.html" target="_blank">lazy loading</a> of objects from
+    a persistent storage.
+    <br/>
+    Doctrine implements this pattern by having <strong>Virtual Proxies</strong> that behave like
+    <strong>Ghost Objects</strong>.
+</p>
+
+<p>
+    The concept behind proxies is quite simple: each time a method of the proxy is called, if the proxy is not
+    initialized, initialization logic is triggered (which usually corresponds to filling its fields with data
+    coming from a DB).
+    <br/>
+    After that, the original code that was supposed to be executed with that method call is run.
+</p>
+
+<p>
+    This is achieved by Doctrine by generating a class that inherits from the original object and faking all of
+    its public API and adding the required code to trigger lazy loading:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class UserProxy extends User
+{
+    protected $initialized = false;
+
+    public function getUsername()
+    {
+        if ( ! $this-&gt;initialized) {
+            initialize($this);
+        }
+
+        return parent::getUsername();
+    }
+}
+</code></pre>
+
+<p>
+    The previous snippet is just a simplified example, and isn't very flexible, but as you may know, Doctrine is a
+    set of libraries focusing on persistence of data, and the
+    <a href="https://github.com/doctrine/common/blob/8b403cde97eaede30bd79acab4f18895fd5bdf27/lib/Doctrine/Common/Persistence/Proxy.php"
+    target="_blank">first version of proxies</a> was highly focused on supporting the purpose of loading an object
+    from a database.
+</p>
+
+<p>
+    The implementation has been enhanced with <a href="https://github.com/doctrine/common/pull/168" target="_blank">
+    a patch I'm working on</a>, now allowing many different uses of the proxy pattern. This is mainly possible
+    because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
+    used as initialization logic holders:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class UserProxy extends User
+{
+    /** @var Closure */
+    protected $initializer;
+
+    public function __setInitializer(Closure $initializer)
+    {
+        $this-&gt;initializer = $initializer;
+    }
+
+    public function getUsername()
+    {
+        if ($this-&gt;initializer !== null) {
+            call_user_func($this-&gt;initializer);
+        }
+
+        return parent::getUsername();
+    }
+}
+</code></pre>
+
+<p>
+    Using a <a href="http://php.net/manual/en/class.closure.php" target="_blank">Closure</a> as an initializer
+    now enables us to swap the initialization logic used for our proxy object. I won't get into details, but this
+    is a requirement for our next step.
+</p>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>Why proxies?</h2>
+
+<p>
+    Let's get back to the example with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>,
+    <code>HelloWorld</code>, but we'll introduce a proxy now:
+</p>
+
+<pre><code class="php">&lt;?php
+
+class A {}
+
+class B {}
+
+class C {}
+
+class D
+{
+    public function __construct(A $a, B $b, C $c)
+    {
+        // ...
+    }
+
+    public function doSomething()
+    {
+        return 'Did something with ' . $this-&gt;a . ', ' . $this-&gt;b . ', ' . $this-&gt;c;
+    }
+}
+
+class D_Proxy extends D
+{
+    private $serviceLocator;
+    private $original;
+
+    public function __construct(ServiceLocator $serviceLocator)
+    {
+        $this-&gt;serviceLocator = $serviceLocator;
+    }
+
+    private function initialize()
+    {
+        $this-&gt;initialized = true;
+        $this-&gt;original    = $this-&gt;serviceLocator-&gt;get('D');
+    }
+
+    public function doSomething()
+    {
+        if ( ! $this-&gt;initialized) {
+            $this-&gt;initialize();
+        }
+
+        return $this-&gt;original-&gt;doSomething();
+    }
+}
+
+class HelloWorld
+{
+    public function __construct(D $d)
+    {
+        // ...
+    }
+
+    public function sayHello()
+    {
+        return 'Hello World';
+    }
+
+    public function doSomethingWithD()
+    {
+        return $this-&gt;d-&gt;doSomething();
+    }
+}
+</code></pre>
+
+<p>
+    Wait... What? Ok, let's slow this down a bit:
+</p>
+
+<ol>
+    <li>
+        You can now pass an instance of <code>D_Proxy</code> to <code>HelloWorld</code>. Since <code>D_Proxy</code>
+        extends <code>D</code>, it respects the <a href="http://en.wikipedia.org/wiki/Liskov_substitution_principle"
+        target="_blank">Liskov substitution principle</a>.
+    </li>
+    <li>
+        The proxy is uninitialized, and it is empty (we have replaced its constructor).
+    </li>
+    <li>
+        When <code>doSomething</code> is called on the proxy, the real instance of <code>D</code> is retrieved
+        from a service locator, and put into the <code>original</code> property.
+    </li>
+    <li>
+        The method call is proxied to <code>$this->original->doSomething();</code>.
+    </li>
+    <li>
+        Since the original object is fully populated with instances of <code>A</code>, <code>B</code> and
+        <code>C</code>, code works as expected.
+    </li>
+</ol>
+
+<p>
+    We successfully avoided instantiating <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code> when
+    calling <code>sayHello</code>! <em>Awesome!</em>
+</p>
+
+<p>
+    But wait: didn't I just say that service location is evil?
+</p>
+
+<p>
+    Yes it is, but <code>D_Proxy</code> is generated code (don't worry about how it is generated) and:
+</p>
+
+<ul>
+    <li>
+        Its code generation is based on how the dependency injection container defined that <code>D</code> should
+        be instantiated, thus the hardcoded <code>'D'</code> within the proxy code comes from the current DIC
+        definitions. This allows it to have our DIC handling collisions between service names, and hardcoded
+        magic strings disappear from our code base.
+    </li>
+    <li>
+        It abstracts the problem of lazy initialization of a service for us. The generated code doesn't need
+        to be tested as that is something done by the implementor of the proxy generator (me).
+    </li>
+    <li>
+        It has the same performance impact of introducing lazy initialization logic in our classes' methods (similar
+        amount of system calls).
+    </li>
+    <li>
+        Turning on or off proxies does not change the functionality provided by our applications. They're just
+        a performance tweak. They do not affect how our logic is dispatched.
+    </li>
+    <li>
+        Proxies actually allow cyclic dependencies. Since objects are lazily initialized, if <code>A</code> depends
+        on <code>B</code>, and <code>B</code> depends on <code>A</code>, and one of those two is proxied, the lazy
+        initialization mechanism will prevent us from triggering an infinite loop in our instantiation logic. This
+        is actually a thing I didn't think of initially, but it turns out to be a nice and powerful side effect.
+    </li>
+</ul>
+
+<hr/>
+
+<h2>General usage directions</h2>
+
+<p>
+    Proxies also have some limitations though:
+</p>
+
+<dl>
+    <dt><strong>Cannot benefit from the initializer pattern/setter injection</strong>:</dt>
+    <dd>
+        since any call to a proxy method that isn't its constructor would cause its initialization, setter injection
+        cannot be used on a proxy, or it will basically render the underlying idea of performance tweak useless.
+    </dd>
+    <dt><strong>Cannot proxy dynamic services</strong>:</dt>
+    <dd>
+        you can apply this proxy pattern only when assuming that calling <code>$serviceLocator-&gt;get('D');</code>
+        will actually return an instance of <code>D</code>. If the return type varies depending on i.e. environment
+        variables, this code will break.
+    </dd>
+    <dt><strong>Must be synchronized</strong>:</dt>
+    <dd>
+        changing implementation of our services requires us to re-generate proxies so that they respect the contract
+        of the service class. Since generated code in PHP is hard to put into a cache (because opcode caches cannot
+        act on serialized data) we need to save proxies to predictable location in our system in order to autoload
+        them and avoid generating them over and over. That also means that we have to delete them when we change our
+        code, so that we can let the generator rewrite them.
+    </dd>
+    <dt><strong>Add constant overhead to method calls</strong>:</dt>
+    <dd>
+        If your object is lightweight, you may not need to proxy it, especially if its methods get called thousands
+        of times.
+    </dd>
+</dl>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>Examples/benchmarks</h2>
+
+<ul>
+    <li>
+        If you want to read further on the proxy implementation I proposed for Zend Framework 2 you can check the
+        <a href="https://github.com/zendframework/zf2/pull/2995" target="_blank">corresponding pull request</a>.
+    </li>
+    <li>
+        If you are interested in how proxy generation works in Doctrine, you can check
+        <a href="https://github.com/doctrine/common/pull/168" target="_blank">my current work</a> on doctrine common.
+    </li>
+    <li>
+        If performance is your concern, read about the results of the last PHPPeru hack day I had with cordoval in
+        <a href="http://www.craftitonline.com/2012/11/lazy-load-services-and-do-not-inject-the-container-into-them/"
+        target="_blank">his blog</a>.
+    </li>
+    <li>
+        I am also starting work to implement this idea for Symfony 2 too. Not quite there yet :-)
+    </li>
+</ul>
+
+<hr/>
+
+<p><br/></p>
+
+<h2>Conclusions</h2>
+
+<p>
+    I can conclude that the proxies are a good solution to solve the performance issues that are introduced by
+    Dependency Injection Containers. They also allow us to completely get rid of service location and to focus
+    on writing clean and robust classes that are easy to test.
+</p>
+
+<p>
+    They surely add some hidden magic to our code, and I've been already told by <a href="http://mwop.net/" target="_blank">
+    Matthew Weier 'o Phinney</a> that some newcomers may be confused by the additional calls they will in stack
+    traces when looking at exceptions. Since proxies are an optional feature, I'm not really concerned about it.
+</p>
+
+<p>
+    I also worked with <a href="http://www.craftitonline.com/2012/11/lazy-load-services-and-do-not-inject-the-container-into-them/"
+    target="_blank">Luis Cordova</a> in organizing the topics for the last PHPPeru hack day, and the participants
+    didn't have big problems in understanding the problems and solutions suggested by the proxy approach, so I'm
+    quite confident about having it adopted in ZF2 and SF2 soon.
+</p>
+
+<p>
+    Anyway, proxies are not a requirement to get our application working. They are just steroids for our services,
+    and I'd surely suggest you to use them.
+</p>
+]]></content>
+        </entry>
+            <entry>
+            <title type="html"><![CDATA[JS/CSS/Images with Zend Framework 2 and the Asset Manager Module]]></title>
+            <link href="/blog/asset-manager-for-zend-framework-2"/>
+            <updated>2012-09-12T00:00:00+00:00</updated>
+            <id>/blog/asset-manager-for-zend-framework-2</id>
+            <content type="html"><![CDATA[<h2>RWOverdijk's AssetManager</h2>
+
+<p>
+    This blog post is about a module that I and <a href="https://twitter.com/RWOverdijk"
+    target="_blank">Roberto Wesley Overdijk</a> developed last month. It is called
+    <a href="https://github.com/RWOverdijk/AssetManager" target="_blank">AssetManager</a>
+    and its aim is to simplify how you currently store and serve assets
+    (JS/CSS/images/etc.) in your <abbr title="Zend Framework 2">ZF2</abbr> applications.
+</p>
+
+<h2>ZF2 Module structure</h2>
+
+<p>
+    When <a href="https://twitter.com/weierophinney" target="_blank">Matthew Weier
+    O'Phinney</a> blogged about <a href="http://mwop.net/blog/why-conventions-matter.html"
+    target="_blank">Why Conventions Matter</a> in ZF2 Modules, we were still defining the
+    basic concepts of modules, and didn't really have a decent solution about how to
+    serve assets. The idea is to ship assets with modules themselves, thus avoiding to
+    copy files to your <code>public/</code> directory each time you start with a new
+    project (copying is almost never a good thing, you know that!).
+</p>
+
+<p>
+    AssetManager solves this problem and is a
+    <a href="http://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/"
+    target="_blank">high quality and well tested module</a>.
+</p>
+
+<hr/>
+
+<h2>Let's get started</h2>
+
+<p>
+    We will use a standard <a href="https://github.com/zendframework/ZendSkeletonApplication"
+    target="_blank">ZF2 skeleton application</a> and
+    <a href="http://getcomposer.org/" target="_blank">Composer</a>:
+</p>
+
+<pre><code class="sh">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
+Cloning into 'ZendSkeletonApplication'...
+
+~$ cd ZendSkeletonApplication
+
+~$ ./composer.phar install
+Loading composer repositories with package information
+Installing dependencies
+  - Installing zendframework/zendframework (2.0.0)
+    Downloading: 100%
+
+~$ ./composer.phar require rwoverdijk/assetmanager
+Please provide a version constraint for the rwoverdijk/assetmanager requirement: *
+composer.json has been updated
+Loading composer repositories with package information
+Updating dependencies
+  - Installing kriswallsmith/assetic (v1.0.4)
+    Downloading: 100%
+
+  - Installing rwoverdijk/assetmanager (1.0.0)
+    Downloading: 100%
+
+Writing lock file
+Generating autoload files
+</code></pre>
+
+<hr/>
+
+<p>Don't forget to enable the module in your <code>config/application.config.php</code>!</p>
+
+<pre><code class="php">&lt;?php
+return array(
+    'modules' =&gt; array(
+        'AssetManager',
+        'Application',
+    ),
+    // ... other configs ...
+</code></pre>
+
+<h2>Assets</h2>
+
+<p>
+    To verify that everything works, we will add a simple asset that will just paint
+    everything in our page as green (just to make things really really obvious). It will
+    be our <code>module/Application/public/test-asset.css</code> (The <code>public</code>
+    dir does not yet exist in the skeleton application, you will need to create it):
+</p>
+
+<pre><code class="css">* {color: green;}
+</code></pre>
+
+<p>
+    We now need to teach the AssetManager where to look for our assets. To do so, we will
+    edit our module's configuration.
+    Now let's go to <code>module/Application/config/module.config.php</code>, we need to
+    add following configuration:
+</p>
+
+<pre><code class="php">&lt;?php
+return array(
+    'asset_manager' =&gt; array(
+        'resolver_configs' =&gt; array(
+            'paths' =&gt; array(
+                'Application' =&gt; __DIR__ . '/../public',
+            ),
+        ),
+    ),
+);
+</code></pre>
+
+<p>
+    This basically means that any request that couldn't be routed to a controller will
+    check also within our module's <code>public/</code> dir and eventually serve an asset
+    from there.
+</p>
+
+<p class="warning">
+    <span class="label label-info">Warning!</span> By configuring your application this
+    way, you're basically telling PHP to serve any content from within your module's
+    <code>public/</code> dir. This also means PHP sources (as text) if there are any in
+    there. Keep it in mind!
+</p>
+
+<h2>Checking if it works</h2>
+
+<p>
+    Once you've done all this, open your browser and go to
+    <code>http://localhost/path/to/ZendSkeletonApplication/public/test-asset.css</code>.
+    You should see the contents we wrote in the CSS file before.
+</p>
+
+<p>
+    That's it! You can now add your CSS file in your
+    <code>module/Application/view/layout/layout.phtml</code> as following if you want:
+</p>
+
+<pre><code class="php">&lt;?php
+    echo $this-&gt;headLink()-&gt;prependStylesheet($this-&gt;basePath() . '/test-asset.css');
+?&gt;
+</code></pre>
+
+<p>
+    Enjoy! You can now build your modules to ship any images, js or generally assets!
+</p>
+
+<p>
+    This Asset Manager supports more kinds of resolver strategies, such as maps,
+    asset collections (to get compiled JS/CSS), filters, caching, asset priorities and
+    more. Most of all this is already implemented, but check the
+    <a href="https://github.com/RWOverdijk/AssetManager" target="_blank">project page
+    on github</a> for more amazing features!
+</p>
+]]></content>
+        </entry>
+    </feed>
