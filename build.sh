@@ -24,3 +24,5 @@ git checkout -b master
 rsync --quiet --archive --filter="P .git*" --exclude=".*.sw*" --exclude=".*.un~" --delete ../output_prod/ ./
 git add -A :/
 git commit -a -m "Deploying sculpin-generated pages to \`master\` branch"
+
+echo "Now please push \`master\` manually from dir \`gh-pages-deployment\`"
