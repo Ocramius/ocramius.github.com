@@ -137,6 +137,16 @@ pre code {
     /*background-size: 2em auto;*/
 }
 
+.social-media{
+    padding-left: 31%;
+}
+
+.social-media a{
+    float: left;
+    width: 3%;
+    list-style: none;
+}
+
 .ocramius {
     background-image: url('../img/marco-pivetta-ocramius.gif');
 }
