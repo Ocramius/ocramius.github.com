@@ -30,30 +30,33 @@
                         <li><a href="{{ site.url }}/blog/tags">Tags</a></li>
                         #}
                         <li><a href="{{ site.url }}/about">About</a></li>
-                        {% if site.twitter %}
-                        <li>
-                            <a
-                                class="twitter"
-                                href="https://twitter.com/{{ site.twitter }}"
-                                rel="me" title="{{ site.twitter }} twitter profile"
-                            >
-                                {{ site.twitter }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if site.github %}
-                        <li>
-                            <a
-                                class="github"
-                                href="https://github.com/{{ site.github }}"
-                                rel="me"
-                                rel="me" title="{{ site.twitter }} github profile"
-                            >
-                                {{ site.github }}
-                            </a>
-                        </li>
-                        {% endif %}
                     </ul>
+
+                    <div class="social-medias">
+                            {% if site.twitter %}
+                                <a
+                                    class="twitter"
+                                    href="https://twitter.com/{{ site.twitter }}"
+                                    rel="me" title="{{ site.twitter }} twitter profile"
+                                    target="_blank"
+                                >
+                                    &nbsp;
+                                </a>
+                            {% endif %}
+                            {% if site.github %}
+                                <a
+                                    class="github"
+                                    href="https://github.com/{{ site.github }}"
+                                    rel="me"
+                                    rel="me" title="{{ site.twitter }} github profile"
+                                    target="_blank"
+                                >
+                                    &nbsp;
+                                </a>
+                            {% endif %}
+                        <ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </header>
