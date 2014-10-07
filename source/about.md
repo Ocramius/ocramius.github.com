@@ -9,7 +9,7 @@ title: About me, Marco Pivetta, aka Ocramius
         Hi, my name is <a class="ocramius fn url" href="http://ocramius.github.io/">
             <span class="given-name">Marco</span> <span class="family-name">Pivetta</span>
         </a>,
-        and I'm a software consultant working for <a class="roave fn url org" href="http://roave.com/">Roave</a>.
+        and I'm a software consultant working for <a class="roave fn url org" href="http://roave.com/" target="_blank">Roave</a>.
     </p>
 
     <p class="adr">
@@ -28,15 +28,15 @@ title: About me, Marco Pivetta, aka Ocramius
     </p>
 
     <p>
-        I am part of the <a href="http://www.doctrine-project.org/" class="doctrine fn url org">Doctrine Project</a>
+        I am part of the <a href="http://www.doctrine-project.org/" class="doctrine fn url org" target="_blank">Doctrine Project</a>
         core team: we build the well known
-        <a href="https://github.com/doctrine/doctrine2">Doctrine 2 Object Relational Mapper</a>.
+        <a href="https://github.com/doctrine/doctrine2" target="_blank">Doctrine 2 Object Relational Mapper</a>.
     </p>
 
     <p>
-        If you dig in my <a href="https://github.com/Ocramius" rel="me" class="github fn url">Github account</a>,
+        If you dig in my <a href="https://github.com/Ocramius" rel="me" class="github fn url" target="_blank">Github account</a>,
         you will also find out that I am part of the
-        <a href="https://github.com/zendframework/" class="zendframework fn url org">ZendFramework CR team</a>,
+        <a href="https://github.com/zendframework/" class="zendframework fn url org" target="_blank">ZendFramework CR team</a>,
         helping maintaining one of the most used, stable and secure enterprise-grade available PHP libraries.
     </p>
 
@@ -57,7 +57,7 @@ title: About me, Marco Pivetta, aka Ocramius
     </p>
 
     <p>
-        You can also say "hi" to me on <a href="https://twitter.com/Ocramius" rel="me" class="twitter url">Twitter</a>,
+        You can also say "hi" to me on <a href="https://twitter.com/Ocramius" rel="me" class="twitter url" target="_blank">Twitter</a>,
         where I post professional and personal thoughts, suggestions, rants and silly things that I find on the
         intertubes.
     </p>
