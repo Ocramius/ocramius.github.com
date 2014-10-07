@@ -2,6 +2,10 @@ body {
     font-family: 'tisaregular';
     font-size: 17px
 }
+
+p{
+    margin: 25px 0 25px
+}
 /* Menu */
 .nav{
     list-style: none;
