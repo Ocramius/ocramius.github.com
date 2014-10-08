@@ -27,7 +27,7 @@
         "components/highlightjs": "~7.3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*@DEV"
+        "phpunit/phpunit": "~4.0"
     },
     "config": {
         "component-dir": "source/components"

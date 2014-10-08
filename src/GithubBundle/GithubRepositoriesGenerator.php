@@ -9,6 +9,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GithubRepositoriesGenerator implements EventSubscriberInterface
 {
+    const SOURCE_GITHUB_KEY          = 'github';
+    const SOURCE_GITHUB_REPOSITORIES = 'repositories';
+
     /**
      * @var array[]
      */
@@ -36,9 +39,7 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [
-            Sculpin::EVENT_BEFORE_RUN => 'beforeRun',
-        ];
+        return [Sculpin::EVENT_BEFORE_RUN => 'beforeRun'];
     }
 
     /**
@@ -49,24 +50,20 @@ class GithubRepositoriesGenerator implements EventSubscriberInterface
      */
     public function beforeRun(SourceSetEvent $sourceSetEvent)
     {
-        $repositories = $this->client
-                             ->api('user')
-                            ->repositories($this->config['github']['user']);
+        $repositories = $this
+            ->client
+            ->api('user')
+            ->repositories($this->config['user']);
 
-        $sourceSet = $sourceSetEvent->sourceSet();
-
-        foreach ($sourceSet->updatedSources() as $source) {
-            if ($source->data()->get('github')
-                && 'repositories' == $source->data()->get('github')
-            ) {
-                $content = str_ireplace(
-                    $this->config['github']['replace_on_content'],
-                    $this->config['github']['render']($repositories),
+        /* @var $source \Sculpin\Core\Source\SourceInterface */
+        foreach ($sourceSetEvent->sourceSet()->updatedSources() as $source) {
+            if (static::SOURCE_GITHUB_REPOSITORIES === $source->data()->get(static::SOURCE_GITHUB_KEY)) {
+                $source->setContent(str_ireplace(
+                    $this->config['replace_on_content'],
+                    $this->config['render']($repositories),
                     $source->content()
-                );
+                ));
 
-
-                $source->setContent($content);
                 $source->setIsGenerated();
             }
         }

@@ -1,25 +1,16 @@
 <?php
 namespace GithubBundleTest;
 
+use Github\Api\User;
 use Github\Client;
-use Sculpin\Core\Event\SourceSetEvent;
 use GithubBundle\GithubRepositoriesGenerator;
+use Sculpin\Core\Configuration\Configuration;
+use Sculpin\Core\Event\SourceSetEvent;
+use Sculpin\Core\Source\SourceInterface;
+use Sculpin\Core\Source\SourceSet;
 
 class GitHubRepositoriesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    public function getConfigForGithubBundle()
-    {
-        return [
-            'github' => [
-                'user' => 'foo',
-                'replace_on_content' => '{GITHUB_TEST}',
-                'render' => function ($data) {
-                    return $data;
-                }
-            ]
-        ];
-    }
-
     public function testIfClassCanBeInstantiated()
     {
         $github = new GithubRepositoriesGenerator([], new Client);
@@ -31,21 +22,53 @@ class GitHubRepositoriesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCanGenerateContentCorrectlyOfGithubPage()
     {
-        $auxiliary = $this->getMock(Auxiliary\SourceSetEvent::class);
-        $client = $this->getMock(Client::class)
+        $client = $this->getMock(Client::class);
+        $users  = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+
+        $client
             ->expects($this->any())
             ->method('api')
-            ->willReturn($auxiliary);
+            ->willReturn($users);
 
-        $sourceSetEvent = $this->getMockBuilder(SourceSetEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $users->expects($this->any())->method('repositories')->will($this->returnValue('REPOSITORIES LIST'));
 
-        $sourceSetEvent->method('sourceSet')
-            ->willReturn($auxiliary);
+        $github = new GithubRepositoriesGenerator($this->getConfigForGithubBundle(), $client);
 
-        $github = new GithubRepositoriesGenerator($this->getConfigForGithubBunble(), $client);
+        $source1 = $this->getMock(SourceInterface::class);
+        $source2 = $this->getMock(SourceInterface::class);
+
+        $source1->expects($this->any())->method('hasChanged')->will($this->returnValue(true));
+        $source2->expects($this->any())->method('hasChanged')->will($this->returnValue(true));
+
+        $source1
+            ->expects($this->any())
+            ->method('data')
+            ->will($this->returnValue(new Configuration(['foo' => 'bar'])));
+        $source2
+            ->expects($this->any())
+            ->method('data')
+            ->will($this->returnValue(new Configuration(['github' => 'repositories'])));
+
+        $source1->expects($this->never())->method('setContent');
+        $source2->expects($this->once())->method('content')->will($this->returnValue('CONTENTS {GITHUB_TEST}'));
+        $source2->expects($this->once())->method('setContent')->with('CONTENTS REPOSITORIES LIST');
+
+        $sourceSetEvent = new SourceSetEvent(new SourceSet([
+            $source1,
+            $source2,
+        ]));
+
         $github->beforeRun($sourceSetEvent);
-        $this->assertEquals('Heya! Repository data', $auxiliary->getContent());
+    }
+
+    private function getConfigForGithubBundle()
+    {
+        return [
+            'user' => 'foo',
+            'replace_on_content' => '{GITHUB_TEST}',
+            'render' => function ($data) {
+                return $data;
+            },
+        ];
     }
 }
