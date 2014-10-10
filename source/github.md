@@ -1,8 +1,9 @@
 ---
 layout: default
 title: Github
+github: repositories
 
 ---
 &nbsp;
 
-{Github}
+{GITHUB_REPOSITORIES}

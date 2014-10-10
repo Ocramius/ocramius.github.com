@@ -6,3 +6,5 @@
 /output_*/
 /source/components/
 s3.conf
+phpunit.xml
+config.php
