@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2014-10-07T10:50:14+00:00</updated>
+    <updated>2014-10-14T01:52:32+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -120,7 +120,7 @@ class MyLoggerFactory implements FactoryInterface
 </p>
 
 <p>
-    We can be mitigate this issue by using an initializer instead:
+    We can mitigate this issue by using an initializer instead:
 </p>
 
 <pre><code class="php">&lt;?php
