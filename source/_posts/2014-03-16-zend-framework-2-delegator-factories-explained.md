@@ -122,7 +122,7 @@ class MyLoggerFactory implements FactoryInterface
     code from external dependencies.
 </p>
 <p>
-    We can be mitigate this issue by using an initializer instead:
+    We can mitigate this issue by using an initializer instead:
 </p>
 
 ~~~php
