@@ -4,9 +4,8 @@ title: Talks
 
 ---
 <article>
-<h2>Here's some of my work as a lecturer.</h2>
+    <h2>Here are some of my presentations</h2>
 
-<div class="row">
     <div class="clear-fix"></div>
     <div class="span12">
         <iframe 
