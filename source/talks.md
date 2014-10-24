@@ -16,6 +16,7 @@ title: Talks
             allowfullscreen>
         </iframe>
         <h4>The Proxy pattern in PHP (IPC 13)</h4>
+        <a href="https://joind.in/talk/view/10378" target="_blank">Reviews</a>
     </div>
 
     <div class="clear-fix"></div>
@@ -28,6 +29,7 @@ title: Talks
             allowfullscreen>
         </iframe>
         <h4>The Proxy pattern in PHP (SymfonyCon Warsaw 2013)</h4>
+        <a href="https://joind.in/talk/view/9555" target="_blank">Reviews</a>
     </div>
 
     <div class="clear-fix"></div>
