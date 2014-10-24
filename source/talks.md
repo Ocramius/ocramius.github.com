@@ -8,6 +8,30 @@ title: Talks
 
     <div class="clear-fix"></div>
     <div class="span12">
+        <iframe
+            width="640"
+            height="390"
+            src="//www.youtube.com/embed/Ka8wlV8M6Vg"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+        <h4>The Proxy pattern in PHP (IPC 13)</h4>
+    </div>
+
+    <div class="clear-fix"></div>
+    <div class="span12">
+        <iframe
+            width="640"
+            height="390"
+            src="//www.youtube.com/embed/lftBjzyd6dQ"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+        <h4>The Proxy pattern in PHP (SymfonyCon Warsaw 2013)</h4>
+    </div>
+
+    <div class="clear-fix"></div>
+    <div class="span12">
         <iframe 
             width="640" 
             height="390" 
@@ -16,16 +40,5 @@ title: Talks
             allowfullscreen>
         </iframe>
         <h4>Doctrine 2 ORM and Zend Framework 2: an introduction to DoctrineModule</h4>
-    </div>
-    <div class="clear-fix"></div>
-    <div class="span12">
-        <iframe 
-            width="640" 
-            height="390" 
-            src="//www.youtube.com/embed/lftBjzyd6dQ"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
-        <h4>The Proxy pattern in PHP</h4>
     </div>
 </article>
