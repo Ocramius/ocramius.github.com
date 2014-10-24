@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Talks
+title: Presentations
 
 ---
 <article>
@@ -19,6 +19,8 @@ title: Talks
         <a href="https://joind.in/talk/view/10378" target="_blank">Reviews</a>
     </div>
 
+    <hr/>
+
     <div class="clear-fix"></div>
     <div class="span12">
         <iframe
@@ -31,6 +33,8 @@ title: Talks
         <h4>The Proxy pattern in PHP (SymfonyCon Warsaw 2013)</h4>
         <a href="https://joind.in/talk/view/9555" target="_blank">Reviews</a>
     </div>
+
+    <hr/>
 
     <div class="clear-fix"></div>
     <div class="span12">
