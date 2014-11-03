@@ -2,7 +2,7 @@
 layout: post
 title: Property Accessors in PHP Userland
 category: PHP
-tags: php oop access property accessors
+tags: ["php", "oop", "access", "property accessors"]
 year: 2013
 month: 6
 day: 30

@@ -2,7 +2,7 @@
 layout: post
 title: Fluent Interfaces are Evil
 category: PHP
-tags: php oop patterns
+tags: ["php", "oop", "patterns"]
 year: 2013
 month: 11
 day: 07

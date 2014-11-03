@@ -2,7 +2,7 @@
 layout: post
 title: JS/CSS/Images with Zend Framework 2 and the Asset Manager Module
 category: Coding
-tags: zf2 module assets
+tags: ["zf2", "module", "assets"]
 year: 2012
 month: 9
 day: 12

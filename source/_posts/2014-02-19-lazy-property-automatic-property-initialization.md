@@ -2,7 +2,7 @@
 layout: post
 title: LazyProperty - Automatic property initialization for PHP
 category: PHP
-tags: php oop hacks
+tags: ["php", "oop", "hacks"]
 year: 2014
 month: 02
 day: 19

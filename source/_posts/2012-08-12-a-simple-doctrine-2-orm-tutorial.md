@@ -2,7 +2,7 @@
 layout: post
 title: A Doctrine 2 ORM Tutorial for beginners
 category: Coding Tutorials
-tags: doctrine2 ORM tutorial
+tags: ["doctrine2", "ORM", "tutorial"]
 year: 2012
 month: 8
 day: 12

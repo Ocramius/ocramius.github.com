@@ -2,7 +2,7 @@
 layout: post
 title: Dependency Injection slowness solved by Doctrine Proxies
 category: PHP
-tags: zend zendframework zf2 symfony doctrine dependency injection service location proxies
+tags: ["zend", "zendframework", "zf2", "symfony", "doctrine", "dependency injection", "service location", "proxies"]
 year: 2012
 month: 11
 day: 19

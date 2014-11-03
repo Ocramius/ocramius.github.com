@@ -2,7 +2,7 @@
 layout: post
 title: Moving my blog to Jekyll and Github pages
 category: Coding
-tags: jekyll blog
+tags: ["jekyll", "blog"]
 year: 2012
 month: 6
 day: 15
