@@ -2,7 +2,7 @@
 layout: post
 title: The Proxy Pattern in PHP
 category: Coding Tutorials
-tags: proxy patterns php oop
+tags: ["proxy patterns", "php", "oop"]
 year: 2013
 month: 1
 day: 20

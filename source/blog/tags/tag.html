@@ -22,7 +22,9 @@ pagination:
   <h3>{{ month }} {{ year }}</h3>
 {% endif %}
 <article>
-  <div><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></div>
+  <div>
+      <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
+  </div>
 </article>
 {% endfor %}
 

@@ -2,7 +2,7 @@
 layout: post
 title: Fast PHP Object to Array conversion
 category: PHP
-tags: php oop
+tags: ["php", "oop"]
 year: 2013
 month: 8
 day: 9

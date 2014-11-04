@@ -2,7 +2,7 @@
 layout: post
 title: ZF2, Zend Di and Controllers for fast SOA development
 category: PHP
-tags: zend zendframework dependency injection di dic soa mvc
+tags: ["zend", "zendframework", "dependency", "injection", "di", "dic", "soa", "mvc"]
 year: 2012
 month: 8
 day: 6

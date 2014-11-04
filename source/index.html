@@ -20,26 +20,28 @@ use:
             {% endif %}
         </p>
         <footer class="small">
-            <small>
-                <time datetime="{{ post.year }}-{{ post.month }}-{{ post.day }}">
-                    Published {{ post.year }}-{{ post.month }}-{{ post.day }}
-                </time>
-            </small>
+            <div class="span2">
+                <small>
+                    <time datetime="{{ post.year }}-{{ post.month }}-{{ post.day }}">
+                        <i class="icon-calendar"></i> Published {{ post.year }}-{{ post.month }}-{{ post.day }}
+                    </time>
+                </small>
+            </div>
+            {% if post.meta.tags %}
+            <div class="span8">
+                <small class="tags">
+                    <i class="icon-tag"></i>
+                    {% for tag in post.meta.tags %}
+                    <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </small>
+            </div>
+            {% endif %}
             {#
             -
             # comments
             #}
         </footer>
-        {# commented out for now, as we don't need tags
-        {% if post.meta.tags %}
-            <p class="tags">
-            Tags:
-            {% for tag in post.meta.tags %}
-            <a href="{{ site.url }}/blog/tags/{{ tag|url_encode(true) }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        {% endif %}
-        #}
     </article>
 {% endfor %}
 {% if page.pagination.previous_page or page.pagination.next_page %}

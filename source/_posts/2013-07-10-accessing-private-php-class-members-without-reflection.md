@@ -2,7 +2,7 @@
 layout: post
 title: Accessing private PHP class members without reflection
 category: PHP
-tags: php oop access property reflection private
+tags: ["php", "oop", "access", "property", "reflection", "private"]
 year: 2013
 month: 7
 day: 10

@@ -2,7 +2,7 @@
 layout: post
 title: A tutorial for Doctrine 2 ORM with Zend Framework 2
 category: Coding Tutorials
-tags: zf2 zendframework doctrine orm php
+tags: ["zf2", "zendframework", "doctrine", "orm", "php"]
 year: 2013
 month: 2
 day: 14

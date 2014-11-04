@@ -2,7 +2,7 @@
 layout: post
 title: Delegator Factories in Zend Framework 2
 category: PHP
-tags: zf2 zendframework2 oop php
+tags: ["zf2", "zendframework2", "oop", "php"]
 year: 2014
 month: 3
 day: 16

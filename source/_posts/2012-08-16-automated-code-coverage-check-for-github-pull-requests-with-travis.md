@@ -2,7 +2,7 @@
 layout: post
 title: Automated Test Coverage Checks with Travis, PHPUnit for Github Pull Requests
 category: PHP
-tags: phpunit code coverage travis travis continuos integration testing
+tags: ["phpunit", "code", "coverage", "travis", "travis", "continuos integration", "testing"]
 year: 2012
 month: 8
 day: 16
