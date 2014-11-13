@@ -4,7 +4,7 @@ namespace JoindInBundle;
 
 use PHPUnit_Framework_TestCase;
 
-class JoindInClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException InvalidArgumentException
