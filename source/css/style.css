@@ -44,21 +44,21 @@ a {
     display: none
 }
 
-h1 {
+h1, .top h2 {
     font-size: 70px;
     padding-top: 36px;
 }
 
-h1 a {
+h1 a, .top h2 a {
     color: #CCC;
 }
 
-h1 a:hover{
+h1 a:hover, .top h2 a:hover {
     color: #999;
     text-decoration: none;
 }
 
-h1 span{
+h1 span, .top h2 span{
     display: block;
     font-size: 20px;
     color: #CCC;
