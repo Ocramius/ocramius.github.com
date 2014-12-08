@@ -62,7 +62,11 @@
                     <div class="top left">
                         <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
 "></p>
+                        {% if page.page_type == "home" %}
                         <h1 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h1>
+                        {% else %}
+                        <h2 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h2>
+                        {% endif %}
                     </div>
 
                     <div class="clear"></div>
