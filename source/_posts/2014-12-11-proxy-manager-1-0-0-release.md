@@ -93,7 +93,9 @@ tweet:
     </li>
     <li>
         <a href="https://github.com/Ocramius/ProxyManager/issues/115" target="_blank">
-            Complete LSP compliance by avoiding overriding constructors in proxies
+            Complete
+            <abbr title="Liskov substitution principle">LSP</abbr>
+            compliance by avoiding overriding constructors in proxies
         </a>
     </li>
     <li>
