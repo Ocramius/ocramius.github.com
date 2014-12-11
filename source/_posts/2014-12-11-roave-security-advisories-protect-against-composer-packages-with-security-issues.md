@@ -13,8 +13,7 @@ tweet:
 ---
 
 <p>
-    Since it's almost christmas, it's also time to release a new project that I've been 
-    thinking of for quite some time.
+    Since it's almost christmas, it's also time to release a new project!
 </p>
 
 <p>
