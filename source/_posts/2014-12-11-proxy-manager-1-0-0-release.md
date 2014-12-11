@@ -108,3 +108,20 @@ tweet:
         for a long time, and will likely be moved to a different library
     </li>
 </ul>
+
+<h2>Thank you!</h2>
+
+<p>
+    It wouldn't be a good 1.0.0 release without thanking all the contributors that helped with the project, 
+    by providing patches, bug reports and their useful insights to the project. Here are the most notable ones: 
+</p>
+
+<ul>
+    <li><a href="https://github.com/blanchonvincent" target="_blank">blanchonvincent</a></li>
+    <li><a href="https://github.com/malukenho" target="_blank">malukenho</a></li>
+    <li><a href="https://github.com/staabm" target="_blank">staabm</a></li>
+    <li><a href="https://github.com/gws" target="_blank">gws</a></li>
+    <li><a href="https://github.com/leedavis81" target="_blank">leedavis81</a></li>
+    <li><a href="https://github.com/lisachenko" target="_blank">lisachenko</a></li>
+    <li><a href="https://github.com/Pittiplatsch" target="_blank">Pittiplatsch</a></li>
+</ul>
