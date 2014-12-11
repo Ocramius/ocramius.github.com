@@ -55,6 +55,6 @@ curl -sS https://getcomposer.org/installer | php --
 <p>
     While I liked the idea of being able to integrate security-issues checks with my 
     <abbr title="Continuous Integration">CI</abbr> system, I didn't like the fact that it was still possible to install
-    and run harmful software before running those checks. I also didn't like having to install and run an additional 
+    and run harmful software before running those checks. I also didn't want to install and run an additional 
     CLI tool for something that composer could provide out of the box.
 </p>
