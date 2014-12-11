@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2014-12-11T15:39:46+00:00</updated>
+    <updated>2014-12-11T15:52:34+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -114,6 +114,11 @@ curl -sS https://getcomposer.org/installer | php --
 
 <p>
     Simple enough!
+</p>
+
+<p>
+    Please just note that this only works when adding new dependencies or when running <code>composer update</code>:
+    security issues in your <code>composer.lock</code> cannot be checked with this technique.
 </p>
 
 <h3>Why is there no tagged version?</h3>
