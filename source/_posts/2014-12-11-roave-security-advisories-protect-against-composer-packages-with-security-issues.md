@@ -23,7 +23,7 @@ tweet:
 </p>
 
 <p>
-    Before telling you more about it, go on and grab it:
+    Before telling you more, go grab it:
 </p>
 
 ~~~sh
