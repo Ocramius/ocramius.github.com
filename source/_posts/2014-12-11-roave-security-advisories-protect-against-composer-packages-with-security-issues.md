@@ -24,6 +24,21 @@ tweet:
 </p>
 
 <p>
+    Before telling you more about it, go on and grab it:
+</p>
+~~~php
+mkdir roave-security-advisories-test
+cd roave-security-advisories-test
+curl -sS https://getcomposer.org/installer | php --
+
+./composer.phar require roave/security-advisories:dev-master@DEV
+~~~
+
+<p>
+    Now hold on: I will tell you what to do with it in a few.
+</p>
+
+<p>
     Sooo... What is it?
 </p>
 
