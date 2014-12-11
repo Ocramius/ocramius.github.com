@@ -95,11 +95,6 @@ curl -sS https://getcomposer.org/installer | php --
     </li>
 </ul>
 
-<p>
-    That project eventually became 
-    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>.
-</p>
-
 <h3>Try it out!</h3>
 
 <p>
