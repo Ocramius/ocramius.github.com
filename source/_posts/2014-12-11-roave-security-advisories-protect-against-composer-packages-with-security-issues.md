@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Check Application Security against known Composer dependencies' Vulnerabilities
+title: roave/security-advisories: Composer against Security Vulnerabilities
 category: PHP
 tags: ["php", "security", "composer", "packagist"]
 year: 2014
@@ -11,6 +11,7 @@ summary: Prevent installation of composer packages with security vulnerabilities
 description: A new project that helps you avoid composer packages with known security issues/vulnerabilities
 tweet: 
 ---
+<p><hr/></p>
 
 <p>
     Since it's almost christmas, it's also time to release a new project!
@@ -42,7 +43,7 @@ curl -sS https://getcomposer.org/installer | php --
 
 <p>
     <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a> is a composer
-    metapackage that prevents installation of packages with known security issues.
+    package that prevents installation of packages with known security issues.
 </p>
 
 <h3>Yet another one? Why?</h3>
