@@ -35,7 +35,7 @@ curl -sS https://getcomposer.org/installer | php --
 ~~~
 
 <p>
-    Now hold on: I will tell you what to do with it in a few.
+    Hold on: I will tell you what to do with it in a few.
 </p>
 
 <h3>Sooo... What is it?</h3>
