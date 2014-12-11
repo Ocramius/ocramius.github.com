@@ -50,3 +50,23 @@ tweet:
         </a>
     </li>
 </ul>
+
+<h2>Planned maintenance schedule</h2>
+
+<p>
+    ProxyManager 1.x will be a maintenance-release only:
+</p>
+
+<ul>
+    <li>
+        I plan to fix bugs until <time datetime="2015-12-11">December 11, 2015</time>
+    </li>
+    <li>
+        I plan to fix security issues until <time datetime="2016-12-11">December 11, 2016</time>
+    </li>
+</ul>
+
+<p>
+    No features are going to be added to ProxyManager 1.x: the current <code>master</code> branch will instead
+    become the development branch for version <code>2.0.0</code>.
+</p>
