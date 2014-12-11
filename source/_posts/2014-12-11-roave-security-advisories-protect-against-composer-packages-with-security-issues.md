@@ -9,7 +9,7 @@ day: 11
 published: true
 summary: Prevent installation of composer packages with security vulnerabilities 
 description: A new project that helps you avoid composer packages with known security issues/vulnerabilities
-tweet: 
+tweet: 543064002461700096
 ---
 <p><hr/></p>
 
