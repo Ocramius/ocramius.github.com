@@ -58,3 +58,29 @@ curl -sS https://getcomposer.org/installer | php --
     and run harmful software before running those checks. I also didn't want to install and run an additional 
     CLI tool for something that composer could provide out of the box.
 </p>
+
+<p>
+    That's when I had the idea of just compiling a list of <code>conflict</code> versions from 
+    <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank"></a> into a composer
+    <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>.
+</p>
+
+<p>
+    This has various advantages:
+</p>
+
+<ul>
+    <li>
+        No files or actual dependencies are added to the project, since a "metapackage" does not provide 
+        a vendor directory by itself
+    </li>
+    <li>
+        Packages with security issues are filtered out during dependency resolution: they will not even be downloaded
+    </li>
+    <li>
+        No more CLI tool to run separately, no more <abbr title="Continuous Integration">CI</abbr> setup steps
+    </li>
+    <li>
+        Not to be upgraded separately
+    </li>
+</ul>
