@@ -67,7 +67,7 @@ curl -sS https://getcomposer.org/installer | php --
 </p>
 
 <p>
-    That's when I had the idea of just compiling a list of <code>conflict</code> versions from 
+    That's why I had the idea of just compiling a list of <code>conflict</code> versions from 
     <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank"></a> into a composer
     <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>.
 </p>
