@@ -11,3 +11,10 @@ summary: ProxyManager 1.0.0 has been released together with the expected support
 description: ProxyManager 1.0.0 is finally released, and an expected lifetime for the 1.x series is also attached with it!
 tweet: 
 ---
+
+<p>
+    Today I finally release version 
+    <a href="https://github.com/Ocramius/ProxyManager/releases/tag/1.0.0" target="_blank">1.0.0</a> of the 
+    <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
+</p>
+
