@@ -81,6 +81,6 @@ curl -sS https://getcomposer.org/installer | php --
         No more CLI tool to run separately, no more <abbr title="Continuous Integration">CI</abbr> setup steps
     </li>
     <li>
-        Not to be upgraded separately
+        No need to upgrade the tool separately
     </li>
 </ul>
