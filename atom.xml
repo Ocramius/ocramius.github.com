@@ -3,9 +3,132 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2014-11-05T11:35:38+00:00</updated>
+    <updated>2014-12-11T15:21:02+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[roave/security-advisories: Composer against Security Vulnerabilities]]></title>
+            <link href="/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues"/>
+            <updated>2014-12-11T00:00:00+00:00</updated>
+            <id>/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</id>
+            <content type="html"><![CDATA[<p><hr/></p>
+
+<p>
+    Since it's almost christmas, it's also time to release a new project!
+</p>
+
+<p>
+    The <a href="https://twitter.com/RoaveTeam" target="_blank">Roave Team</a> is pleased to announce the release of
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>, a package
+    that keeps known security issues out of your project.
+</p>
+
+<p>
+    Before telling you more, go grab it:
+</p>
+
+<pre><code class="sh">mkdir roave-security-advisories-test
+cd roave-security-advisories-test
+curl -sS https://getcomposer.org/installer | php --
+
+./composer.phar require roave/security-advisories:dev-master@DEV
+</code></pre>
+
+<p>
+    Hold on: I will tell you what to do with it in a few.
+</p>
+
+<h3>What is it?</h3>
+
+<p>
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a> is a composer
+    package that prevents installation of packages with known security issues.
+</p>
+
+<h3>Yet another one?</h3>
+
+<p>
+    Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
+    <a href="http://fabien.potencier.org/article/67/don-t-use-php-libraries-with-known-security-issues" target="_blank">announced</a>
+    the <a href="https://security.sensiolabs.org/" target="_blank">security.sensiolabs.org</a> project.
+    This october, he 
+    <a href="http://fabien.potencier.org/article/74/the-php-security-advisories-database" target="_blank">announced again</a> 
+    that the project was being moved 
+    <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank">to the open-source FriendsOfPHP organization</a>.
+</p>
+
+<p>
+    While I like the idea of integrating security checks with my 
+    <abbr title="Continuous Integration">CI</abbr>, I don't like the fact that it is possible to install
+    and run harmful software before those checks.
+    <br/>
+    I also don't want to install and run an additional CLI tool for something that composer can provide directly.
+</p>
+
+<p>
+    That's why I had the idea of just compiling a list of <code>conflict</code> versions from 
+    <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank"></a> into a composer
+    <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>:
+</p>
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/QkjD3D5FgmE" frameborder="0" allowfullscreen></iframe>
+
+<h3>Why?</h3>
+
+<p>
+    This has various advantages:
+</p>
+
+<ul>
+    <li>
+        No files or actual dependencies are added to the project, since a "metapackage" does not provide 
+        a vendor directory by itself
+    </li>
+    <li>
+        Packages with security issues are filtered out during dependency resolution: they will not even be downloaded
+    </li>
+    <li>
+        No more CLI tool to run separately, no more <abbr title="Continuous Integration">CI</abbr> setup steps
+    </li>
+    <li>
+        No need to upgrade the tool separately
+    </li>
+    <li>
+        No coupling or version constraints with any dependencies used by similar CLI-based alternatives
+    </li>
+</ul>
+
+<h3>Try it out!</h3>
+
+<p>
+    Now that you installed <code>roave/security-advisories</code>, you can try out how it works:
+</p>
+
+<pre><code class="sh">cd roave-security-advisories-test
+
+./composer.phar require symfony/symfony:2.5.2 # this will fail
+./composer.phar require zendframework/zendframework:2.3.1 # this will fail
+./composer.phar require symfony/symfony:~2.6 # works!
+./composer.phar require zendframework/zendframework:~2.3 # works!
+</code></pre>
+
+<p>
+    Simple enough!
+</p>
+
+<h3>Why is there no tagged version?</h3>
+
+<p>
+    Because of how composer dependency resolution works, it is not possible to have more than one version of 
+    <code>roave/security-advisories</code> other than <code>dev-master@DEV</code>. More about this is on the 
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">project page</a>
+</p>
+
+<hr/>
+
+<h2>Fin</h2>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Delegator Factories in Zend Framework 2]]></title>
             <link href="/blog/zend-framework-2-delegator-factories-explained"/>
@@ -2596,163 +2719,6 @@ class HelloWorld
 <p>
     Anyway, proxies are not a requirement to get our application working. They are just steroids for our services,
     and I'd surely suggest you to use them.
-</p>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[JS/CSS/Images with Zend Framework 2 and the Asset Manager Module]]></title>
-            <link href="/blog/asset-manager-for-zend-framework-2"/>
-            <updated>2012-09-12T00:00:00+00:00</updated>
-            <id>/blog/asset-manager-for-zend-framework-2</id>
-            <content type="html"><![CDATA[<h2>RWOverdijk's AssetManager</h2>
-
-<p>
-    This blog post is about a module that I and <a href="https://twitter.com/RWOverdijk"
-    target="_blank">Roberto Wesley Overdijk</a> developed last month. It is called
-    <a href="https://github.com/RWOverdijk/AssetManager" target="_blank">AssetManager</a>
-    and its aim is to simplify how you currently store and serve assets
-    (JS/CSS/images/etc.) in your <abbr title="Zend Framework 2">ZF2</abbr> applications.
-</p>
-
-<h2>ZF2 Module structure</h2>
-
-<p>
-    When <a href="https://twitter.com/weierophinney" target="_blank">Matthew Weier
-    O'Phinney</a> blogged about <a href="http://mwop.net/blog/why-conventions-matter.html"
-    target="_blank">Why Conventions Matter</a> in ZF2 Modules, we were still defining the
-    basic concepts of modules, and didn't really have a decent solution about how to
-    serve assets. The idea is to ship assets with modules themselves, thus avoiding to
-    copy files to your <code>public/</code> directory each time you start with a new
-    project (copying is almost never a good thing, you know that!).
-</p>
-
-<p>
-    AssetManager solves this problem and is a
-    <a href="http://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/"
-    target="_blank">high quality and well tested module</a>.
-</p>
-
-<hr/>
-
-<h2>Let's get started</h2>
-
-<p>
-    We will use a standard <a href="https://github.com/zendframework/ZendSkeletonApplication"
-    target="_blank">ZF2 skeleton application</a> and
-    <a href="http://getcomposer.org/" target="_blank">Composer</a>:
-</p>
-
-<pre><code class="sh">~$ git clone git://github.com/zendframework/ZendSkeletonApplication.git
-Cloning into 'ZendSkeletonApplication'...
-
-~$ cd ZendSkeletonApplication
-
-~$ ./composer.phar install
-Loading composer repositories with package information
-Installing dependencies
-  - Installing zendframework/zendframework (2.0.0)
-    Downloading: 100%
-
-~$ ./composer.phar require rwoverdijk/assetmanager
-Please provide a version constraint for the rwoverdijk/assetmanager requirement: *
-composer.json has been updated
-Loading composer repositories with package information
-Updating dependencies
-  - Installing kriswallsmith/assetic (v1.0.4)
-    Downloading: 100%
-
-  - Installing rwoverdijk/assetmanager (1.0.0)
-    Downloading: 100%
-
-Writing lock file
-Generating autoload files
-</code></pre>
-
-<hr/>
-
-<p>Don't forget to enable the module in your <code>config/application.config.php</code>!</p>
-
-<pre><code class="php">&lt;?php
-return array(
-    'modules' =&gt; array(
-        'AssetManager',
-        'Application',
-    ),
-    // ... other configs ...
-</code></pre>
-
-<h2>Assets</h2>
-
-<p>
-    To verify that everything works, we will add a simple asset that will just paint
-    everything in our page as green (just to make things really really obvious). It will
-    be our <code>module/Application/public/test-asset.css</code> (The <code>public</code>
-    dir does not yet exist in the skeleton application, you will need to create it):
-</p>
-
-<pre><code class="css">* {color: green;}
-</code></pre>
-
-<p>
-    We now need to teach the AssetManager where to look for our assets. To do so, we will
-    edit our module's configuration.
-    Now let's go to <code>module/Application/config/module.config.php</code>, we need to
-    add following configuration:
-</p>
-
-<pre><code class="php">&lt;?php
-return array(
-    'asset_manager' =&gt; array(
-        'resolver_configs' =&gt; array(
-            'paths' =&gt; array(
-                'Application' =&gt; __DIR__ . '/../public',
-            ),
-        ),
-    ),
-);
-</code></pre>
-
-<p>
-    This basically means that any request that couldn't be routed to a controller will
-    check also within our module's <code>public/</code> dir and eventually serve an asset
-    from there.
-</p>
-
-<p class="warning">
-    <span class="label label-info">Warning!</span> By configuring your application this
-    way, you're basically telling PHP to serve any content from within your module's
-    <code>public/</code> dir. This also means PHP sources (as text) if there are any in
-    there. Keep it in mind!
-</p>
-
-<h2>Checking if it works</h2>
-
-<p>
-    Once you've done all this, open your browser and go to
-    <code>http://localhost/path/to/ZendSkeletonApplication/public/test-asset.css</code>.
-    You should see the contents we wrote in the CSS file before.
-</p>
-
-<p>
-    That's it! You can now add your CSS file in your
-    <code>module/Application/view/layout/layout.phtml</code> as following if you want:
-</p>
-
-<pre><code class="php">&lt;?php
-    echo $this-&gt;headLink()-&gt;prependStylesheet($this-&gt;basePath() . '/test-asset.css');
-?&gt;
-</code></pre>
-
-<p>
-    Enjoy! You can now build your modules to ship any images, js or generally assets!
-</p>
-
-<p>
-    This Asset Manager supports more kinds of resolver strategies, such as maps,
-    asset collections (to get compiled JS/CSS), filters, caching, asset priorities and
-    more. Most of all this is already implemented, but check the
-    <a href="https://github.com/RWOverdijk/AssetManager" target="_blank">project page
-    on github</a> for more amazing features!
 </p>
 ]]></content>
         </entry>
