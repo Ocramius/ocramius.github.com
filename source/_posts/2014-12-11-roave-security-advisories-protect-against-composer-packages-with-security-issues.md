@@ -111,3 +111,14 @@ cd roave-security-advisories-test
     Simple enough!
 </p>
 
+<h4>Why is there no tagged version?</h4>
+
+<p>
+    Because of how composer dependency resolution works, it is not possible to have more than one version of 
+    <code>roave/security-advisories</code> other than <code>dev-master@DEV</code>. More about this is on the 
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">project page</a>
+</p>
+
+<hr/>
+
+<h2>Fin</h2>
