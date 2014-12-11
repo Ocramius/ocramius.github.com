@@ -12,3 +12,13 @@ description: A new project that helps you avoid composer packages with known sec
 tweet: 
 ---
 
+<p>
+    Since it's almost christmas, it's also time to release a new project that I've been 
+    thinking of for quite some time.
+</p>
+
+<p>
+    The <a href="https://twitter.com/RoaveTeam" target="_blank">Roave Team</a> is pleased to announce the release of
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>, a package
+    that keeps known security issues out of your project.
+</p>
