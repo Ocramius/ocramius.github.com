@@ -35,6 +35,11 @@ tweet:
         </a>
     </li>
     <li>
+        <a href="https://github.com/Ocramius/ProxyManager/pull/172" target="_blank">
+            Proxy classes are now re-generated when the library version changes
+        </a>
+    </li>
+    <li>
         <a href="https://github.com/Ocramius/ProxyManager/pull/182" target="_blank">
             Documentation has been moved to github pages
         </a> (Markdown documentation will be kept in sync)
