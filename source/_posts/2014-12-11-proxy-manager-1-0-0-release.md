@@ -12,6 +12,14 @@ description: ProxyManager 1.0.0 is finally released, and an expected lifetime fo
 tweet: 
 ---
 
+<p style="align: center;">
+    <img
+        src="https://raw.githubusercontent.com/Ocramius/ProxyManager/1.0.0/proxy-manager.svg"
+        alt="ProxyManager"
+        width="50%"
+    />
+</p>
+
 <p>
     Today I finally release version 
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/1.0.0" target="_blank">1.0.0</a> of the 
