@@ -38,7 +38,7 @@ curl -sS https://getcomposer.org/installer | php --
     Now hold on: I will tell you what to do with it in a few.
 </p>
 
-<h4>Sooo... What is it?</h4>
+<h3>Sooo... What is it?</h3>
 
 <p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
@@ -91,7 +91,7 @@ curl -sS https://getcomposer.org/installer | php --
     <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>.
 </p>
 
-<h4>Try it out!</h4>
+<h3>Try it out!</h3>
 
 <p>
     Now that you installed <code>roave/security-advisories</code>, you can try out how it works:
@@ -110,7 +110,7 @@ cd roave-security-advisories-test
     Simple enough!
 </p>
 
-<h4>Why is there no tagged version?</h4>
+<h3>Why is there no tagged version?</h3>
 
 <p>
     Because of how composer dependency resolution works, it is not possible to have more than one version of 
