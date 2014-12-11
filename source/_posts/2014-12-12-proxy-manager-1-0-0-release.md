@@ -26,7 +26,7 @@ tweet:
     <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
 </p>
 
-<h2>Noticeable improvements since 0.5.2:</h2>
+<h3>Noticeable improvements since 0.5.2:</h3>
 
 <ul>
     <li>
@@ -51,7 +51,7 @@ tweet:
     </li>
 </ul>
 
-<h2>Planned maintenance schedule</h2>
+<h3>Planned maintenance schedule</h3>
 
 <p>
     ProxyManager 1.x will be a maintenance-release only:
@@ -71,7 +71,7 @@ tweet:
     become the development branch for version <code>2.0.0</code>.
 </p>
 
-<h2>ProxyManager 2.0.0 targets</h2>
+<h3>ProxyManager 2.0.0 targets</h3>
 
 <p>
     ProxyManager 2.0.0 has following main aims:
@@ -111,7 +111,7 @@ tweet:
     </li>
 </ul>
 
-<h2>Thank you!</h2>
+<h3>Thank you!</h3>
 
 <p>
     It wouldn't be a good 1.0.0 release without thanking all the contributors that helped with the project, 
