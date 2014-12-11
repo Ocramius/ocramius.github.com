@@ -26,7 +26,7 @@ tweet:
     <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
 </p>
 
-<h2>Noticeable improvements:</h2>
+<h2>Noticeable improvements since 0.5.2:</h2>
 
 <ul>
     <li>
