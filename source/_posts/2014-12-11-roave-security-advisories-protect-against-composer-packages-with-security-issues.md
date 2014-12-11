@@ -26,7 +26,8 @@ tweet:
 <p>
     Before telling you more about it, go on and grab it:
 </p>
-~~~php
+
+~~~sh
 mkdir roave-security-advisories-test
 cd roave-security-advisories-test
 curl -sS https://getcomposer.org/installer | php --
@@ -38,9 +39,7 @@ curl -sS https://getcomposer.org/installer | php --
     Now hold on: I will tell you what to do with it in a few.
 </p>
 
-<p>
-    Sooo... What is it?
-</p>
+<h4>Sooo... What is it?</h4>
 
 <p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
@@ -87,3 +86,28 @@ curl -sS https://getcomposer.org/installer | php --
         No coupling or version constraints with to any dependency used by similar CLI-based alternatives
     </li>
 </ul>
+
+<p>
+    That project eventually became 
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>.
+</p>
+
+<h4>Try it out!</h4>
+
+<p>
+    Now that you installed <code>roave/security-advisories</code>, you can try out how it works:
+</p>
+
+~~~sh
+cd roave-security-advisories-test
+
+./composer.phar require symfony/symfony:2.5.2 # this will fail
+./composer.phar require zendframework/zendframework:2.3.1 # this will fail
+./composer.phar require symfony/symfony:~2.6 # works!
+./composer.phar require zendframework/zendframework:~2.3 # works!
+~~~
+
+<p>
+    Simple enough!
+</p>
+
