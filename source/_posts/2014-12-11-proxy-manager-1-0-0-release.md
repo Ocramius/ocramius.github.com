@@ -26,3 +26,22 @@ tweet:
     <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
 </p>
 
+<h2>Noticeable improvements:</h2>
+
+<ul>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/pull/108" target="_blank">
+            Windows path length limitations are now mitigated
+        </a>
+    </li>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/pull/182" target="_blank">
+            Documentation has been moved to github pages
+        </a> (Markdown documentation will be kept in sync)
+    </li>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/pull/194" target="_blank">
+            It is not possible to trigger fatal errors via code-generation anymore
+        </a>
+    </li>
+</ul>
