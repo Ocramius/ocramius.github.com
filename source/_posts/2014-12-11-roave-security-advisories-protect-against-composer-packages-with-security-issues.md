@@ -32,7 +32,7 @@ mkdir roave-security-advisories-test
 cd roave-security-advisories-test
 curl -sS https://getcomposer.org/installer | php --
 
-./composer.phar require roave/security-advisories:dev-master@DEV
+./composer.phar require roave/security-advisories:dev-master
 ~~~
 
 <p>
@@ -122,7 +122,7 @@ cd roave-security-advisories-test
 
 <p>
     Because of how composer dependency resolution works, it is not possible to have more than one version of 
-    <code>roave/security-advisories</code> other than <code>dev-master@DEV</code>. More about this is on the 
+    <code>roave/security-advisories</code> other than <code>dev-master</code>. More about this is on the 
     <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">project page</a>
 </p>
 
