@@ -38,7 +38,7 @@ curl -sS https://getcomposer.org/installer | php --
     Hold on: I will tell you what to do with it in a few.
 </p>
 
-<h3>Sooo... What is it?</h3>
+<h3>What is it?</h3>
 
 <p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
