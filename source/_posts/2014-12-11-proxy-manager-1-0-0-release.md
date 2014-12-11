@@ -70,3 +70,41 @@ tweet:
     No features are going to be added to ProxyManager 1.x: the current <code>master</code> branch will instead
     become the development branch for version <code>2.0.0</code>.
 </p>
+
+<h2>ProxyManager 2.0.0 targets</h2>
+
+<p>
+    ProxyManager 2.0.0 has following main aims:
+</p>
+
+<ul>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/issues/167" target="_blank">
+            Drop PHP 5.3, 5.4 and HHVM 3.3 limitations, aiming only at next-generation PHP runtimes
+        </a>
+    </li>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/issues/159" target="_blank">
+            Lazy Loading ghost objects should be property-based, even for private properties
+        </a>
+    </li>
+    <li>
+        Move documentation to RST, eventually using <a href="https://github.com/CouscousPHP" target="_blank">couscous</a>
+    </li>
+    <li>
+        <a href="https://github.com/Ocramius/ProxyManager/issues/115" target="_blank">
+            Complete LSP compliance by avoiding overriding constructors in proxies
+        </a>
+    </li>
+    <li>
+        Compatibility with 
+        <a href="https://github.com/doctrine/common/blob/559a805125524b0bb6742638784c2979a5c5e607/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php" target="_blank">
+            <code>Doctrine\Common\Proxy\AbstractProxyFactory</code>
+        </a> to improve doctrine proxy logic in next generation data mappers
+    </li>
+    <li>
+        Prototypal inheritance in PHP, which 
+        <a href="https://github.com/Ocramius/ProxyManager/pull/103" target="_blank">was left un-merged</a>
+        for a long time, and will likely be moved to a different library
+    </li>
+</ul>
