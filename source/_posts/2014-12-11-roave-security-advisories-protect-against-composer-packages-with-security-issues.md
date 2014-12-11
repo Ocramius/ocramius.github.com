@@ -118,6 +118,11 @@ cd roave-security-advisories-test
     Simple enough!
 </p>
 
+<p>
+    Please just note that this only works when adding new dependencies or when running <code>composer update</code>:
+    security issues in your <code>composer.lock</code> cannot be checked with this technique.
+</p>
+
 <h3>Why is there no tagged version?</h3>
 
 <p>
