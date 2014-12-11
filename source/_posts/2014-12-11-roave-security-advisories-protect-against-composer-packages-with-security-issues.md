@@ -41,6 +41,13 @@ curl -sS https://getcomposer.org/installer | php --
 <h3>What is it?</h3>
 
 <p>
+    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a> is a composer
+    metapackage that prevents installation of packages with known security issues.
+</p>
+
+<h3>Yet another one? Why?</h3>
+
+<p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
     <a href="http://fabien.potencier.org/article/67/don-t-use-php-libraries-with-known-security-issues" target="_blank">announced</a>
     the <a href="https://security.sensiolabs.org/" target="_blank">security.sensiolabs.org</a> project.
