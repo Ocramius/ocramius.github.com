@@ -83,4 +83,7 @@ curl -sS https://getcomposer.org/installer | php --
     <li>
         No need to upgrade the tool separately
     </li>
+    <li>
+        No coupling or version constraints with to any dependency used by similar CLI-based alternatives
+    </li>
 </ul>
