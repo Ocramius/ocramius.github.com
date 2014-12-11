@@ -21,7 +21,7 @@ tweet:
 </p>
 
 <p>
-    Today I finally release version 
+    Today I finally released version 
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/1.0.0" target="_blank">1.0.0</a> of the 
     <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
 </p>
