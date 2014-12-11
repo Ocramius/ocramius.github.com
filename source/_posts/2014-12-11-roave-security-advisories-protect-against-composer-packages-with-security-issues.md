@@ -46,7 +46,7 @@ curl -sS https://getcomposer.org/installer | php --
     package that prevents installation of packages with known security issues.
 </p>
 
-<h3>Yet another one? Why?</h3>
+<h3>Yet another one?</h3>
 
 <p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
@@ -73,6 +73,8 @@ curl -sS https://getcomposer.org/installer | php --
 </p>
 
 <iframe width="420" height="315" src="https://www.youtube.com/embed/QkjD3D5FgmE" frameborder="0" allowfullscreen></iframe>
+
+<h3>Why?</h3>
 
 <p>
     This has various advantages:
