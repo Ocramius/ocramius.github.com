@@ -46,7 +46,7 @@ curl -sS https://getcomposer.org/installer | php --
     package that prevents installation of packages with known security issues.
 </p>
 
-<h3>Yet another one? Why?</h3>
+<h3>Yet another one?</h3>
 
 <p>
     Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
@@ -69,8 +69,12 @@ curl -sS https://getcomposer.org/installer | php --
 <p>
     That's why I had the idea of just compiling a list of <code>conflict</code> versions from 
     <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank"></a> into a composer
-    <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>.
+    <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>:
 </p>
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/QkjD3D5FgmE" frameborder="0" allowfullscreen></iframe>
+
+<h3>Why?</h3>
 
 <p>
     This has various advantages:
