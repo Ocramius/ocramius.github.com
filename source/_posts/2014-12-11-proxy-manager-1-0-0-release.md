@@ -14,9 +14,9 @@ tweet:
 
 <p style="align: center;">
     <img
-        src="https://raw.githubusercontent.com/Ocramius/ProxyManager/1.0.0/proxy-manager.svg"
+        src="https://raw.githubusercontent.com/Ocramius/ProxyManager/1.0.0/proxy-manager.png"
         alt="ProxyManager"
-        width="50%"
+        width="25%"
     />
 </p>
 
