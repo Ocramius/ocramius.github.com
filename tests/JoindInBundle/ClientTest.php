@@ -12,6 +12,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
         new Client([]);
     }
 
+    /**
+     * @covers JoindInBundle\Client::getUserInfo
+     */
     public function testCanGetDataOfAUser()
     {
         $client = new Client(['user' => 'ocramius']);
@@ -21,6 +24,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ocramius', $userInfo['users'][0]['username']);
     }
 
+    /**
+     * @covers JoindInBundle\Client::getTalks
+     */
     public function testCanGetTalksFromUser()
     {
         $client = new Client(['user' => 'ocramius']);
