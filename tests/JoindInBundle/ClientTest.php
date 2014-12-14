@@ -10,7 +10,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfGivenAInvalidConfigData()
     {
         $this->setExpectedException('InvalidArgumentException');
-        new Client([]);
+
+        $httpClient = new HttpClient();
+        new Client([], $httpClient);
     }
 
     /**
