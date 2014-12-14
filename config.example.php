@@ -8,8 +8,10 @@ return [
         'user' => 'ocramius',
         'template' => function($talks) {
 
-            $templatePattern = '<h3>%s</h3><p><small>%s</small></p>'
-                             . '<a href="%s" target="_blank">See on joind.in</a>';
+            $templatePattern = '<div itemscope itemtype="http://schema.org/Event">'
+                             . '<h3 mprop="name">%s</h3><p><small>%s</small></p>'
+                             . '<a itemprop="url" href="%s" target="_blank">See on joind.in</a>'
+                             . '</div>';
 
             $template = '<h1>My talks <small><i>(joind.in)</i></small></h1><hr />';
 
