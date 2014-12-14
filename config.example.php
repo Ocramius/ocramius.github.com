@@ -9,7 +9,7 @@ return [
         'template' => function($talks) {
 
             $templatePattern = '<div itemscope itemtype="http://schema.org/Event">'
-                             . '<h3 mprop="name">%s</h3><p><small>%s</small></p>'
+                             . '<h3 itemprop="name">%s</h3><p><small>%s</small></p>'
                              . '<a itemprop="url" href="%s" target="_blank">See on joind.in</a>'
                              . '</div>';
 
