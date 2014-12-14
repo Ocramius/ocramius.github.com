@@ -2,8 +2,8 @@
 
 namespace JoindInBundle;
 
-use GuzzleHttp;
 use InvalidArgumentException;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * Client to get informations about a user
@@ -35,14 +35,14 @@ class Client
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $config)
+    public function __construct(array $config, HttpClient $httpClient)
     {
         if (! $this->validateConfig($config)) {
             throw new InvalidArgumentException('The config bundle has not all mandatory config keys.');
         }
 
         $this->config = $config;
-        $this->client = new GuzzleHttp\Client();
+        $this->client = $httpClient;
     }
 
     /**

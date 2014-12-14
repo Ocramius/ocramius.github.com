@@ -3,6 +3,7 @@
 namespace JoindInBundle;
 
 use PHPUnit_Framework_TestCase;
+use GuzzleHttp\Client as HttpClient;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
@@ -17,7 +18,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testCanGetDataOfAUser()
     {
-        $client = new Client(['user' => 'ocramius']);
+        $httpClient = new HttpClient();
+        $client = new Client(['user' => 'ocramius'], $httpClient);
+
         $userInfo = $client->getUserInfo();
 
         $this->assertTrue(isset($userInfo['users'][0]));
@@ -29,7 +32,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testCanGetTalksFromUser()
     {
-        $client = new Client(['user' => 'ocramius']);
+        $httpClient = new HttpClient();
+        $client = new Client(['user' => 'ocramius'], $httpClient);
+
         $userInfo = $client->getTalks();
 
         $this->assertTrue(isset($userInfo['talks']));

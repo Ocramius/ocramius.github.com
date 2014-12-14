@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use GuzzleHttp\Client as HttpClient;
 
 class JoindInBundle extends Bundle
 {
@@ -13,7 +14,14 @@ class JoindInBundle extends Bundle
     {
         $config = require __DIR__ . '/../../config.php';
 
-        $joindInClientDefinition = new Definition(Client::class, [ $config['joindin'] ]);
+        $joindInClientDefinition = new Definition(
+            Client::class,
+            [
+                $config['joindin'],
+                new  HttpClient()
+            ]
+        );
+
         $joindInPageGeneratorDefinition = new Definition(
             JoindInPageGenerator::class,
             [
