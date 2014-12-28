@@ -11,13 +11,14 @@ class JoindInBundle extends Bundle
 {
     public function build(ContainerBuilder $containerBuilder)
     {
-        $config = require __DIR__ . '/../../config.example.php';
+        $config = require __DIR__ . '/../../config.php';
 
         $joindInClientDefinition = new Definition(Client::class, [ $config['joindin'] ]);
         $joindInPageGeneratorDefinition = new Definition(
             JoindInPageGenerator::class,
             [
-                new Reference(Client::class)
+                new Reference(Client::class),
+                $config['joindin']['template']
             ]
         );
 
