@@ -56,6 +56,19 @@ class Client
     }
 
     /**
+     * @return string[][]
+     */
+    public function getTalks()
+    {
+        $userInfo = $this->getUserInfo();
+        $talkUri  = $userInfo['users'][0]['talks_uri'];
+
+        $reponse  = $this->client->get(sprintf($talkUri, $this->config['user']));
+
+        return $reponse->json();
+    }
+
+    /**
      * @return boolean
      */
     private function validateConfig(array $config)
