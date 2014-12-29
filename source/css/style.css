@@ -137,6 +137,11 @@ footer.container {
     .sidebar {
         padding-top: 30px;
     }
+    .item {
+        width: 97%;
+        padding: 1.5%;
+        float: left;
+    }
 }
 @media (min-width: 980px) {
     body {
