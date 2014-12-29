@@ -63,9 +63,9 @@ class Client
         $userInfo = $this->getUserInfo();
         $talkUri  = $userInfo['users'][0]['talks_uri'];
 
-        $reponse  = $this->client->get(sprintf($talkUri, $this->config['user']));
+        $response  = $this->client->get(sprintf($talkUri, $this->config['user']));
 
-        return $reponse->json();
+        return $response->json();
     }
 
     /**

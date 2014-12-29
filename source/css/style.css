@@ -64,14 +64,36 @@ p{
 }
 
 /* Abstracts */
+.clear{
+    clear: both;
+}
+
+.item {
+    width: 47%;
+    padding: 1.5%;
+    float: left;
+}
+
+.item:hover{
+    background: #f1f1f1;
+}
+
+.item .links div{
+    width: 33%;
+    font-size: 12px;
+    float: left;
+}
+
 .align-center{
     border-bottom: 1px dashed #AAA;
     text-align: center;
     padding-bottom: 20px;
 }
+
 .logo{
     text-align: center;
 }
+
 .logo img{
     padding-top: 100px;
     margin: 0 auto;
