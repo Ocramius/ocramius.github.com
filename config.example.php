@@ -28,7 +28,7 @@ return [
                     $templatePattern,
                     $talk['talk_title'],
                     $talk['talk_description'],
-                    date('m.d.Y', strtotime($talk['start_date'])),
+                    date('Y-m-d', strtotime($talk['start_date'])),
                     $talk['average_rating'],
                     $talk['website_uri'],
                     (0 == $increment % 2) ? '<div class="clear"></div>' : ' '
