@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2014-12-13T17:17:06+00:00</updated>
+    <updated>2015-01-02T19:53:47+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -22,7 +22,7 @@
 <p>
     Today I finally released version 
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/1.0.0" target="_blank">1.0.0</a> of the 
-    <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">ProxyManager</a>
+    <a href="http://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
 </p>
 
 <h3>Noticeable improvements since 0.5.2:</h3>
