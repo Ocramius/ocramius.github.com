@@ -16,7 +16,7 @@ class Client
     /**
      * Url to get informations about a user
      */
-    const API_USER_URL = 'http://api.joind.in/v2.1/users?username=%s';
+    const API_USER_URL = 'http://api.joind.in/v2.1/users?verbose=yes&username=%s';
 
     /**
      * Configuration for the bundle works.
