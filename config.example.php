@@ -19,7 +19,6 @@ return [
 </div>
 . '%s'
 HTML;
-;
 
             $template = '<h1>My talks <small><i>(joind.in)</i></small></h1><hr />';
 
