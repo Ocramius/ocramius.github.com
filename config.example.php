@@ -18,7 +18,7 @@ return [
     <div class="links">
         <div><i class="icon-calendar"> </i> %s</div>
         <div><i class="icon-star"> </i> %s</div>
-        <div><a itemprop="url" href="%s" target="_blank"><i class="icon-eye-open"> </i> See on joind.in</a></div>
+        <div><a itemprop="url" href="%s" target="_blank"><i class="icon-eye-open"> </i> Comments</a></div>
         %s
     </div>
 </div>
@@ -26,9 +26,9 @@ return [
 HTML;
 
             $slidesLinkPattern = <<<'HTML'
-        <div itemprop="recordedIn" itemscope itemtype="http://schema.org/CreativeWork">
+        <span itemprop="recordedIn" itemscope itemtype="http://schema.org/CreativeWork">
             <a itemprop="url" href="%s" target="_blank"><i class="icon-film"> </i> Slides</a>
-        </div>
+        </span>
 HTML;
 
 
