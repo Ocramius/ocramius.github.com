@@ -25,7 +25,8 @@
         "dflydev/embedded-composer-core": "1.0.*@DEV",
         "dflydev/embedded-composer-console": "1.0.*@DEV",
         "sculpin/sculpin-theme-composer-plugin": "1.0.*@DEV",
-        "zendframework/zend-escaper": "2.*"
+        "zendframework/zend-escaper": "2.*",
+        "roave/security-advisories": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"
