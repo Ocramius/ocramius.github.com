@@ -28,12 +28,11 @@ HTML;
             foreach ($talks['talks'] as $talk) {
                 $increment++;
 
-                $duration = new DateInterval('PT' . ((int) $talk['duration']) . 'M');
-                $start    = DateTime::createFromFormat(DateTime::ISO8601, $talk['start_date'], new DateTimeZone('UTC'));
+                $start = DateTime::createFromFormat(DateTime::ISO8601, $talk['start_date'], new DateTimeZone('UTC'));
 
                 $template .= sprintf(
                     $templatePattern,
-                    $duration->format(DateTime::ISO8601),
+                    'PT' . ((int) $talk['duration']) . 'M',
                     $start->format(DateTime::ISO8601),
                     $talk['talk_title'],
                     $talk['talk_description'],
