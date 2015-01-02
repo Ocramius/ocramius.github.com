@@ -11,7 +11,7 @@ return [
         'template' => function($talks) {
 
             $templatePattern = <<<'HTML'
-<div class="item" itemscope itemtype="http://schema.org/Event">
+<div class="item" itemscope itemtype="https://schema.org/Event">
     <meta itemprop="duration" content="%s"/>
     <meta itemprop="startDate" content="%s"/>
     <h3 itemprop="name">%s</h3><p><small itemprop="description">%s</small></p>
