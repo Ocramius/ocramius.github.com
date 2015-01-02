@@ -17,7 +17,7 @@ return [
         <div><a itemprop="url" href="%s" target="_blank"><i class="icon-eye-open"> </i> See on joind.in</a></div>
     </div>
 </div>
-. '%s'
+%s
 HTML;
 
             $template  = '<h1>My talks <small><i>(via joind.in)</i></small></h1><hr />';
