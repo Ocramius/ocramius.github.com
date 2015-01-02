@@ -1,5 +1,7 @@
 <?php
 
+use Zend\Escaper\Escaper;
+
 /**
  * Bundles configuration
  */
@@ -22,6 +24,7 @@ return [
 %s
 HTML;
 
+            $escaper   = new Escaper();
             $template  = '<h1>My talks <small><i>(via joind.in)</i></small></h1><hr />';
             $increment = 0;
 
@@ -34,11 +37,11 @@ HTML;
                     $templatePattern,
                     'T' . ((int) $talk['duration']) . 'M',
                     $start->format(DateTime::ISO8601),
-                    $talk['talk_title'],
-                    $talk['talk_description'],
-                    date('Y-m-d', strtotime($talk['start_date'])),
-                    $talk['average_rating'],
-                    $talk['website_uri'],
+                    $escaper->escapeHtml($talk['talk_title']),
+                    $escaper->escapeHtml($talk['talk_description']),
+                    $start->format('Y-m-d'),
+                    (int) $talk['average_rating'],
+                    $escaper->escapeHtmlAttr($talk['website_uri']),
                     (0 == $increment % 2) ? '<div class="clear"></div>' : ' '
                 );
             }
