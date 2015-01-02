@@ -12,9 +12,9 @@ return [
 <div class="item" itemscope itemtype="http://schema.org/Event">'
     <h3 itemprop="name">%s</h3><p><small>%s</small></p>
     <div class="links">
-    <div><i class="icon-calendar"> </i> %s</div>
-    <div><i class="icon-star"> </i> %s</div>
-    <div><a itemprop="url" href="%s" target="_blank"><i class="icon-eye-open"> </i> See on joind.in</a></div>
+        <div><i class="icon-calendar"> </i> %s</div>
+        <div><i class="icon-star"> </i> %s</div>
+        <div><a itemprop="url" href="%s" target="_blank"><i class="icon-eye-open"> </i> See on joind.in</a></div>
     </div>
 </div>
 . '%s'
