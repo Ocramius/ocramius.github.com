@@ -16,7 +16,7 @@ class Client
     /**
      * Url to get informations about a user
      */
-    const API_USER_URL = 'http://api.joind.in/v2.1/users?verbose=yes&username=%s';
+    const API_USER_URL = 'http://api.joind.in/v2.1/users?username=%s';
 
     /**
      * Configuration for the bundle works.
@@ -60,12 +60,22 @@ class Client
      */
     public function getTalks()
     {
-        $userInfo = $this->getUserInfo();
-        $talkUri  = $userInfo['users'][0]['talks_uri'];
+        $userInfo   = $this->getUserInfo();
+        $talks      = $userInfo['users'][0]['talks_uri'];
+        $parsedUri  = parse_url($talks);
 
-        $response  = $this->client->get(sprintf($talkUri, $this->config['user']));
+        parse_str(isset($parsedUri['query']) ? $parsedUri['query'] : '', $queryParams);
 
-        return $response->json();
+        $queryParams['verbose'] = 'yes';
+
+        $talksUri = $parsedUri['scheme']
+            . '://'
+            . $parsedUri['host']
+            . $parsedUri['path']
+            . '?'
+            . http_build_query($queryParams);
+
+        return $this->client->get($talksUri)->json();
     }
 
     /**
