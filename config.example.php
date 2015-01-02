@@ -9,9 +9,9 @@ return [
         'template' => function($talks) {
 
             $templatePattern = <<<'HTML'
-<div class="item" itemscope itemtype="http://schema.org/Event">'
-    <h3 itemprop="name">%s</h3><p><small>%s</small></p>
+<div class="item" itemscope itemtype="http://schema.org/Event">
     <meta itemprop="duration" content="%s"/>
+    <h3 itemprop="name">%s</h3><p><small>%s</small></p>
     <div class="links">
         <div><i class="icon-calendar"> </i> %s</div>
         <div><i class="icon-star"> </i> %s</div>
