@@ -26,9 +26,9 @@ return [
 HTML;
 
             $slidesLinkPattern = <<<'HTML'
-        <span itemprop="recordedIn" itemscope itemtype="http://schema.org/CreativeWork">
+        <div itemprop="recordedIn" itemscope itemtype="http://schema.org/CreativeWork">
             <a itemprop="url" href="%s" target="_blank"><i class="icon-film"> </i> Slides</a>
-        </span>
+        </div>
 HTML;
 
 
