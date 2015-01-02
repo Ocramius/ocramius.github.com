@@ -32,7 +32,7 @@ HTML;
 
                 $template .= sprintf(
                     $templatePattern,
-                    'PT' . ((int) $talk['duration']) . 'M',
+                    'T' . ((int) $talk['duration']) . 'M',
                     $start->format(DateTime::ISO8601),
                     $talk['talk_title'],
                     $talk['talk_description'],
