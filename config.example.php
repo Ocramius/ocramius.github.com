@@ -11,6 +11,7 @@ return [
             $templatePattern = <<<'HTML'
 <div class="item" itemscope itemtype="http://schema.org/Event">'
     <h3 itemprop="name">%s</h3><p><small>%s</small></p>
+    <meta itemprop="duration" content="%s"/>
     <div class="links">
         <div><i class="icon-calendar"> </i> %s</div>
         <div><i class="icon-star"> </i> %s</div>
@@ -26,10 +27,13 @@ HTML;
             foreach ($talks['talks'] as $talk) {
                 $increment++;
 
+                $duration = new DateInterval('PT' . ((int) $talk['duration']) . 'M');
+
                 $template .= sprintf(
                     $templatePattern,
                     $talk['talk_title'],
                     $talk['talk_description'],
+                    $duration->format(DateTime::ISO8601),
                     date('Y-m-d', strtotime($talk['start_date'])),
                     $talk['average_rating'],
                     $talk['website_uri'],
