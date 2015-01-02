@@ -11,6 +11,7 @@ return [
             $templatePattern = <<<'HTML'
 <div class="item" itemscope itemtype="http://schema.org/Event">
     <meta itemprop="duration" content="%s"/>
+    <meta itemprop="startDate" content="%s"/>
     <h3 itemprop="name">%s</h3><p><small>%s</small></p>
     <div class="links">
         <div><i class="icon-calendar"> </i> %s</div>
@@ -28,12 +29,14 @@ HTML;
                 $increment++;
 
                 $duration = new DateInterval('PT' . ((int) $talk['duration']) . 'M');
+                $start    = DateTime::createFromFormat(DateTime::ISO8601, $talk['start_date'], new DateTimeZone('UTC'));
 
                 $template .= sprintf(
                     $templatePattern,
+                    $duration->format(DateTime::ISO8601),
+                    $start->format(DateTime::ISO8601),
                     $talk['talk_title'],
                     $talk['talk_description'],
-                    $duration->format(DateTime::ISO8601),
                     date('Y-m-d', strtotime($talk['start_date'])),
                     $talk['average_rating'],
                     $talk['website_uri'],
