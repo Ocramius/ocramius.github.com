@@ -45,6 +45,12 @@ tweet:
 <h3>Why do I have to use <code>final</code>?</h3>
 
 <p>
+    There are numerous reasons to mark a class as <code>final</code>, and here I will be listing some of them.
+</p>
+
+<h4>1. Preventing massive inheritance chain of doom</h4> 
+
+<p>
     Developers have the bad habit of fixing problems by providing specific subclasses of an existing (not adequate)
     solution. You probably saw it yourself with examples like following:
 </p>
