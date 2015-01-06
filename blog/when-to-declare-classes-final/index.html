@@ -223,7 +223,7 @@ class RegistrationService implements RegistrationServiceInterface
 {
     protected $db;
 
-    public function __construct(DbConnection $db) 
+    public function __construct(DbConnectionInterface $db) 
     {
         $this-&gt;db = $db;
     }
@@ -240,7 +240,7 @@ class RegistrationService implements RegistrationServiceInterface
 
 class SwitchableDbRegistrationService extends RegistrationService
 {
-    public function setDb(DbConnection $db)
+    public function setDb(DbConnectionInterface $db)
     {
         $this-&gt;db = $db;
     }
@@ -254,7 +254,7 @@ class SwitchableDbRegistrationService extends RegistrationService
 
 <ul>
     <li>
-        The <code>setDb</code> method is used to change the <code>DbConnection</code> at runtime, which seems
+        The <code>setDb</code> method is used to change the <code>DbConnectionInterface</code> at runtime, which seems
         to hide a different problem being solved: maybe we need a <code>MasterSlaveConnection</code> instead?
     </li>
     <li>
