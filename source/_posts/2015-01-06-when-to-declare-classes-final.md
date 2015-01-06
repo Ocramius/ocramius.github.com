@@ -254,6 +254,14 @@ class SwitchableDbRegistrationService extends RegistrationService
     sort of code-smell involved.
 </p>
 
+<h5>8. You are free to change the code</h5>
+
+<p>
+    Once you made a class <code>final</code>, you can change it as much as it pleases you. Since encapsulation is
+    guaranteed to be maintained, the only thing that you have to care about is that the public API.
+    Now you are free to rewrite everything, as many times as you want.
+</p>
+
 <h3>When <strong>avoid</strong> <code>final</code>:</h3>
 
 <p>
