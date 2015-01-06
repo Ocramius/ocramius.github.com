@@ -99,10 +99,12 @@ class EmailingRegistrationService extends RegistrationService
     {
         $user = parent::registerUser(/* ... */);
         
-        sendTheRegistrationMail($user);
+        $this->sendTheRegistrationMail($user);
         
         return $user;
     }
+    
+    // ...
 }
 ~~~
 
@@ -127,9 +129,13 @@ class EmailingRegistrationService implements RegistrationServiceInterface
     {
         $user = $this->mainRegistrationService->registerUser(/* ... */);
         
-        sendTheRegistrationMail($user);
+        $this->sendTheRegistrationMail($user);
         
         return $user;
     }
+    
+    // ...
 }
 ~~~
+
+<h4>3. </h4>
