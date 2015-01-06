@@ -47,6 +47,21 @@ tweet:
     solution. You probably saw it yourself with examples like following:
 </p>
 
+~~~php
+<?php
+
+class Db { /* ... */ }
+class Core extends Db { /* ... */ }
+class User extends Core { /* ... */ }
+class Admin extends User { /* ... */ }
+class Bot extends Admin { /* ... */ }
+class BotThatDoesSpecialThings extends Bot { /* ... */ }
+class PatchedBot extends BotThatDoesSpecialThings { /* ... */ }
+~~~
+
+<p>
+</p>
+
 
 
 <p>
