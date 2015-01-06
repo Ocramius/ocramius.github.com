@@ -42,6 +42,8 @@ tweet:
     <code>final</code> should be used <strong>whenever possible</strong>.
 </p>
 
+<h3>Why do I have to use <code>final</code>?</h3>
+
 <p>
     Developers have the bad habit of fixing problems by providing specific subclasses of an existing (not adequate)
     solution. You probably saw it yourself with examples like following:
