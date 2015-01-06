@@ -60,12 +60,10 @@ class PatchedBot extends BotThatDoesSpecialThings { /* ... */ }
 ~~~
 
 <p>
-    This is, without any doubts, how you should <strong>NOT</strong> design your code. This kind of approach is usually
-    adopted by developers who confuse <abbr title="Object Oriented Programming">OOP</abbr> with "<cite>a way of solving 
-    problems via inheritance</cite>" ("inheritance-oriented-programming" maybe?).
+    This is, without any doubts, how you should <strong>NOT</strong> design your code. The approach described above is 
+    usually adopted by developers who confuse <abbr title="Object Oriented Programming">OOP</abbr> with "<cite>a way 
+    of solving problems via inheritance</cite>" ("inheritance-oriented-programming" maybe?).
 </p>
-
-
 
 <p>
     In general, preventing inheritance in a forceful way has the nice advantage of making developers think more about
