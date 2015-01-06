@@ -109,7 +109,8 @@ p.description{
 article{
     padding-top: 30px;
     padding-bottom: 30px;
-    border-bottom: 1px dashed #AAA
+    border-bottom: 1px dashed #AAA;
+    max-width: 700px;
 }
 article h2 a{
     text-decoration: none;
