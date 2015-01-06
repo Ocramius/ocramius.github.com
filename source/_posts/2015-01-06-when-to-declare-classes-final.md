@@ -204,3 +204,13 @@ class SwitchableDbRegistrationService extends RegistrationService
     There are more issues with the <code>setDb</code> example, but these are the most relevant ones for our purpose
     of explaining why <code>final</code> would have prevented this sort of situation upfront
 </p>
+
+<h4>4. Force the developer to shrink an object's public API</h4>
+
+<p>
+    Since classes with a lot of public methods are very likely to break the 
+    <abbr title="Single Responsibility Principle">SRP</abbr>, it is often true that a developer will want to override
+    specific API of those classes.
+    Starting to make every new implementation <code>final</code> forces the developer to think about new APIs upfront,
+    and about keeping them as small as possible.
+</p>
