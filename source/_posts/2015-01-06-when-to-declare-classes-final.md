@@ -214,3 +214,11 @@ class SwitchableDbRegistrationService extends RegistrationService
     Starting to make every new implementation <code>final</code> forces the developer to think about new APIs upfront,
     and about keeping them as small as possible.
 </p>
+
+<h4>5. A <code>final</code> class can always be made non-final</h4>
+
+<p>
+    Coding a new class as <code>final</code> also means that you can make it extensible at any point in time (if really
+    required). No drawbacks, but you will have to explain your reasoning for such change to you and other team members,
+    and that may lead to better solutions before anything gets merged.
+</p>
