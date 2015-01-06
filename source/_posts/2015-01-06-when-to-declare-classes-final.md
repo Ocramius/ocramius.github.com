@@ -257,7 +257,7 @@ class SwitchableDbRegistrationService extends RegistrationService
 <h3>When <strong>avoid</strong> <code>final</code>:</h3>
 
 <p>
-    Final classes only work effectively under following assumptions:
+    Final classes <strong>only work effectively under following assumptions</strong>:
 </p>
 
 <ol>
