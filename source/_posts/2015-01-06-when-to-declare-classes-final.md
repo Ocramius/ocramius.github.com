@@ -231,3 +231,25 @@ class SwitchableDbRegistrationService extends RegistrationService
     <abbr title="Backwards Compatibility">BC</abbr> breaks: think twice before using the <code>extends</code> keyword,
     or better, make your classes <code>final</code> and avoid others from having to think about it.
 </p>
+
+<h5>7. You don't need that flexibility</h5>
+
+<p>
+    One argument that I always have to counter is that <code>final</code> reduces flexibility of use of a codebase.
+</p>
+
+<p>
+    My counter-argument is very simple: you don't need that flexibility.
+</p>
+
+<p>
+    Why do you need it in first place?
+    Why can't you write your own customized implementation of a contract?
+    Why can't you use composition?
+    Did you think carefully about the problem?
+</p>
+
+<p>
+    If you still need to remove the <code>final</code> keyword from an implementation, then there may be some other 
+    sort of code-smell involved.
+</p>
