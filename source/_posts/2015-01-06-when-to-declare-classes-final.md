@@ -269,3 +269,11 @@ class SwitchableDbRegistrationService extends RegistrationService
     If one of these two pre-conditions is missing, then you will likely reach a point where you will make the
     class extensible, as your code is not truly relying on abstractions.
 </p>
+
+<p>
+    An exception can be made if a particular class represents a set of constraints or concepts that are totally 
+    immutable, inflexible and global to an entire system.
+    A good example is a mathematical operation: <code>$calculator->sum()</code> will unlikely change over time.
+    In these cases, it is safe to assume that we can use the <code>final</code> keyword without an abstraction to 
+    rely on first.
+</p>
