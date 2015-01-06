@@ -13,6 +13,14 @@ tweet:
 ---
 
 <p>
+    <strong>
+        <abbr title="too long, didn't read">TL;DR</abbr>: 
+        Make your classes always <code>final</code>, if they implement an interface, 
+        and no other public methods are defined
+    </strong>
+</p>
+
+<p>
     In the last month, I had a few discussions about the usage of the <code>final</code> marker on PHP classes.
 </p>
 
