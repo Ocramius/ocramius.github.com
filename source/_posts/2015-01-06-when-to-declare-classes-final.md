@@ -253,3 +253,19 @@ class SwitchableDbRegistrationService extends RegistrationService
     If you still need to remove the <code>final</code> keyword from an implementation, then there may be some other 
     sort of code-smell involved.
 </p>
+
+<h3>When <strong>avoid</strong> <code>final</code>:</h3>
+
+<p>
+    Final classes only work effectively under following assumptions:
+</p>
+
+<ol>
+    <li>There is an abstraction (interface) that the final class implements</li>
+    <li>All of the public API of the final class is part of that interface</li>
+</ol>
+
+<p>
+    If one of these two pre-conditions is missing, then you will likely reach a point where you will make the
+    class extensible, as your code is not truly relying on abstractions.
+</p>
