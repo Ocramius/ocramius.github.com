@@ -138,4 +138,69 @@ class EmailingRegistrationService implements RegistrationServiceInterface
 }
 ~~~
 
-<h4>3. </h4>
+<h4>3. Force the developer to think about user public API</h4>
+
+<p>
+    Developers tend to use inheritance to add accessors and additional API to existing classes:
+</p>
+
+~~~php
+<?php
+
+class RegistrationService implements RegistrationServiceInterface
+{
+    protected $db;
+
+    public function __construct(DbConnection $db) 
+    {
+        $this->db = $db;
+    }
+
+    public function registerUser(/* ... */) 
+    {
+        // ...
+        
+        $this->db->insert($userData);
+        
+        // ...
+    }
+}
+
+class SwitchableDbRegistrationService extends RegistrationService
+{
+    public function setDb(DbConnection $db)
+    {
+        $this->db = $db;
+    }
+}
+~~~
+
+<p>
+    This example shows a set of flaws in the thought-process that led to the 
+    <code>SwitchableDbRegistrationService</code>:
+</p>
+
+<ul>
+    <li>
+        The <code>setDb</code> method is used to change the <code>DbConnection</code> at runtime, which seems
+        to hide a different problem being solved: maybe we need a <code>MasterSlaveConnection</code> instead?
+    </li>
+    <li>
+        The <code>setDb</code> method is not covered by the <code>RegistrationServiceInterface</code>, therefore
+        we can only use it when we strictly couple our code with the <code>SwitchableDbRegistrationService</code>,
+        which destroys the purpose of the contract itself in some contexts.
+    </li>
+    <li>
+        The <code>setDb</code> switches dependencies at runtime, which may not be correctly
+        handled by the <code>RegistrationService</code> logic in all cases, and may lead to bugs.
+    </li>
+    <li>
+        Maybe the <code>setDb</code> method was introduced because of a bug in the original implementation: why
+        was the fix provided this way? Is it an actual fix or does it only fix a symptom?
+    </li>
+</ul>
+
+<p>
+    There are more issues with the <code>setDb</code> example, but these are the most relevant ones for our purpose
+    of explaining why <code>final</code> would have prevented this sort of situation upfront
+</p>
