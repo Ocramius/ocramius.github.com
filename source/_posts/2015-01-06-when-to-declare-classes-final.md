@@ -40,7 +40,11 @@ tweet:
 </p>
 
 <p>
-    There are many other articles about the subject, but this is mainly thought as a "quick reference" for those
+    There are 
+    <a href="http://verraes.net/2014/05/final-classes-in-php/" target="_blank">many</a> 
+    <a href="http://www.javaworld.com/article/2073649/core-java/why-extends-is-evil.html" target="_blank">other</a>
+    <a href="http://stackoverflow.com/questions/137868/using-final-modifier-whenever-applicable-in-java" target="_blank">articles</a>
+    about the subject, but this is mainly thought as a "quick reference" for those
     that will ask me the same questions in future.
 </p>
 
