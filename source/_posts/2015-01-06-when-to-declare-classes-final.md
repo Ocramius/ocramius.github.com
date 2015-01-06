@@ -73,7 +73,63 @@ class PatchedBot extends BotThatDoesSpecialThings { /* ... */ }
     of solving problems via inheritance</cite>" ("inheritance-oriented-programming" maybe?).
 </p>
 
+<h4>2. Encouraging composition</h4>
+
 <p>
-    In general, preventing inheritance in a forceful way has the nice advantage of making developers think more about
-    composition.
+    In general, preventing inheritance in a forceful way (by default) has the nice advantage of making developers 
+    think more about composition, and less about stuffing functionality in existing code via inheritance (which, in my
+    opinion, is a symptom of haste combined with feature creep).
 </p>
+
+<p>
+    Take following naive example:
+</p>
+
+~~~php
+<?php
+
+class RegistrationService implements RegistrationServiceInterface
+{
+    public function registerUser(/* ... */) { /* ... */ }
+}
+
+class EmailingRegistrationService extends RegistrationService
+{
+    public function registerUser(/* ... */) 
+    {
+        $user = parent::registerUser(/* ... */);
+        
+        sendTheRegistrationMail($user);
+        
+        return $user;
+    }
+}
+~~~
+
+<p>
+    By making the <code>RegistrationService</code> <code>final</code>, the idea behind 
+    <code>EmailingRegistrationService</code> being a child-class of it is denied upfront, and silly mistakes as
+    the previous one are easily avoided:
+</p>
+
+
+~~~php
+<?php
+
+class EmailingRegistrationService implements RegistrationServiceInterface
+{
+    public function __construct(RegistrationServiceInterface $mainRegistrationService) 
+    {
+        $this->mainRegistrationService = $mainRegistrationService;
+    }
+
+    public function registerUser(/* ... */) 
+    {
+        $user = $this->mainRegistrationService->registerUser(/* ... */);
+        
+        sendTheRegistrationMail($user);
+        
+        return $user;
+    }
+}
+~~~
