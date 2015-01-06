@@ -9,7 +9,7 @@ day: 6
 published: true
 summary: When do I need to declare a class as final?
 description: Declaring classes as final enhances our code quality and abstraction dramatically, but is it always correct?
-tweet: 
+tweet: 552547686134857728
 ---
 
 <p>
