@@ -222,3 +222,12 @@ class SwitchableDbRegistrationService extends RegistrationService
     required). No drawbacks, but you will have to explain your reasoning for such change to you and other team members,
     and that may lead to better solutions before anything gets merged.
 </p>
+
+<h5>6. Extension breaks encapsulation</h5>
+
+<p>
+    Unless the author of a class specifically designed it for extension, then you should consider it <code>final</code>
+    even if it isn't. Extending a class breaks encapsulation, and can lead to unforseen consequences and/or 
+    <abbr title="Backwards Compatibility">BC</abbr> breaks: think twice before using the <code>extends</code> keyword,
+    or better, make your classes <code>final</code> and avoid others from having to think about it.
+</p>
