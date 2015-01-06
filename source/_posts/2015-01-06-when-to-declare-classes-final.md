@@ -26,3 +26,30 @@ tweet:
     <li>I have to explain that flexibility comes from good abstractions, and not from inheritance</li>
 </ol>
 
+<p>
+    It is therefore clear that people need a better explanation of <strong>when</strong> to use <code>final</code>, 
+    and when it has to be avoided.
+</p>
+
+<p>
+    There are many other articles about the subject, but this is mainly thought as a "quick reference" for those
+    that will ask me the same questions in future.
+</p>
+
+<h3>When to use <code>final</code>:</h3>
+
+<p>
+    <code>final</code> should be used <strong>whenever possible</strong>.
+</p>
+
+<p>
+    Developers have the bad habit of fixing problems by providing specific subclasses of an existing (not adequate)
+    solution. You probably saw it yourself with examples like following:
+</p>
+
+
+
+<p>
+    In general, preventing inheritance in a forceful way has the nice advantage of making developers think more about
+    composition.
+</p>
