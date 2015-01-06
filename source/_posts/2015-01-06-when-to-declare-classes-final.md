@@ -332,3 +332,14 @@ class SwitchableDbRegistrationService extends RegistrationService
     be done if you follow <a href="http://semver.org/" target="_blank">semver</a> and you bump the major version
     for the affected codebase.
 </p>
+
+<h3>Try it out!</h3>
+
+<p>
+    After having read this article, consider going back to your code, and if you never did so,
+    adding your first <code>final</code> marker to a class that you are planning to implement.
+</p>
+
+<p>
+    You will see the rest just getting in place as expected.
+</p>
