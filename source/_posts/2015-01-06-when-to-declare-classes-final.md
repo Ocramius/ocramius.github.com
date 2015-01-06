@@ -285,3 +285,9 @@ class SwitchableDbRegistrationService extends RegistrationService
     In these cases, it is safe to assume that we can use the <code>final</code> keyword without an abstraction to 
     rely on first.
 </p>
+
+<p>
+    Another case where you do not want to use the <code>final</code> keyword is on existing classes: that can only
+    be done if you follow <a href="http://semver.org/" target="_blank">semver</a> and you bump the major version
+    for the affected codebase.
+</p>
