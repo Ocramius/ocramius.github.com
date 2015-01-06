@@ -146,7 +146,7 @@ class EmailingRegistrationService extends RegistrationService
 ~~~php
 <?php
 
-class EmailingRegistrationService implements RegistrationServiceInterface
+final class EmailingRegistrationService implements RegistrationServiceInterface
 {
     public function __construct(RegistrationServiceInterface $mainRegistrationService) 
     {
