@@ -108,6 +108,9 @@ $queryBuilder
     <li>Fluent Interfaces are harder to Mock</li>
     <li>Fluent Interfaces make diffs harder to read</li>
     <li>Fluent Interfaces are less readable (personal feeling)</li>
+    <li>
+        Fluent Interfaces cause <abbr title="Backwards Compatibility">BC</abbr> breaks during early development stages
+    </li>
 </ol>
 
 <hr/>
@@ -678,6 +681,25 @@ return $someBuilder
 <p>
     Which of these method calls is part of a fluent interface? Which is instead
     returning a different object? You can't really tell that...
+</p>
+
+<hr/>
+
+
+<h2>Fluent Interfaces can be introduced later on</h2>
+
+<p>
+    Declaring an <code>@return void</code> type allows you to change the method behavior later on.
+</p>
+
+<p>
+    Eagerly declaring a <code>@return self</code> precludes that choice, and changing the signature of the
+    method will inevitably result in a <abbr title="Backwards Compatibility">BC</abbr> break.
+</p>
+
+<p>
+    This approach allows for more flexible and rapid design while we are prototyping around a piece of our
+    codebase.
 </p>
 
 <hr/>
