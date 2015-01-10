@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2015-01-10T12:10:23+00:00</updated>
+    <updated>2015-01-10T12:13:49+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -1867,7 +1867,7 @@ return $someBuilder
 
 <hr/>
 
-<h2>Fluent Interfaces can be introduced later on</h2>
+<h2>Fluent Interfaces cause <abbr title="Backwards Compatibility">BC</abbr> breaks</h2>
 
 <p>
     Declaring an <code>@return void</code> type allows you to change the method behavior later on.
@@ -1879,8 +1879,8 @@ return $someBuilder
 </p>
 
 <p>
-    This approach allows for more flexible and rapid design while we are prototyping around a piece of our
-    codebase.
+    Using <code>void</code> as a default return type allows for more flexible and rapid design while 
+    we are prototyping around a piece of our codebase.
 </p>
 
 <hr/>
