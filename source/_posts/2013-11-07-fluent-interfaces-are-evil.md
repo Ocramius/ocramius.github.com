@@ -682,6 +682,25 @@ return $someBuilder
 
 <hr/>
 
+
+<h2>Fluent Interfaces can be introduced later on</h2>
+
+<p>
+    Declaring an <code>@return void</code> type allows you to change the method behavior later on.
+</p>
+
+<p>
+    Eagerly declaring a <code>@return self</code> precludes that choice, and changing the signature of the
+    method will inevitably result in a <abbr title="Backwards Compatibility">BC</abbr> break.
+</p>
+
+<p>
+    This approach allows for more flexible and rapid design while we are prototyping around a piece of our
+    codebase.
+</p>
+
+<hr/>
+
 <h2>Conclusion</h2>
 
 <p>
