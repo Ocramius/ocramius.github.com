@@ -108,6 +108,9 @@ $queryBuilder
     <li>Fluent Interfaces are harder to Mock</li>
     <li>Fluent Interfaces make diffs harder to read</li>
     <li>Fluent Interfaces are less readable (personal feeling)</li>
+    <li>
+        Fluent Interfaces cause <abbr title="Backwards Compatibility">BC</abbr> breaks during early development stages
+    </li>
 </ol>
 
 <hr/>
