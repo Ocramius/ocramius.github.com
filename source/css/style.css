@@ -1,6 +1,10 @@
 body {
     font-family: 'tisaregular';
-    font-size: 17px
+    font-size: 17px;
+    padding: 0;
+    margin: 0;
+    background: #FFF;
+    color: #000;
 }
 
 p{
@@ -43,11 +47,18 @@ p{
                 inset -10px -10px 20px 0 rgba(0, 0, 0, 0.15),
                 1px 0 0 0 #FFF;
 }
+
+.content-wrap {
+    width: 55%;
+    margin: 0 auto;
+    background: #FFF;
+}
+
 .mainContent{
-    width: 80%;
-    position: absolute;
-    overflow-y: visible;
-    right: 0;
+    /*width: 78%;*/
+    /*position: absolute;*/
+    /*overflow-y: visible;*/
+    /*right: 0;*/
 }
 .main-navigator {
     text-align: center
@@ -64,8 +75,12 @@ p{
 }
 
 /* Abstracts */
-.clear{
+.clear {
     clear: both;
+}
+
+.left {
+    float: left;
 }
 
 .item {
@@ -146,8 +161,8 @@ footer.container {
 }
 @media (min-width: 980px) {
     body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-        padding-bottom: 40px;
+        /*padding-top: 60px; *//* 60px to make the container go all the way to the bottom of the topbar */
+        /*padding-bottom: 40px;*/
     }
 }
 
