@@ -12,57 +12,44 @@
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/font/stylesheet.css" rel="stylesheet" type="text/css" />
-        <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="{{ site.url }}/css/menu_bubble.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/normalize.css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
         <link href="{{ site.url }}/img/marco-pivetta-ocramius.gif" rel="shortcut icon"/>
         <link rel="stylesheet" href="{{ site.url }}/components/highlightjs/styles/github.css" />
+        <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
         <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/atom.xml" title="{{ site.title }} activity feed" />
+        <script src="{{ site.url }}js/snap.svg-min.js"></script>
     </head>
     <body>
-        <header>
-            <div class="sidebar">
-                <div class="main-navigator">
-                    <p id="shield-container" class="logo-cont"></p>
-                    <ul class="nav">
-                        <li><a href="{{ site.url }}/">Latest Posts</a></li>
-                        <li><a href="{{ site.url }}/blog">Archive</a></li>
-                        {# not needed for now
-                        <li><a href="{{ site.url }}/blog/categories">Categories</a></li>
-                        <li><a href="{{ site.url }}/blog/tags">Tags</a></li>
-                        #}
-                        <li><a href="{{ site.url }}/talks">Presentations</a></li>
-                        <li><a href="{{ site.url }}/joindin">Talks</a></li>
-                        <li><a href="{{ site.url }}/about">About</a></li>
-                    </ul>
+        <div class="mainContent container">
 
-                    <div class="social-media">
-                            {% if site.twitter %}
-                                <a
-                                    class="twitter"
-                                    href="https://twitter.com/{{ site.twitter }}"
-                                    rel="me" title="{{ site.twitter }} twitter profile"
-                                    target="_blank"
-                                >
-                                    &nbsp;
-                                </a>
-                            {% endif %}
-                            {% if site.github %}
-                                <a
-                                    class="github"
-                                    href="https://github.com/{{ site.github }}"
-                                    rel="me"
-                                    rel="me" title="{{ site.twitter }} github profile"
-                                    target="_blank"
-                                >
-                                    &nbsp;
-                                </a>
-                            {% endif %}
-                        <ul>
-                        </ul>
+            <div class="menu-wrap">
+                <nav class="menu">
+                    <div class="icon-list">
+                        <a href="#"><i class="fa fa-fw fa-star-o"></i><span>Favorites</span></a>
+                        <a href="#"><i class="fa fa-fw fa-bell-o"></i><span>Alerts</span></a>
+                        <a href="#"><i class="fa fa-fw fa-envelope-o"></i><span>Messages</span></a>
+                        <a href="#"><i class="fa fa-fw fa-comment-o"></i><span>Comments</span></a>
+                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i><span>Analytics</span></a>
+                        <a href="#"><i class="fa fa-fw fa-newspaper-o"></i><span>Reading List</span></a>
                     </div>
+                </nav>
+                <button class="close-button" id="close-button">Close Menu</button>
+                <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                        <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+                    </svg>
                 </div>
             </div>
-        </header>
-        <div class="mainContent container">
+            <button class="menu-button" id="open-button">Open Menu</button>
+
+            <div class="content-wrap">
+                <div class="content">
+        <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
+"></p>
+        <h1 class="left">Marco Pivetta aka Ocramius</h1>
             <div class="row-fluid">
                 {#
                 <div class="span11 align-center">
@@ -74,6 +61,8 @@
                     {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
                 </div>
                 <div class="span4 si debar"></div>
+            </div>
+        </div>
             </div>
         </div>
 
@@ -98,8 +87,11 @@
             ga('send', 'pageview');
         </script>
         {% endif %}
+
         <script src="{{ site.url }}/components/highlightjs/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script src="{{ site.url }}/js/classie.js"></script>
+        <script src="{{ site.url }}/js/main4.js"></script>
         <script src="{{ site.url }}/js/three-js-object-loader.js"></script>
         <script src="{{ site.url }}/js/mario.js"></script>
         <script>mario($('#shield-container'), "{{ site.url }}/logo/mario");</script>
