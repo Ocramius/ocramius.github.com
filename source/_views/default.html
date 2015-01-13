@@ -37,6 +37,14 @@
                         <a href="{{ site.url }}/talks"><i class="fa fa-fw fa-youtube"></i><span>Presentations</span></a>
                         <a href="{{ site.url }}/joindin"><i class="fa fa-fw fa-star-o"></i><span>Talks</span></a>
                         <a href="{{ site.url }}/about"><i class="fa fa-fw fa-user"></i><span>About</span></a>
+
+                        {% if site.twitter %}
+                        <a href="https://twitter.com/{{ site.twitter }}" rel="me" title="{{ site.twitter }} twitter profile" target="_blank"><i class="fa fa-fw fa-twitter"></i><span>Twitter</span></a>
+                        {% endif %}
+
+                        {% if site.github %}
+                        <a href="https://github.com/{{ site.github }}" rel="me" title="{{ site.twitter }} github profile" target="_blank"><i class="fa fa-fw fa-github"></i><span>Github</span></a>
+                        {% endif %}
                     </div>
                 </nav>
                 <button class="close-button" id="close-button">Close Menu</button>
