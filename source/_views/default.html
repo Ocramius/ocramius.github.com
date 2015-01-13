@@ -15,7 +15,7 @@
         <link href="{{ site.url }}/css/menu_bubble.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/normalize.css" />
         <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/demo.css" />
-        <link rel="stylesheet" type="text/css" href="{{ site.url }}/fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/font/font-awesome-4.2.0/css/font-awesome.min.css" />
         <link href="{{ site.url }}/img/marco-pivetta-ocramius.gif" rel="shortcut icon"/>
         <link rel="stylesheet" href="{{ site.url }}/components/highlightjs/styles/github.css" />
         <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
@@ -28,12 +28,15 @@
             <div class="menu-wrap">
                 <nav class="menu">
                     <div class="icon-list">
-                        <a href="#"><i class="fa fa-fw fa-star-o"></i><span>Favorites</span></a>
-                        <a href="#"><i class="fa fa-fw fa-bell-o"></i><span>Alerts</span></a>
-                        <a href="#"><i class="fa fa-fw fa-envelope-o"></i><span>Messages</span></a>
-                        <a href="#"><i class="fa fa-fw fa-comment-o"></i><span>Comments</span></a>
-                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i><span>Analytics</span></a>
-                        <a href="#"><i class="fa fa-fw fa-newspaper-o"></i><span>Reading List</span></a>
+                        <a href="{{ site.url }}/"><i class="fa fa-fw fa-newspaper-o"></i><span>Latest Posts</span></a>
+                        <a href="{{ site.url }}/blog"><i class="fa fa-fw fa-comment-o"></i><span>Archive</span></a>
+                        {# not needed for now
+                        <a href="{{ site.url }}/blog/categories"><i class="fa fa-fw fa-star-o"></i><span>Categories</span></a>
+                        <a href="{{ site.url }}/blog/tags"><i class="fa fa-fw fa-star-o"></i><span>Tags</span></a>
+                        #}
+                        <a href="{{ site.url }}/talks"><i class="fa fa-fw fa-youtube"></i><span>Presentations</span></a>
+                        <a href="{{ site.url }}/joindin"><i class="fa fa-fw fa-star-o"></i><span>Talks</span></a>
+                        <a href="{{ site.url }}/about"><i class="fa fa-fw fa-user"></i><span>About</span></a>
                     </div>
                 </nav>
                 <button class="close-button" id="close-button">Close Menu</button>
@@ -44,13 +47,19 @@
                 </div>
             </div>
             <button class="menu-button" id="open-button">Open Menu</button>
-
+            
             <div class="content-wrap">
                 <div class="content">
-                    <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
+                    <div class="top left">
+                        <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
 "></p>
-                    <h1 class="left text-center">Marco Pivetta <span>(aka Ocramius)</span></h1>
+                        <h1 class="left text-center">Marco Pivetta <span>(aka Ocramius)</span></h1>
+                    </div>
 
+                    <div class="clear"></div>
+                    <p class="text-center remove-margin">
+                        <img src="{{ site.url }}/img/separator.jpg" alt=""/>
+                    </p>
                     <div class="row-fluid">
                     {#
                     <div class="span12 align-center">
