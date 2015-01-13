@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="{{ site.url }}/components/highlightjs/styles/github.css" />
         <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
         <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/atom.xml" title="{{ site.title }} activity feed" />
-        <script src="{{ site.url }}js/snap.svg-min.js"></script>
+        <script src="{{ site.url }}/js/snap.svg-min.js"></script>
     </head>
     <body>
         <div class="mainContent container">
@@ -47,23 +47,25 @@
 
             <div class="content-wrap">
                 <div class="content">
-        <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
+                    <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
 "></p>
-        <h1 class="left">Marco Pivetta aka Ocramius</h1>
-            <div class="row-fluid">
-                {#
-                <div class="span11 align-center">
-                    <h1>{{ site.title }}</h1>
-                    <p class="description"> {{ site.description }} </p>
+                    <h1 class="left text-center">Marco Pivetta <span>(aka Ocramius)</span></h1>
+
+                    <div class="row-fluid">
+                    {#
+                    <div class="span12 align-center">
+                        <h1>{{ site.title }}</h1>
+                        <p class="description"> {{ site.description }} </p>
+                    </div>
+                    #}
+                    <div class="span12">
+                        {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+                    </div>
+                    <div class="span4 si debar"></div>
+                   </div>
                 </div>
-                #}
-                <div class="span11">
-                    {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
-                </div>
-                <div class="span4 si debar"></div>
             </div>
-        </div>
-            </div>
+
         </div>
 
         <script src="{{ site.url }}/components/jquery/jquery.min.js"></script>
