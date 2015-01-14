@@ -6,15 +6,15 @@ use InvalidArgumentException;
 use GuzzleHttp\ClientInterface;
 
 /**
- * Client to get informations about a user
- * previously configurated
+ * Client to get information about a user
+ * previously configured
  *
  * @author Jefersson Nathan <malukenho@phpse.net>
  */
 class Client
 {
     /**
-     * Url to get informations about a user
+     * Url to get information about a user
      */
     const API_USER_URL = 'http://api.joind.in/v2.1/users?username=%s';
 
