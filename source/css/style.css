@@ -9,6 +9,10 @@ p{
     margin: 25px 0 25px
 }
 
+a {
+    color: dodgerblue;
+}
+
 .remove-margin {
     margin: 0;
 }
@@ -53,6 +57,7 @@ h1 span{
     width: 90% !important;
     margin: 0 auto;
 }
+
 /* Intro */
 .intro {
     text-align: center;
@@ -71,21 +76,17 @@ h1 span{
     margin-left: 11%;
 }
 
-.mainContent{
-    /*width: 78%;*/
-    /*position: absolute;*/
-    /*overflow-y: visible;*/
-    /*right: 0;*/
-}
 .main-navigator {
     text-align: center
 }
+
 .main-navigator a{
     color: #FFFFFF;
     font-size: 20px;
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
 .main-navigator a:hover{
     background-color: #0297AF;
     color: #000000;
@@ -113,6 +114,7 @@ h1 span{
 .top30 {
     margin-top: 30px;
 }
+
 .text-center {
     text-align: center;
 }
