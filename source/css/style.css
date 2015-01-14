@@ -26,11 +26,13 @@ h1 {
     font-size: 70px;
     padding-top: 36px;
 }
+
 h1 span{
     display: block;
     font-size: 20px;
     color: #CCC;
 }
+
 /* Menu */
 .nav{
     list-style: none;
@@ -98,12 +100,19 @@ h1 span{
     float: left;
 }
 
+.right {
+    float: right;
+}
+
 .item {
     width: 50%;
     padding: 1.5%;
     float: left;
 }
 
+.top30 {
+    margin-top: 30px;
+}
 .text-center {
     text-align: center;
 }
