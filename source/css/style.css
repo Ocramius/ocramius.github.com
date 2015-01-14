@@ -66,7 +66,6 @@ h1 span{
 /* Main structure */
 
 .content-wrap {
-    width: 960px;
     margin: 0 auto;
     background: #FFF;
 }
@@ -180,16 +179,19 @@ footer.container {
 }
 
 @media (max-width: 767px) {
+    #shield-container {
+        display: none;
+    }
+
     .item {
         width: 97%;
         padding: 1.5%;
         float: left;
     }
 }
-@media (min-width: 980px) {
-    body {
-        /*padding-top: 60px; *//* 60px to make the container go all the way to the bottom of the topbar */
-        /*padding-bottom: 40px;*/
+@media (min-width: 960px) {
+    .content-wrap {
+        width: 960px;
     }
 }
 
