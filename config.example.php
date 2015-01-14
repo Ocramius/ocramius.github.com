@@ -33,7 +33,7 @@ HTML;
 
 
             $escaper   = new Escaper();
-            $template  = '<h1>My talks <small><i>(via joind.in)</i></small></h1><hr />';
+            $template  = '<h2>My talks <small><i>(via joind.in)</i></small></h2><hr />';
             $increment = 0;
 
             foreach ($talks['talks'] as $talk) {
