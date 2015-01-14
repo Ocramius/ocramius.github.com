@@ -69,16 +69,10 @@
                         <img src="{{ site.url }}/img/separator.jpg" alt=""/>
                     </p>
                     <div class="row-fluid">
-                    {#
-                    <div class="span12 align-center">
-                        <h1>{{ site.title }}</h1>
-                        <p class="description"> {{ site.description }} </p>
-                    </div>
-                    #}
-                    <div class="span12">
-                        {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
-                    </div>
-                    <div class="span4 si debar"></div>
+                        <div class="span12">
+                            {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+                        </div>
+                        <div class="span4 si debar"></div>
                    </div>
                 </div>
             </div>
