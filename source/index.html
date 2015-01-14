@@ -3,9 +3,9 @@ layout: default
 title: Ocramius' blog - software development thoughts by Marco Pivetta
 generator: pagination
 pagination:
-    max_per_page: 5
+max_per_page: 5
 use:
-    - posts
+- posts
 ---
 {% for post in page.pagination.items %}
     <article class="overview">
@@ -45,8 +45,8 @@ use:
     </article>
 {% endfor %}
 {% if page.pagination.previous_page or page.pagination.next_page %}
-    <nav>
-        {% if page.pagination.previous_page %}<a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a>{% endif %}<br />
-        {% if page.pagination.next_page %}<a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a>{% endif %}<br />
-    </nav>
+<nav>
+    {% if page.pagination.previous_page %}<a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a>{% endif %}<br />
+    {% if page.pagination.next_page %}<a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a>{% endif %}<br />
+</nav>
 {% endif %}
