@@ -6,7 +6,7 @@ title: Presentations
 <article>
     <h2>Here are some of my presentations</h2>
 
-    <div class="clear-fix"></div>
+    <div class="clear"></div>
     <div class="span12">
         <iframe
             width="640"
@@ -21,7 +21,7 @@ title: Presentations
 
     <hr/>
 
-    <div class="clear-fix"></div>
+    <div class="clear"></div>
     <div class="span12">
         <iframe
             width="640"
@@ -36,7 +36,7 @@ title: Presentations
 
     <hr/>
 
-    <div class="clear-fix"></div>
+    <div class="clear"></div>
     <div class="span12">
         <iframe 
             width="640" 
