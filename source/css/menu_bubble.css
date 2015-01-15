@@ -107,7 +107,7 @@ html, body {
 
 /* Menu */
 .menu-wrap {
-    position: absolute;
+    position: fixed;
     z-index: 1001;
     width: 280px;
     height: 100%;
