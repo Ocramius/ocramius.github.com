@@ -13,6 +13,10 @@ html, body {
     color: #b8b7ad;
 }
 
+article {
+    line-height: 25px;
+}
+
 .menu-wrap a:hover,
 .menu-wrap a:focus {
     color: #c94e50;
