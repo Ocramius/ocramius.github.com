@@ -26,9 +26,36 @@ a {
     background: none;
 }
 
+.display {
+    display: block !important;
+}
+
+.morph-shape {
+    background-color: #373A47;
+}
+
+.menu-fixed {
+    position:relative;
+    z-index: 1000
+}
+
+.menu-fixed .content::before{
+    content: '';
+    display: none
+}
+
 h1 {
     font-size: 70px;
     padding-top: 36px;
+}
+
+h1 a {
+    color: #CCC;
+}
+
+h1 a:hover{
+    color: #999;
+    text-decoration: none;
 }
 
 h1 span{

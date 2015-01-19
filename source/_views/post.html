@@ -44,7 +44,11 @@
         
         <div id="disqus_thread"></div>
 
-        <script>$(prettyPrint);</script>
+        <script>
+            if (typeof prettyPrint !== 'undefined') {
+                $(prettyPrint);
+            }
+        </script>
         <script>
             var disqus_shortname = 'ocramius-dev';
             var disqus_identifier = '{{ page.url }}';
