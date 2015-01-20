@@ -5,7 +5,7 @@ body {
     color: #000;
 }
 
-p{
+p {
     margin: 25px 0 25px
 }
 
@@ -35,11 +35,11 @@ a {
 }
 
 .menu-fixed {
-    position:relative;
+    position: relative;
     z-index: 1000
 }
 
-.menu-fixed .content::before{
+.menu-fixed .content::before {
     content: '';
     display: none
 }
@@ -58,7 +58,7 @@ h1 a:hover, .top h2 a:hover {
     text-decoration: none;
 }
 
-h1 span, .top h2 span{
+h1 span, .top h2 span {
     display: block;
     font-size: 20px;
     color: #CCC;
@@ -69,22 +69,22 @@ h1 span, .top h2 span{
 }
 
 /* Menu */
-.nav{
+.nav {
     list-style: none;
     padding: 0;
 }
 
-.nav a{
+.nav a {
     text-decoration: none;
 }
 
-.nav li{
+.nav li {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* Container content */
-.row-fluid{
+.row-fluid {
     width: 90% !important;
     margin: 0 auto;
 }
@@ -102,7 +102,7 @@ h1 span, .top h2 span{
 }
 
 .top {
-    margin:0 auto;
+    margin: 0 auto;
     margin-left: 11%;
 }
 
@@ -110,14 +110,14 @@ h1 span, .top h2 span{
     text-align: center
 }
 
-.main-navigator a{
+.main-navigator a {
     color: #FFFFFF;
     font-size: 20px;
     padding-top: 3px;
     padding-bottom: 3px;
 }
 
-.main-navigator a:hover{
+.main-navigator a:hover {
     background-color: #0297AF;
     color: #000000;
 }
@@ -141,7 +141,7 @@ h1 span, .top h2 span{
     float: left;
 }
 
-.top30 {
+.margin-top-30 {
     margin-top: 30px;
 }
 
@@ -149,51 +149,51 @@ h1 span, .top h2 span{
     text-align: center;
 }
 
-.item:hover{
+.item:hover {
     background: #f1f1f1;
 }
 
-.item .links div{
+.item .links div {
     width: 25%;
     font-size: 12px;
     float: left;
 }
 
-.align-center{
+.align-center {
     border-bottom: 1px dashed #AAA;
     text-align: center;
     padding-bottom: 20px;
 }
 
-.logo{
+.logo {
     text-align: center;
 }
 
-.logo img{
+.logo img {
     padding-top: 100px;
     margin: 0 auto;
 }
 
-p.description{
+p.description {
     font-family: 'Times New Roman';
     font-style: italic;
     font-size: 20px;
     padding-top: 20px
 }
 
-article{
+article {
     padding-top: 30px;
     padding-bottom: 30px;
     border-bottom: 1px dashed #AAA;
     max-width: 700px;
 }
-article h2 a{
+
+article h2 a {
     text-decoration: none;
     color: #328CFF
 }
 
-h4 small
-{
+h4 small {
     display: block;
     font-size: 60%;
     color: #888;
@@ -220,6 +220,7 @@ footer.container {
         float: left;
     }
 }
+
 @media (min-width: 960px) {
     .content-wrap {
         width: 960px;
@@ -233,6 +234,7 @@ pre code {
 .logo-cont {
     height: 100px;
 }
+
 .logo-cont canvas {
     z-index: 2;
     pointer-events: none;
@@ -246,11 +248,11 @@ pre code {
     background-size: contain;
 }
 
-.social-media{
+.social-media {
     padding-left: 31%;
 }
 
-.social-media a{
+.social-media a {
     float: left;
     width: 3%;
     list-style: none;

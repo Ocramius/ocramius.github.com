@@ -46,7 +46,7 @@ use:
     </article>
 {% endfor %}
 {% if page.pagination.previous_page or page.pagination.next_page %}
-<nav class="top30">
+<nav class="margin-top-30">
     {% if page.pagination.previous_page %}<button class="left btn"><a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a></button>{% endif %}<br />
     {% if page.pagination.next_page %}<button class="right btn"><a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a></button>{% endif %}<br />
 </nav>
