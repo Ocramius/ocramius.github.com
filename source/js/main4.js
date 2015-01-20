@@ -10,18 +10,17 @@
  */
 (function () {
 
-    var bodyEl = document.body,
-        content = document.querySelector('.content-wrap'),
-        openbtn = document.getElementById('open-button'),
-        closebtn = document.getElementById('close-button'),
-        isOpen = false,
-
-        morphEl = document.getElementById('morph-shape'),
-        s = Snap(morphEl.querySelector('svg'));
-        path = s.select('path');
+    var bodyEl      = document.body,
+        content     = document.querySelector('.content-wrap'),
+        openbtn     = document.getElementById('open-button'),
+        closebtn    = document.getElementById('close-button'),
+        isOpen      = false,
+        morphEl     = document.getElementById('morph-shape'),
+        s           = Snap(morphEl.querySelector('svg'));
+        path        = s.select('path');
         initialPath = this.path.attr('d'),
-        steps = morphEl.getAttribute('data-morph-open').split(';');
-        stepsTotal = steps.length;
+        steps       = morphEl.getAttribute('data-morph-open').split(';');
+        stepsTotal  = steps.length;
         isAnimating = false;
 
     function init() {
@@ -44,8 +43,13 @@
     }
 
     function toggleMenu() {
-        if (isAnimating) return false;
+
+        if (isAnimating) {
+            return false;
+        }
+
         isAnimating = true;
+
         if (isOpen) {
             classie.remove(bodyEl, 'show-menu');
             // animate path
