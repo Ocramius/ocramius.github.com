@@ -19,9 +19,9 @@ use:
   {% set month = this_month %}
   <h3>{{ month }} {{ year }}</h3>
 {% endif %}
-  <div>
-    <dd>&rarr; <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></dd>
-  </div>
+  <ul class="no-decoration">
+    <li>&rarr; <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></li>
+  </ul>
 {% endfor %}
 
 <div>

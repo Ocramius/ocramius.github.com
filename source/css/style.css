@@ -64,6 +64,10 @@ h1 span, .top h2 span{
     color: #CCC;
 }
 
+.no-decoration, .no-decoration li {
+    list-style: none;
+}
+
 /* Menu */
 .nav{
     list-style: none;
