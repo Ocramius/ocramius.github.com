@@ -49,7 +49,7 @@ a {
     display: none
 }
 
-h1, .top h2 {
+.top h1, .top h2 {
     font-size: 70px;
     padding-top: 36px;
 }
