@@ -12,82 +12,86 @@
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/components/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ site.url }}/font/stylesheet.css" rel="stylesheet" type="text/css" />
-        <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="{{ site.url }}/css/menu_bubble.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/normalize.css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="{{ site.url }}/font/font-awesome-4.2.0/css/font-awesome.min.css" />
         <link href="{{ site.url }}/img/marco-pivetta-ocramius.gif" rel="shortcut icon"/>
         <link rel="stylesheet" href="{{ site.url }}/components/highlightjs/styles/github.css" />
+        <link href="{{ site.url }}/css/style.css" rel="stylesheet" type="text/css" />
         <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/atom.xml" title="{{ site.title }} activity feed" />
     </head>
-    <body>
-        <header>
-            <div class="sidebar">
-                <div class="main-navigator">
-                    <p id="shield-container" class="logo-cont"></p>
-                    <ul class="nav">
-                        <li><a href="{{ site.url }}/">Latest Posts</a></li>
-                        <li><a href="{{ site.url }}/blog">Archive</a></li>
-                        {# not needed for now
-                        <li><a href="{{ site.url }}/blog/categories">Categories</a></li>
-                        <li><a href="{{ site.url }}/blog/tags">Tags</a></li>
-                        #}
-                        <li><a href="{{ site.url }}/talks">Presentations</a></li>
-                        <li><a href="{{ site.url }}/joindin">Talks</a></li>
-                        <li><a href="{{ site.url }}/about">About</a></li>
-                    </ul>
+    <script src="{{ site.url }}/js/snap.svg-min.js"></script>
+    <body{% if page.layout != "post" %} class="show-menu"{% endif %}>
+        <div class="container">
 
-                    <div class="social-media">
-                            {% if site.twitter %}
-                                <a
-                                    class="twitter"
-                                    href="https://twitter.com/{{ site.twitter }}"
-                                    rel="me" title="{{ site.twitter }} twitter profile"
-                                    target="_blank"
-                                >
-                                    &nbsp;
-                                </a>
-                            {% endif %}
-                            {% if site.github %}
-                                <a
-                                    class="github"
-                                    href="https://github.com/{{ site.github }}"
-                                    rel="me"
-                                    rel="me" title="{{ site.twitter }} github profile"
-                                    target="_blank"
-                                >
-                                    &nbsp;
-                                </a>
-                            {% endif %}
-                        <ul>
-                        </ul>
+            <div class='menu-wrap{% if page.layout != "post" %} display{% endif %}'>
+                <nav class="menu">
+                    <div class="icon-list">
+                        <a href="{{ site.url }}/"><i class="fa fa-fw fa-newspaper-o"></i><span>Latest Posts</span></a>
+                        <a href="{{ site.url }}/blog"><i class="fa fa-fw fa-comment-o"></i><span>Archive</span></a>
+                        <a href="{{ site.url }}/talks"><i class="fa fa-fw fa-youtube"></i><span>Presentations</span></a>
+                        <a href="{{ site.url }}/joindin"><i class="fa fa-fw fa-star-o"></i><span>Talks</span></a>
+                        <a href="{{ site.url }}/about"><i class="fa fa-fw fa-user"></i><span>About</span></a>
+
+                        {% if site.twitter %}
+                        <a href="https://twitter.com/{{ site.twitter }}" rel="me" title="{{ site.twitter }} twitter profile" target="_blank"><i class="fa fa-fw fa-twitter"></i><span>Twitter</span></a>
+                        {% endif %}
+
+                        {% if site.github %}
+                        <a href="https://github.com/{{ site.github }}" rel="me" title="{{ site.twitter }} github profile" target="_blank"><i class="fa fa-fw fa-github"></i><span>Github</span></a>
+                        {% endif %}
                     </div>
+                </nav>
+                {% if page.layout == "post" %}
+                <button class="close-button" id="close-button">Close Menu</button>
+                {% endif %}
+                <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                        <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+                    </svg>
                 </div>
             </div>
-        </header>
-        <div class="mainContent container">
-            <div class="row-fluid">
-                {#
-                <div class="span11 align-center">
-                    <h1>{{ site.title }}</h1>
-                    <p class="description"> {{ site.description }} </p>
+
+            {% if page.layout == "post" %}
+            <button class="menu-button" id="open-button">Open Menu</button>
+            {% endif %}
+
+            <div class="content-wrap{% if page.layout != "post" %} menu-fixed{% endif %}">
+                <div class="content">
+                    <div class="top left">
+                        <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
+"></p>
+                        {% if page.page_type == "home" %}
+                        <h1 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h1>
+                        {% else %}
+                        <h2 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h2>
+                        {% endif %}
+                    </div>
+
+                    <div class="clear"></div>
+                    <p class="text-center remove-margin">
+                        <img src="{{ site.url }}/img/separator.png" alt=""/>
+                    </p>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+                        </div>
+                        <div class="span4 si debar"></div>
+                   </div>
                 </div>
-                #}
-                <div class="span11">
-                    {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
-                </div>
-                <div class="span4 si debar"></div>
             </div>
+
         </div>
 
-        <script src="{{ site.url }}/components/jquery/jquery.min.js"></script>
         <script src="{{ site.url }}/js/shifty.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.min.js"></script>
         <script src="{{ site.url }}/components/bootstrap/js/bootstrap.min.js"></script>
         <script src ="/js/blogpost-tweets.js" type="text/javascript"></script>
+        <script src="{{ site.url }}/components/jquery/jquery.min.js"></script>
         <script src="http://platform.twitter.com/widgets.js"></script>
-        {% block scripts %}
-        {% endblock %}
 
         {% if site.google_analytics_tracking_id %}
-
         <script type="text/javascript">
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -98,8 +102,11 @@
             ga('send', 'pageview');
         </script>
         {% endif %}
+
         <script src="{{ site.url }}/components/highlightjs/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <script src="{{ site.url }}/js/classie.js"></script>
+        <script src="{{ site.url }}/js/main4.js"></script>
         <script src="{{ site.url }}/js/three-js-object-loader.js"></script>
         <script src="{{ site.url }}/js/mario.js"></script>
         <script>mario($('#shield-container'), "{{ site.url }}/logo/mario");</script>

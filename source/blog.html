@@ -19,19 +19,19 @@ use:
   {% set month = this_month %}
   <h3>{{ month }} {{ year }}</h3>
 {% endif %}
-  <div>
-    <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
-  </div>
+  <ul class="no-decoration">
+    <li>&rarr; <a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></li>
+  </ul>
 {% endfor %}
 
 <div>
 {% if page.pagination.previous_page or page.pagination.next_page %}
-    <nav class="article clearfix">
+    <nav class="article clearfix top30">
     {% if page.pagination.previous_page %}
-    <a class="previous" href="{{ site.url }}{{ page.pagination.previous_page.url }}" title="Previous Page"><span class="title">Previous Page</span></a>
+        <button class="left btn"><a class="previous" href="{{ site.url }}{{ page.pagination.previous_page.url }}" title="Previous Page"><span class="title">Previous Page</span></a></button>
     {% endif %}
     {% if page.pagination.next_page %}
-    <a class="next" href="{{ site.url }}{{ page.pagination.next_page.url }}" title="Next Page"><span class="title">Next Page</span></a>
+        <button class="right btn"><a class="next" href="{{ site.url }}{{ page.pagination.next_page.url }}" title="Next Page"><span class="title">Next Page</span></a></button>
     {% endif %}
     </nav>
 {% endif %}

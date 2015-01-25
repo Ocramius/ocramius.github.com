@@ -44,7 +44,11 @@
         
         <div id="disqus_thread"></div>
 
-        <script>$(prettyPrint);</script>
+        <script>
+            if (typeof prettyPrint !== 'undefined') {
+                $(prettyPrint);
+            }
+        </script>
         <script>
             var disqus_shortname = 'ocramius-dev';
             var disqus_identifier = '{{ page.url }}';
@@ -53,4 +57,3 @@
         <script src="http://ocramius-dev.disqus.com/count.js"></script>
         <script src="http://ocramius-dev.disqus.com/embed.js"></script>
 {% endblock %}
-

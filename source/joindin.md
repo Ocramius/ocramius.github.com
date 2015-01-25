@@ -1,6 +1,6 @@
 ---
 layout: default
-title: JoindIn Page
+title: Ocramius' blog - Talks
 joindin: talks
 
 ---

@@ -1,124 +1,205 @@
 body {
-    font-family: 'tisaregular';
-    font-size: 17px
+    padding: 0;
+    margin: 0;
+    background: #FFF;
+    color: #000;
 }
 
-p{
+p {
     margin: 25px 0 25px
 }
+
+a {
+    color: dodgerblue;
+}
+
+.remove-margin {
+    margin: 0;
+}
+
+.remove-padding {
+    padding: 0;
+}
+
+.icon-list {
+    width: 245px;
+    background: none;
+}
+
+.display {
+    display: block !important;
+}
+
+.morph-shape {
+    background-color: #373A47;
+}
+
+.menu-wrap {
+    float: right;
+    width: 20%
+}
+
+.menu-fixed {
+    position: relative;
+    z-index: 1000
+}
+
+.menu-fixed .content::before {
+    content: '';
+    display: none
+}
+
+h1, .top h2 {
+    font-size: 70px;
+    padding-top: 36px;
+}
+
+h1 a, .top h2 a {
+    color: #CCC;
+}
+
+h1 a:hover, .top h2 a:hover {
+    color: #999;
+    text-decoration: none;
+}
+
+h1 span, .top h2 span {
+    display: block;
+    font-size: 20px;
+    color: #CCC;
+}
+
+.no-decoration, .no-decoration li {
+    list-style: none;
+}
+
 /* Menu */
-.nav{
+.nav {
     list-style: none;
     padding: 0;
 }
 
-.nav a{
+.nav a {
     text-decoration: none;
 }
 
-.nav li{
+.nav li {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* Container content */
-.row-fluid{
+.row-fluid {
     width: 90% !important;
     margin: 0 auto;
 }
+
 /* Intro */
 .intro {
     text-align: center;
 }
 
 /* Main structure */
-.sidebar{
-    top: 0;
-    left: 0;
-    width: 20%;
-    height: 100%;
-    position: fixed;
-    background: #0297AF url(../img/texture.jpg) fixed;
-    box-shadow: inset -30px -10px 80px 0 rgba(0, 0, 0, 0.2),
-                inset -10px -10px 20px 0 rgba(0, 0, 0, 0.15),
-                1px 0 0 0 #FFF;
-}
-.mainContent{
+
+.content-wrap {
+    margin: 0 auto;
+    background: #FFF;
     width: 80%;
-    position: absolute;
-    overflow-y: visible;
-    right: 0;
+    float: right;
 }
+
+.top {
+    margin: 0 auto;
+    margin-left: 11%;
+}
+
 .main-navigator {
     text-align: center
 }
-.main-navigator a{
+
+.main-navigator a {
     color: #FFFFFF;
     font-size: 20px;
     padding-top: 3px;
     padding-bottom: 3px;
 }
-.main-navigator a:hover{
+
+.main-navigator a:hover {
     background-color: #0297AF;
     color: #000000;
 }
 
 /* Abstracts */
-.clear{
+.clear {
     clear: both;
 }
 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 .item {
-    width: 47%;
+    width: 50%;
     padding: 1.5%;
     float: left;
 }
 
-.item:hover{
+.margin-top-30 {
+    margin-top: 30px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.item:hover {
     background: #f1f1f1;
 }
 
-.item .links div{
+.item .links div {
     width: 25%;
     font-size: 12px;
     float: left;
 }
 
-.align-center{
+.align-center {
     border-bottom: 1px dashed #AAA;
     text-align: center;
     padding-bottom: 20px;
 }
 
-.logo{
+.logo {
     text-align: center;
 }
 
-.logo img{
+.logo img {
     padding-top: 100px;
     margin: 0 auto;
 }
 
-p.description{
+p.description {
     font-family: 'Times New Roman';
     font-style: italic;
     font-size: 20px;
     padding-top: 20px
 }
 
-article{
+article {
     padding-top: 30px;
     padding-bottom: 30px;
     border-bottom: 1px dashed #AAA;
-    max-width: 700px;
 }
-article h2 a{
+
+article h2 a {
     text-decoration: none;
     color: #328CFF
 }
 
-h4 small
-{
+h4 small {
     display: block;
     font-size: 60%;
     color: #888;
@@ -135,24 +216,44 @@ footer.container {
 }
 
 @media (max-width: 767px) {
-    .sidebar {
-        padding-top: 30px;
+    #shield-container {
+        display: none;
     }
+
+    .menu-wrap {
+        width: 20% !important;
+    }
+
     .item {
         width: 97%;
         padding: 1.5%;
         float: left;
     }
 }
-@media (min-width: 980px) {
-    body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-        padding-bottom: 40px;
+
+@media (max-width: 900px) {
+    .menu-wrap {
+        width: 12%;
+    }
+
+    .menu a span {
+        display: none;
+    }
+}
+
+@media (min-width: 960px) {
+
+    .content-wrap {
+        width: 80%;
     }
 }
 
 pre code {
     background-color: inherit;
+}
+
+.logo-cont {
+    height: 100px;
 }
 
 .logo-cont canvas {
@@ -166,14 +267,13 @@ pre code {
     background-repeat: no-repeat;
     background-position: left;
     background-size: contain;
-    /*background-size: 2em auto;*/
 }
 
-.social-media{
+.social-media {
     padding-left: 31%;
 }
 
-.social-media a{
+.social-media a {
     float: left;
     width: 3%;
     list-style: none;
