@@ -49,7 +49,7 @@ a {
     display: none
 }
 
-h1, .top h2 {
+.top h1, .top h2 {
     font-size: 70px;
     padding-top: 36px;
 }
@@ -108,9 +108,12 @@ h1 span, .top h2 span {
     float: right;
 }
 
+.content {
+    max-width: 850px;
+}
+
 .top {
     margin: 0 auto;
-    margin-left: 11%;
 }
 
 .main-navigator {
@@ -192,6 +195,7 @@ article {
     padding-top: 30px;
     padding-bottom: 30px;
     border-bottom: 1px dashed #AAA;
+    max-width: 850px;
 }
 
 article h2 a {
