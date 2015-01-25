@@ -34,6 +34,11 @@ a {
     background-color: #373A47;
 }
 
+.menu-wrap {
+    float: right;
+    width: 20%
+}
+
 .menu-fixed {
     position: relative;
     z-index: 1000
@@ -99,6 +104,8 @@ h1 span, .top h2 span {
 .content-wrap {
     margin: 0 auto;
     background: #FFF;
+    width: 80%;
+    float: right;
 }
 
 .top {
@@ -213,6 +220,10 @@ footer.container {
         display: none;
     }
 
+    .menu-wrap {
+        width: 20% !important;
+    }
+
     .item {
         width: 97%;
         padding: 1.5%;
@@ -220,7 +231,18 @@ footer.container {
     }
 }
 
+@media (max-width: 900px) {
+    .menu-wrap {
+        width: 12%;
+    }
+
+    .menu a span {
+        display: none;
+    }
+}
+
 @media (min-width: 960px) {
+
     .content-wrap {
         width: 960px;
     }
