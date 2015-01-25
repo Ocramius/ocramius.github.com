@@ -104,7 +104,6 @@ h1 span, .top h2 span {
 .content-wrap {
     margin: 0 auto;
     background: #FFF;
-    width: 80%;
     float: right;
 }
 
@@ -244,7 +243,7 @@ footer.container {
 @media (min-width: 960px) {
 
     .content-wrap {
-        width: 960px;
+        width: 80%;
     }
 }
 
