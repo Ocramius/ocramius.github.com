@@ -139,3 +139,56 @@ LEFT JOIN
         </tr>
     </tbody>
 </table>
+
+<p>
+    As you can see, we are now joining 2 tables in the results, and the ORM has to perform more complicated operations:
+</p>
+
+<ol>
+    <li>
+        Hydrate
+        <strong>1</strong> 
+        <code>User</code> 
+        object for
+        <i>ocramius@gmail.com</i>
+    </li>
+    <li>
+        Hydrate
+        <strong>3</strong>
+        <code>SocialAccount</code> 
+        instances into 
+        <code>User#$socialAccounts</code> 
+        for 
+        <i>ocramius@gmail.com</i>
+    </li>
+    <li>
+        Hydrate
+        <strong>1</strong>
+        <code>User</code>
+        object for
+        <i>grandpa@example.com</i>
+    </li>
+    <li>
+        Skip hydrating
+        <code>User#$socialAccounts</code>
+        for
+        <i>grandpa@example.com</i>,
+        as no social accounts are associated
+    </li>
+    <li>
+        Hydrate
+        <strong>1</strong>
+        <code>User</code>
+        object for
+        <i>grandma@example.com</i>
+    </li>
+    <li>
+        Hydrate
+        <strong>1</strong>
+        <code>SocialAccount</code>
+        instance into
+        <code>User#$socialAccounts</code>
+        for
+        <i>grandma@example.com</i>
+    </li>
+</ol>
