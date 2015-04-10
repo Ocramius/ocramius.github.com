@@ -58,7 +58,7 @@ return $results;
     it, and not actually reduce it to something more efficient.
 </p>
 
-<h2>When is hydration expensive</h2>
+<h2>When is hydration expensive?</h2>
 
 <p>
     Hydration starts to become expensive with complex resultsets.
@@ -159,6 +159,9 @@ LEFT JOIN
         instances into 
         <code>User#$socialAccounts</code> 
         for 
+        <i>ocramius@gmail.com</i>,
+        while skipping re-hydrating
+        <code>User</code>
         <i>ocramius@gmail.com</i>
     </li>
     <li>
@@ -223,3 +226,5 @@ LEFT JOIN
     <code>n</code> and <code>m</code> being the records in the <code>user</code> and the <code>socialAccount</code>
     tables.
 </p>
+
+<h2>Bringing hydration cost to an extreme</h2>
