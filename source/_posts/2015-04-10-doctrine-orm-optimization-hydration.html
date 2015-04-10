@@ -1,0 +1,141 @@
+---
+layout: post
+title: Doctrine ORM Hydration Performance Optimization
+category: PHP
+tags: ["php", "doctrine", "orm", "hydration", "performance", "speed"]
+year: 2015
+month: 4
+day: 10
+published: true
+summary: Squeezing performance out of the most expensive operation that Doctrine ORM is doing for you 
+description: Hydration is the most expensive operation performed by Doctrine ORM: how do we prevent it from killing our applications?
+tweet: 
+---
+
+<h2>What is hydration?</h2>
+
+<p>
+    Doctrine ORM, like most ORMs, is performing a process called <strong>Hydration</strong> when converting database
+    results into objects.
+</p>
+
+<p>
+    This process usually involves reading a record from a database result and then converting the column values
+    into an object's properties.
+</p>
+
+<p>
+    Here is a little pseudo-code snippet that shows what a mapper is actually doing under the hood:
+</p>
+
+~~~php
+<?php
+$results = [];
+
+foreach ($resultSet->fetchRow() as $row) {
+    $object = new $mappedClassName;
+
+    foreach ($mappingInformation->reflectionFields() as $column => $reflectionField) {
+        $reflectionField->setValue($object, $row[$column]);
+    }
+
+    $results[] = $object;
+}
+
+return $results;
+~~~
+
+<p>
+    That's a very basic example, but this gives you an idea of what an ORM is doing for you.
+</p>
+
+<p>
+    As you can see, this is an <code>O(N)</code> operation (assuming a constant number of reflection fields).
+</p>
+
+<p>
+    There are multiple ways to speed up this particular process, but we can only remove constant overhead from
+    it, and not actually reduce it to something more efficient.
+</p>
+
+<h2>When is hydration expensive</h2>
+
+<p>
+    Hydration starts to become expensive with complex resultsets.
+</p>
+
+<p>
+    Take, the following SQL query:
+</p>
+
+~~~sql
+SELECT
+    u.id       AS userId,
+    u.username AS userUsername,
+    s.id       AS socialAccountId
+    s.username AS socialAccountUsername
+    s.type     AS socialAccountType
+FROM
+    user u
+LEFT JOIN
+    socialAccount s
+        ON s.userId = u.id
+~~~
+
+<p>
+    Assuming that the relation from <code>user</code> to <code>socialAccount</code> is a <code>one-to-many</code>,
+    this query retrieves all the social accounts for all the users in our application
+</p>
+
+<p>
+    A resultset may be as follows:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <td>userId</td>
+            <td>userUsername</td>
+            <td>socialAccountId</td>
+            <td>socialAccountUsername</td>
+            <td>socialAccountType</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>20</td>
+            <td>ocramius</td>
+            <td>Facebook</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>21</td>
+            <td>@ocramius</td>
+            <td>Twitter</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>22</td>
+            <td>ocramiusaethril</td>
+            <td>Last.fm</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>grandpa@example.com</td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>grandma@example.com</td>
+            <td>85</td>
+            <td>awesomegrandma9917</td>
+            <td>Facebook</td>
+        </tr>
+    </tbody>
+</table>
