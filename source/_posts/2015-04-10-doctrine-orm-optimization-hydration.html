@@ -201,3 +201,20 @@ LEFT JOIN
     </a>
     feature.
 </p>
+
+<p>
+    Fetch joins are a very efficient way to hydrate multiple records without resorting to multiple queries, but there
+    are two performance issues with this approach (both not being covered by this article):
+</p>
+
+<ul>
+    <li>
+        Empty records require some useless looping inside the ORM internals (see <i>grandpa@example.com</i>'s
+        social account). This is a quick operation, but we can't simply ignore those records upfront.
+    </li>
+    <li>
+        If multiple duplicated records are being joined (happens a lot in <code>many-to-many</code> associations),
+        then we want to de-duplicate records by keeping a temporary in-memory identifier map.
+    </li>
+</ul>
+
