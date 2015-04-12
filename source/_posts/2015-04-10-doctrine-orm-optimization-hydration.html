@@ -459,6 +459,11 @@ LEFT JOIN
 </p>
 
 <p>
+    By re-fetching the same users, we are telling the ORM to re-hydrate those objects (which are now in memory,
+    stored in the <code>UnitOfWork</code>): that fills the <code>User#$sessions</code> collections.
+</p>
+
+<p>
     Also, please note that we could have used a <code>JOIN</code> instead of a <code>LEFT JOIN</code>, but that
     would have triggered lazy-loading on the sessions for the <i>grandpa@example.com</i> <code>User</code>
 </p>
