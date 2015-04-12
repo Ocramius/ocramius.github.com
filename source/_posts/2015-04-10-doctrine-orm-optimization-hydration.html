@@ -408,3 +408,14 @@ LEFT JOIN
 <p>
     After all, code that is not required should not be written in first place.
 </p>
+
+<h3>Multi-step hydration</h3>
+
+<p>
+    The second approach is simpler, and allows us to exploit how the ORM's <code>UnitOfWork</code> is working
+    internally.
+</p>
+
+<p>
+    In fact, we can simply split hydration for different associations into different queries, or multiple steps:
+</p>
