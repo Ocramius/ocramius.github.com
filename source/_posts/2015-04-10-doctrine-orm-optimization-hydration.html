@@ -349,3 +349,12 @@ LEFT JOIN
         </tr>
     </tbody>
 </table>
+
+<p>
+    If you try to re-normalize this resultset, you can actually see how many useless de-duplication operation
+    have to happen.
+</p>
+<p>
+    That is because the <code>User</code> <i>ocramius@gmail.com</i> has multiple active sessions on
+    multiple devices, as well as multiple social accounts.
+</p>
