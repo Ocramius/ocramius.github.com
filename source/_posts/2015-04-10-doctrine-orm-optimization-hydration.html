@@ -373,3 +373,38 @@ LEFT JOIN
 <p>
     <!-- Well that escalated quickly image here -->
 </p>
+
+<h2>How to avoid <code>O(m ^ n)</code> hydration?</h2>
+
+<p>
+    <code>O(n ^ m)</code> can be avoided with some very simple, yet effective approaches.
+</p>
+
+<p>
+    No, it's not "don't use an ORM", you muppet.
+</p>
+
+<h3>Avoiding <code>one-to-many</code> and <code>many-to-many</code> associations</h3>
+
+<p>
+    Collection valued associations are as useful as problematic, as you never know how much data you are
+    going to load.
+</p>
+
+<p>
+    Unless you use <code>fetch="EXTRA_LAZY"</code> and <code>Doctrine\Common\Collections\Collection#slice()</code>
+    wisely, you will probably make your app crash if you initialize a very large collection of associated objects.
+</p>
+
+<p>
+    Therefore, the simplest, yet most limiting advice, is to avoid collection-valued associations whenever
+    they are not strictly necessary.
+</p>
+
+<p>
+    Additionally, reduce the amount of bi-directional associations to the strict necessary.
+</p>
+
+<p>
+    After all, code that is not required should not be written in first place.
+</p>
