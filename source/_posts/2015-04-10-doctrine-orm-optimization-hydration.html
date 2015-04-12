@@ -505,3 +505,31 @@ $users = $entityManager
     ->getResult();
 ~~~
 
+<p>
+    This is how you'd code the multi-step hydration approach:
+</p>
+
+
+~~~php
+$users = $entityManager
+    ->createQuery('
+        SELECT
+            user, socialAccounts
+        FROM
+            User user
+        LEFT JOIN
+            user.socialAccounts socialAccounts
+    ')
+    ->getResult();
+
+$entityManager
+    ->createQuery('
+        SELECT PARTIAL
+            user.{id}, sessions
+        FROM
+            User user
+        LEFT JOIN
+            user.sessions sessions
+    ')
+    ->getResult(); // result is discarded (this is just re-hydrating the collections)
+~~~
