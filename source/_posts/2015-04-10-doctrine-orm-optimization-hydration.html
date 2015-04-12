@@ -354,7 +354,22 @@ LEFT JOIN
     If you try to re-normalize this resultset, you can actually see how many useless de-duplication operation
     have to happen.
 </p>
+
 <p>
     That is because the <code>User</code> <i>ocramius@gmail.com</i> has multiple active sessions on
     multiple devices, as well as multiple social accounts.
+</p>
+
+<p>
+    The hydration operations on this resultset are <code>O(n * m * q)</code>, which I'm going to simply
+    generalize as <code>O(n ^ m)</code>, with <code>n</code> being the amount of results, and <code>m</code>
+    being the amount of joined tables.
+</p>
+
+<p>
+    Here is a graphical representation of <code>O(n ^ m)</code>:
+</p>
+
+<p>
+    <!-- Well that escalated quickly image here -->
 </p>
