@@ -491,7 +491,7 @@ LEFT JOIN
 </p>
 
 ~~~php
-$users = $entityManager
+return $entityManager
     ->createQuery('
         SELECT
             user, socialAccounts, sessions 
@@ -532,6 +532,8 @@ $entityManager
             user.sessions sessions
     ')
     ->getResult(); // result is discarded (this is just re-hydrating the collections)
+
+return $users;
 ~~~
 
 <p>
