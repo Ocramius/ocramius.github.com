@@ -257,3 +257,95 @@ LEFT JOIN
     session as
         ON as.userId = u.id
 ~~~
+
+<p>
+    This kind of query produces a much larger resultset, and the results are duplicated by a lot:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <td>userId</td>
+            <td>userUsername</td>
+            <td>socialAccountId</td>
+            <td>socialAccountUsername</td>
+            <td>socialAccountType</td>
+            <td>sessionId</td>
+            <td>sessionExpiresOn</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>20</td>
+            <td>ocramius</td>
+            <td>Facebook</td>
+            <td>b1fc7171/ocramius-macbook</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>21</td>
+            <td>@ocramius</td>
+            <td>Twitter</td>
+            <td>b1fc7171/ocramius-macbook</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>22</td>
+            <td>ocramiusaethril</td>
+            <td>Last.fm</td>
+            <td>b1fc7171/ocramius-macbook</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>20</td>
+            <td>ocramius</td>
+            <td>Facebook</td>
+            <td>hh678114/ocramius-android</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>21</td>
+            <td>@ocramius</td>
+            <td>Twitter</td>
+            <td>hh678114/ocramius-android</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>ocramius@gmail.com</td>
+            <td>22</td>
+            <td>ocramiusaethril</td>
+            <td>Last.fm</td>
+            <td>hh678114/ocramius-android</td>
+            <td>2015-04-20 22:08:56</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>grandpa@example.com</td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+            <td><code>NULL</code></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>grandma@example.com</td>
+            <td>85</td>
+            <td>awesomegrandma9917</td>
+            <td>Facebook</td>
+            <td>aaaa123/home-pc</td>
+            <td>2015-04-15 10:05:31</td>
+        </tr>
+    </tbody>
+</table>
