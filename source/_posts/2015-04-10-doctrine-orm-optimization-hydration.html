@@ -482,5 +482,26 @@ LEFT JOIN
 <h3>Coding multi-step hydration in Doctrine ORM</h3>
 
 <p>
-    Let's get more specific and code
+    Let's get more specific and code the various queries represented above in
+    <abbr title="Doctrine Query Language">DQL</abbr>.
 </p>
+
+<p>
+    Here is the <code>O(n ^ m)</code> query (in this case, <code>O(n ^ 3)</code>):
+</p>
+
+~~~php
+$users = $entityManager
+    ->createQuery('
+        SELECT
+            user, socialAccounts, sessions 
+        FROM
+            User user
+        LEFT JOIN
+            user.socialAccounts socialAccounts
+        LEFT JOIN
+            user.sessions sessions
+    ')
+    ->getResult();
+~~~
+
