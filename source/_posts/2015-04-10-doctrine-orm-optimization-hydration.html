@@ -419,3 +419,23 @@ LEFT JOIN
 <p>
     In fact, we can simply split hydration for different associations into different queries, or multiple steps:
 </p>
+
+
+~~~sql
+SELECT
+    u.id         AS userId,
+    u.username   AS userUsername,
+    s.id         AS socialAccountId,
+    s.username   AS socialAccountUsername,
+    s.type       AS socialAccountType
+FROM
+    user u
+LEFT JOIN
+    socialAccount s
+        ON s.userId = u.id
+~~~
+
+<p>
+    We already know this query: hydration for it is <code>O(n * m)</code>, but that's the best we can do,
+    regardless of how we code it.
+</p>
