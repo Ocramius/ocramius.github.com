@@ -472,3 +472,15 @@ LEFT JOIN
     Additionally, we could also skip the <i>userUsername</i> field from the results, as it already is in memory
     and well known.
 </p>
+
+<p>
+    We now reduced the hydration complexity from <code>O(n ^ m)</code> to <code>O(n * m * k)</code>, with
+    <code>n</code> being the amount of <code>User</code> instances, <code>m</code> being the amount of associated
+    <code>to-many</code> results, and <code>k</code> being the amount of associations that we want to hydrate.
+</p>
+
+<h3>Coding multi-step hydration in Doctrine ORM</h3>
+
+<p>
+    Let's get more specific and code
+</p>
