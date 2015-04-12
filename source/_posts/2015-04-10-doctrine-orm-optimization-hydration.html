@@ -420,7 +420,6 @@ LEFT JOIN
     In fact, we can simply split hydration for different associations into different queries, or multiple steps:
 </p>
 
-
 ~~~sql
 SELECT
     u.id         AS userId,
@@ -438,4 +437,28 @@ LEFT JOIN
 <p>
     We already know this query: hydration for it is <code>O(n * m)</code>, but that's the best we can do,
     regardless of how we code it.
+</p>
+
+
+~~~sql
+SELECT
+    u.id         AS userId,
+    u.username   AS userUsername,
+    as.id        AS sessionId,
+    as.expiresOn AS sessionExpiresOn,
+FROM
+    user u
+LEFT JOIN
+    session as
+        ON as.userId = u.id
+~~~
+
+<p>
+    This query is another <code>O(n * m)</code> hydration one, but we are now only loading the user sessions
+    in the resultsets, avoiding duplicate results overall.
+</p>
+
+<p>
+    Also, please note that we could have used a <code>JOIN</code> instead of a <code>LEFT JOIN</code>, but that
+    would have triggered lazy-loading on the sessions for the <i>grandpa@example.com</i> <code>User</code>
 </p>
