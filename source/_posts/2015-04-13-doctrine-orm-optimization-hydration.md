@@ -9,7 +9,7 @@ day: 13
 published: true
 summary: Squeezing performance out of the most expensive operation that Doctrine ORM is doing for you 
 description: Hydration is the most expensive operation performed by Doctrine ORM: how do we prevent it from killing our applications?
-tweet: 
+tweet: 587605445000441856
 ---
 
 <p class="alert alert-warning">
