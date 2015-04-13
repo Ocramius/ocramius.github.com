@@ -12,6 +12,14 @@ description: Hydration is the most expensive operation performed by Doctrine ORM
 tweet: 
 ---
 
+<p class="alert alert-warning">
+    <span class="label label-warning">PRE-REQUISITE:</span>
+    Please note that this article explains complexity in internal ORM operations with the <strong>Big-O</strong>
+    notation. Consider reading
+    <a href="http://stackoverflow.com/questions/487258/plain-english-explanation-of-big-o" target="_blank">this article</a>, 
+    if you are not familiar with the <strong>Big-O</strong> syntax.
+</p>
+
 <h2>What is hydration?</h2>
 
 <p>
