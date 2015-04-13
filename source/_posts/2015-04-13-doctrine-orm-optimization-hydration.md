@@ -584,3 +584,20 @@ return $users;
         the wheel here seems like a bad idea)
     </li>
 </ul>
+
+<h2>Research material</h2>
+
+<p>
+    Just so you stop thinking that I pulled out all these thought out of thin air, here is a repository
+    with actual code examples that you can run, measure, compare and patch yourself:
+</p>
+
+<h4>
+    <a href="https://github.com/Ocramius/Doctrine2StepHydration" target="_blank">
+        https://github.com/Ocramius/Doctrine2StepHydration
+    </a>
+</h4>
+
+<p>
+    Give it a spin and see the results for yourself!
+</p>
