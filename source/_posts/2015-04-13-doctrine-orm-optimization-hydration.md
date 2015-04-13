@@ -51,7 +51,7 @@ return $results;
     That's a very basic example, but this gives you an idea of what an ORM is doing for you.
 </p>
 
-<p>
+<p class="alert alert-success">
     As you can see, this is an <code>O(N)</code> operation (assuming a constant number of reflection fields).
 </p>
 
@@ -204,7 +204,8 @@ LEFT JOIN
     </dd>
 </dl>
 
-<p>
+<p class="alert alert-info">
+    <span class="label label-info">DOCS</span>
     This operation is what is done by Doctrine ORM when you use the
     <abbr title="Doctrine Query Language">DQL</abbr>
     <a href="http://docs.doctrine-project.org/en/latest/reference/dql-doctrine-query-language.html#joins" target="_blank">
@@ -229,7 +230,7 @@ LEFT JOIN
     </li>
 </ul>
 
-<p>
+<p class="alert alert-danger">
     Additionally, our operation starts to become more complicated, as it is now <code>O(n * m)</code>, with
     <code>n</code> and <code>m</code> being the records in the <code>user</code> and the <code>socialAccount</code>
     tables.
@@ -368,7 +369,8 @@ LEFT JOIN
     multiple devices, as well as multiple social accounts.
 </p>
 
-<p>
+<p class="alert alert-danger">
+    <span class="label label-warning">SLOW!</span>
     The hydration operations on this resultset are <code>O(n * m * q)</code>, which I'm going to simply
     generalize as <code>O(n ^ m)</code>, with <code>n</code> being the amount of results, and <code>m</code>
     being the amount of joined tables.
@@ -396,7 +398,7 @@ LEFT JOIN
 </p>
 
 <p>
-    No, it's not "don't use an ORM", you muppet.
+    No, it's not <em>"don't use an ORM"</em>, you muppet.
 </p>
 
 <h3>Avoiding <code>one-to-many</code> and <code>many-to-many</code> associations</h3>
@@ -488,7 +490,8 @@ LEFT JOIN
     and well known.
 </p>
 
-<p>
+<p class="alert alert-success">
+    <span class="label label-success">SOLUTION:</span>
     We now reduced the hydration complexity from <code>O(n ^ m)</code> to <code>O(n * m * k)</code>, with
     <code>n</code> being the amount of <code>User</code> instances, <code>m</code> being the amount of associated
     <code>to-many</code> results, and <code>k</code> being the amount of associations that we want to hydrate.
@@ -564,7 +567,7 @@ return $users;
 </p>
 
 <p>
-    Other solutions that we may work on in future include:
+    Other solutions that we may work on in the future include:
 </p>
 
 <ul>
