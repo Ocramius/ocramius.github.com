@@ -405,9 +405,9 @@ LEFT JOIN
     <code>O(n ^ m)</code> can be avoided with some very simple, yet effective approaches.
 </p>
 
-<p>
+<blockquote cite="me">
     No, it's not <em>"don't use an ORM"</em>, you muppet.
-</p>
+</blockquote>
 
 <h3>Avoiding <code>one-to-many</code> and <code>many-to-many</code> associations</h3>
 
