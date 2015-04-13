@@ -67,7 +67,7 @@ return $results;
 </p>
 
 <p>
-    Take, the following SQL query:
+    Consider the following SQL query:
 </p>
 
 ~~~sql
