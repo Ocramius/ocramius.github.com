@@ -384,6 +384,7 @@ LEFT JOIN
 </p>
 
 <p>
+    Yes, it is bad.
 </p>
 
 <h2>How to avoid <code>O(m ^ n)</code> hydration?</h2>
