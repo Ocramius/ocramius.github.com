@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="/atom.xml" rel="self"/>
     <link href="/"/>
-    <updated>2015-04-13T13:23:05+00:00</updated>
+    <updated>2015-04-13T13:31:45+00:00</updated>
     <id>/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -395,7 +395,7 @@ LEFT JOIN
     Yes, it is bad.
 </p>
 
-<h2>How to avoid <code>O(m ^ n)</code> hydration?</h2>
+<h2>How to avoid <code>O(n ^ m)</code> hydration?</h2>
 
 <p>
     <code>O(n ^ m)</code> can be avoided with some very simple, yet effective approaches.
