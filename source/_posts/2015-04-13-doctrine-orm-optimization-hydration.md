@@ -377,7 +377,13 @@ LEFT JOIN
 </p>
 
 <p>
-    <!-- Well that escalated quickly image here -->
+    <img
+        src="/img/posts/2015-04-13-doctrine-orm-optimization-hydration/boy-that-escalated-quickly.jpg"
+        alt="Boy, that escalated quickly"
+    />
+</p>
+
+<p>
 </p>
 
 <h2>How to avoid <code>O(m ^ n)</code> hydration?</h2>
