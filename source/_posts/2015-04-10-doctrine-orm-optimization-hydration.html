@@ -91,14 +91,14 @@ LEFT JOIN
     A resultset may be as follows:
 </p>
 
-<table>
+<table class="table table-striped">
     <thead>
         <tr>
-            <td>userId</td>
-            <td>userUsername</td>
-            <td>socialAccountId</td>
-            <td>socialAccountUsername</td>
-            <td>socialAccountType</td>
+            <th>userId</th>
+            <th>userUsername</th>
+            <th>socialAccountId</th>
+            <th>socialAccountUsername</th>
+            <th>socialAccountType</th>
         </tr>
     </thead>
     <tbody>
@@ -144,17 +144,18 @@ LEFT JOIN
     As you can see, we are now joining 2 tables in the results, and the ORM has to perform more complicated operations:
 </p>
 
-<ol>
-    <li>
-        Hydrate
-        <strong>1</strong> 
-        <code>User</code> 
-        object for
+<dl class="dl-horizontal">
+    <dt>
+        Hydrate <strong>1</strong>
+    </dt>
+    <dd>
+        <code>User</code> object for
         <i>ocramius@gmail.com</i>
-    </li>
-    <li>
-        Hydrate
-        <strong>3</strong>
+    </dd>
+    <dt>
+        Hydrate <strong>3</strong>
+    </dt>
+    <dd>
         <code>SocialAccount</code> 
         instances into 
         <code>User#$socialAccounts</code> 
@@ -163,38 +164,43 @@ LEFT JOIN
         while skipping re-hydrating
         <code>User</code>
         <i>ocramius@gmail.com</i>
-    </li>
-    <li>
-        Hydrate
-        <strong>1</strong>
+    </dd>
+    <dt>
+        Hydrate <strong>1</strong>
+    </dt>
+    <dd>
         <code>User</code>
         object for
         <i>grandpa@example.com</i>
-    </li>
-    <li>
+    </dd>
+    <dt>
         Skip hydrating
+    </dt>
+    <dd>
         <code>User#$socialAccounts</code>
         for
         <i>grandpa@example.com</i>,
         as no social accounts are associated
-    </li>
-    <li>
-        Hydrate
-        <strong>1</strong>
+    </dd>
+    <dt>
+        Hydrate <strong>1</strong>
+    </dt>
+    <dd>
         <code>User</code>
         object for
         <i>grandma@example.com</i>
-    </li>
-    <li>
-        Hydrate
-        <strong>1</strong>
+    </dd>
+    <dt>
+        Hydrate <strong>1</strong>
+    </dt>
+    <dd>
         <code>SocialAccount</code>
         instance into
         <code>User#$socialAccounts</code>
         for
         <i>grandma@example.com</i>
-    </li>
-</ol>
+    </dd>
+</dl>
 
 <p>
     This operation is what is done by Doctrine ORM when you use the
@@ -262,16 +268,16 @@ LEFT JOIN
     This kind of query produces a much larger resultset, and the results are duplicated by a lot:
 </p>
 
-<table>
+<table class="table table-bordered" style="width: 500px">
     <thead>
         <tr>
-            <td>userId</td>
-            <td>userUsername</td>
-            <td>socialAccountId</td>
-            <td>socialAccountUsername</td>
-            <td>socialAccountType</td>
-            <td>sessionId</td>
-            <td>sessionExpiresOn</td>
+            <th>userId</th>
+            <th>user Username</th>
+            <th>social Account Id</th>
+            <th>social Account Username</th>
+            <th>social Account Type</th>
+            <th>session Id</th>
+            <th>session Expires On</th>
         </tr>
     </thead>
     <tbody>
@@ -281,7 +287,7 @@ LEFT JOIN
             <td>20</td>
             <td>ocramius</td>
             <td>Facebook</td>
-            <td>b1fc7171/ocramius-macbook</td>
+            <td>b1fc7171/ ocramius-macbook</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -290,7 +296,7 @@ LEFT JOIN
             <td>21</td>
             <td>@ocramius</td>
             <td>Twitter</td>
-            <td>b1fc7171/ocramius-macbook</td>
+            <td>b1fc7171/ ocramius-macbook</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -299,7 +305,7 @@ LEFT JOIN
             <td>22</td>
             <td>ocramiusaethril</td>
             <td>Last.fm</td>
-            <td>b1fc7171/ocramius-macbook</td>
+            <td>b1fc7171/ ocramius-macbook</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -308,7 +314,7 @@ LEFT JOIN
             <td>20</td>
             <td>ocramius</td>
             <td>Facebook</td>
-            <td>hh678114/ocramius-android</td>
+            <td>hh678114/ ocramius-android</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -317,7 +323,7 @@ LEFT JOIN
             <td>21</td>
             <td>@ocramius</td>
             <td>Twitter</td>
-            <td>hh678114/ocramius-android</td>
+            <td>hh678114/ ocramius-android</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -326,7 +332,7 @@ LEFT JOIN
             <td>22</td>
             <td>ocramiusaethril</td>
             <td>Last.fm</td>
-            <td>hh678114/ocramius-android</td>
+            <td>hh678114/ ocramius-android</td>
             <td>2015-04-20 22:08:56</td>
         </tr>
         <tr>
@@ -342,9 +348,9 @@ LEFT JOIN
             <td>3</td>
             <td>grandma@example.com</td>
             <td>85</td>
-            <td>awesomegrandma9917</td>
+            <td>awesomegrandma</td>
             <td>Facebook</td>
-            <td>aaaa123/home-pc</td>
+            <td>aaaa123/ home-pc</td>
             <td>2015-04-15 10:05:31</td>
         </tr>
     </tbody>
