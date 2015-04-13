@@ -412,7 +412,7 @@ LEFT JOIN
 </p>
 
 <p>
-    Therefore, the simplest, yet most limiting advice, is to avoid collection-valued associations whenever
+    Therefore, the simplest yet most limiting advice is to avoid collection-valued associations whenever
     they are not strictly necessary.
 </p>
 
