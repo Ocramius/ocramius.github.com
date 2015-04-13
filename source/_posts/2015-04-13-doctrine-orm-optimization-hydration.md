@@ -553,3 +553,29 @@ return $users;
     I'd also add that this is the only legitimate use-case for partial hydration that I ever
     had, but it's a personal opinion/feeling.
 </p>
+
+<h2>Other alternatives (science fiction)</h2>
+
+<p>
+    As you may have noticed, all this overhead is caused by normalizing de-normalized data coming
+    from the DB.
+</p>
+
+<p>
+    Other solutions that we may work on in future include:
+</p>
+
+<ul>
+    <li>
+        Generating hydrator code - solves constant overhead issues, performs better with
+        <abbr title="Just In Time">JIT</abbr> engines such as <abbr title="HipHop VM">HHVM</abbr>
+    </li>
+    <li>
+        Leveraging the capabilities of powerful engines such as PostgreSQL, which comes with JSON
+        support (since version 9.4), and would allow us to normalize the fetched data to some extent
+    </li>
+    <li>
+        Generate more complex SQL, creating an own output format that is "hydrator-friendly" (re-inventing
+        the wheel here seems like a bad idea)
+    </li>
+</ul>
