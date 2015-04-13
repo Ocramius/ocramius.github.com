@@ -30,12 +30,14 @@ tweet:
 
 ~~~php
 <?php
-$results = [];
+
+$results          = [];
+$reflectionFields = $mappingInformation->reflectionFields();
 
 foreach ($resultSet->fetchRow() as $row) {
     $object = new $mappedClassName;
 
-    foreach ($mappingInformation->reflectionFields() as $column => $reflectionField) {
+    foreach ($reflectionFields as $column => $reflectionField) {
         $reflectionField->setValue($object, $row[$column]);
     }
 
