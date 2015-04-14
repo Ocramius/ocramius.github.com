@@ -311,19 +311,19 @@ LEFT JOIN
 <pre><code class="sql">SELECT
     u.id         AS userId,
     u.username   AS userUsername,
-    s.id         AS socialAccountId,
-    s.username   AS socialAccountUsername,
-    s.type       AS socialAccountType,
-    as.id        AS sessionId,
-    as.expiresOn AS sessionExpiresOn,
+    sa.id        AS socialAccountId,
+    sa.username  AS socialAccountUsername,
+    sa.type      AS socialAccountType,
+    s.id         AS sessionId,
+    s.expiresOn  AS sessionExpiresOn,
 FROM
     user u
 LEFT JOIN
-    socialAccount s
-        ON s.userId = u.id
+    socialAccount sa
+        ON sa.userId = u.id
 LEFT JOIN
-    session as
-        ON as.userId = u.id
+    session s
+        ON s.userId = u.id
 </code></pre>
 
 <p>
@@ -515,15 +515,15 @@ LEFT JOIN
 </p>
 
 <pre><code class="sql">SELECT
-    u.id         AS userId,
-    u.username   AS userUsername,
-    as.id        AS sessionId,
-    as.expiresOn AS sessionExpiresOn,
+    u.id        AS userId,
+    u.username  AS userUsername,
+    s.id        AS sessionId,
+    s.expiresOn AS sessionExpiresOn,
 FROM
     user u
 LEFT JOIN
-    session as
-        ON as.userId = u.id
+    session s
+        ON s.userId = u.id
 </code></pre>
 
 <p>
