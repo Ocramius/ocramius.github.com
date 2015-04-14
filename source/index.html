@@ -47,7 +47,7 @@ use:
 {% endfor %}
 {% if page.pagination.previous_page or page.pagination.next_page %}
 <nav class="margin-top-30">
-    {% if page.pagination.previous_page %}<button class="left btn"><a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a></button>{% endif %}<br />
-    {% if page.pagination.next_page %}<button class="right btn"><a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a></button>{% endif %}<br />
+    {% if page.pagination.previous_page %}<a class="left btn" href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a>{% endif %}<br />
+    {% if page.pagination.next_page %}<a class="right btn" href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a>{% endif %}<br />
 </nav>
 {% endif %}
