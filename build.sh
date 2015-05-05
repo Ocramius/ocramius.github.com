@@ -11,13 +11,11 @@ rm -rf ./output_prod
 ./vendor/bin/sculpin generate --env=prod
 
 cp -r ./presentations/ output_prod/presentations/
-rm -rf ./output_prod/presentations/*/.git
+find ./output_prod/ -name ".git" -exec rm -rf {} \;
 
 rm -rf ./gh-pages-deployment
 git clone git@github.com:Ocramius/ocramius.github.com.git ./gh-pages-deployment
 cd gh-pages-deployment
-#git submodule update --init
-#cp -r ./presentations ./../output_prod/presentations
 git checkout master
 git checkout -b master
 
