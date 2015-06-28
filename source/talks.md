@@ -11,11 +11,12 @@ title: Presentations
         <iframe
             width="640"
             height="390"
-            src="//www.youtube.com/watch?v=vS0Nn_ncH-8"
+            src="//www.youtube.com/embed/vS0Nn_ncH-8"
             frameborder="0"
             allowfullscreen>
         </iframe>
         <h4>Extremely defensive PHP (SOLIDay 2015)</h4>
+        <a href="https://joind.in/talk/view/14373" target="_blank">Reviews</a>
     </div>
 
     <hr />
@@ -24,7 +25,7 @@ title: Presentations
         <iframe
             width="640"
             height="390"
-            src="//www.youtube.com/watch?v=ONIPTP1nVZ0"
+            src="//www.youtube.com/embed/ONIPTP1nVZ0"
             frameborder="0"
             allowfullscreen>
         </iframe>
