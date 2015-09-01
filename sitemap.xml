@@ -1,115 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc></loc>
-    <lastmod>2015-07-13</lastmod>
+    <loc>https://ocramius.github.io</loc>
+    <lastmod>2015-09-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
     <url>
-    <loc>/blog/doctrine-orm-optimization-hydration</loc>
+    <loc>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration</loc>
     <lastmod>2015-04-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/when-to-declare-classes-final</loc>
+    <loc>https://ocramius.github.io/blog/when-to-declare-classes-final</loc>
     <lastmod>2015-01-06T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/proxy-manager-1-0-0-release</loc>
+    <loc>https://ocramius.github.io/blog/proxy-manager-1-0-0-release</loc>
     <lastmod>2014-12-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</loc>
+    <loc>https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</loc>
     <lastmod>2014-12-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/zend-framework-2-delegator-factories-explained</loc>
+    <loc>https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained</loc>
     <lastmod>2014-03-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/lazy-property-automatic-property-initialization</loc>
+    <loc>https://ocramius.github.io/blog/lazy-property-automatic-property-initialization</loc>
     <lastmod>2014-02-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/fluent-interfaces-are-evil</loc>
+    <loc>https://ocramius.github.io/blog/fluent-interfaces-are-evil</loc>
     <lastmod>2013-11-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/fast-php-object-to-array-conversion</loc>
+    <loc>https://ocramius.github.io/blog/fast-php-object-to-array-conversion</loc>
     <lastmod>2013-08-09T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/accessing-private-php-class-members-without-reflection</loc>
+    <loc>https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection</loc>
     <lastmod>2013-07-10T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/intercepting-public-property-access-in-php</loc>
+    <loc>https://ocramius.github.io/blog/intercepting-public-property-access-in-php</loc>
     <lastmod>2013-06-30T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/doctrine-2-orm-zf2-tutorial</loc>
+    <loc>https://ocramius.github.io/blog/doctrine-2-orm-zf2-tutorial</loc>
     <lastmod>2013-02-14T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/proxy-pattern-in-php</loc>
+    <loc>https://ocramius.github.io/blog/proxy-pattern-in-php</loc>
     <lastmod>2013-01-20T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies</loc>
+    <loc>https://ocramius.github.io/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies</loc>
     <lastmod>2012-11-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/asset-manager-for-zend-framework-2</loc>
+    <loc>https://ocramius.github.io/blog/asset-manager-for-zend-framework-2</loc>
     <lastmod>2012-09-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/automated-code-coverage-check-for-github-pull-requests-with-travis</loc>
+    <loc>https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis</loc>
     <lastmod>2012-08-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/a-simple-doctrine-2-orm-tutorial</loc>
+    <loc>https://ocramius.github.io/blog/a-simple-doctrine-2-orm-tutorial</loc>
     <lastmod>2012-08-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/zend-framework-2-controllers-and-dependency-injection-with-zend-di</loc>
+    <loc>https://ocramius.github.io/blog/zend-framework-2-controllers-and-dependency-injection-with-zend-di</loc>
     <lastmod>2012-08-06T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>/blog/moving-my-blog-to-jekyll</loc>
+    <loc>https://ocramius.github.io/blog/moving-my-blog-to-jekyll</loc>
     <lastmod>2012-07-15T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><![CDATA[]]></title>
-    <link href="/atom.xml" rel="self"/>
-    <link href="/"/>
-    <updated>2015-07-13T14:43:41+00:00</updated>
-    <id>/</id>
+    <link href="https://ocramius.github.io/atom.xml" rel="self"/>
+    <link href="https://ocramius.github.io/"/>
+    <updated>2015-09-01T13:33:47+00:00</updated>
+    <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
             <title type="html"><![CDATA[Doctrine ORM Hydration Performance Optimization]]></title>
-            <link href="/blog/doctrine-orm-optimization-hydration"/>
+            <link href="https://ocramius.github.io/blog/doctrine-orm-optimization-hydration"/>
             <updated>2015-04-13T00:00:00+00:00</updated>
-            <id>/blog/doctrine-orm-optimization-hydration</id>
+            <id>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration</id>
             <content type="html"><![CDATA[<p class="alert alert-warning">
     <span class="label label-warning">PRE-REQUISITE:</span>
     Please note that this article explains complexity in internal ORM operations with the <strong>Big-O</strong>
@@ -603,9 +603,9 @@ return $users;
         </entry>
             <entry>
             <title type="html"><![CDATA[When to declare classes final]]></title>
-            <link href="/blog/when-to-declare-classes-final"/>
+            <link href="https://ocramius.github.io/blog/when-to-declare-classes-final"/>
             <updated>2015-01-06T00:00:00+00:00</updated>
-            <id>/blog/when-to-declare-classes-final</id>
+            <id>https://ocramius.github.io/blog/when-to-declare-classes-final</id>
             <content type="html"><![CDATA[<p>
     <strong>
         <abbr title="too long, didn't read">TL;DR</abbr>: 
@@ -941,9 +941,9 @@ class SwitchableDbRegistrationService extends RegistrationService
         </entry>
             <entry>
             <title type="html"><![CDATA[ProxyManager 1.0.0 release and expected 1.x lifetime]]></title>
-            <link href="/blog/proxy-manager-1-0-0-release"/>
+            <link href="https://ocramius.github.io/blog/proxy-manager-1-0-0-release"/>
             <updated>2014-12-12T00:00:00+00:00</updated>
-            <id>/blog/proxy-manager-1-0-0-release</id>
+            <id>https://ocramius.github.io/blog/proxy-manager-1-0-0-release</id>
             <content type="html"><![CDATA[<p style="align: center;">
     <img
         src="https://raw.githubusercontent.com/Ocramius/ProxyManager/1.0.0/proxy-manager.png"
@@ -1063,9 +1063,9 @@ class SwitchableDbRegistrationService extends RegistrationService
         </entry>
             <entry>
             <title type="html"><![CDATA[roave/security-advisories: Composer against Security Vulnerabilities]]></title>
-            <link href="/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues"/>
+            <link href="https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues"/>
             <updated>2014-12-11T00:00:00+00:00</updated>
-            <id>/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</id>
+            <id>https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</id>
             <content type="html"><![CDATA[<p><hr/></p>
 
 <p>
@@ -1191,9 +1191,9 @@ curl -sS https://getcomposer.org/installer | php --
         </entry>
             <entry>
             <title type="html"><![CDATA[Delegator Factories in Zend Framework 2]]></title>
-            <link href="/blog/zend-framework-2-delegator-factories-explained"/>
+            <link href="https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained"/>
             <updated>2014-03-16T00:00:00+00:00</updated>
-            <id>/blog/zend-framework-2-delegator-factories-explained</id>
+            <id>https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained</id>
             <content type="html"><![CDATA[<p>
     Last year, I
     <a href="https://github.com/zendframework/zf2/pull/4145" target="_blank">worked on a feature</a>
@@ -1513,9 +1513,9 @@ return [
         </entry>
             <entry>
             <title type="html"><![CDATA[LazyProperty - Automatic property initialization for PHP]]></title>
-            <link href="/blog/lazy-property-automatic-property-initialization"/>
+            <link href="https://ocramius.github.io/blog/lazy-property-automatic-property-initialization"/>
             <updated>2014-02-19T00:00:00+00:00</updated>
-            <id>/blog/lazy-property-automatic-property-initialization</id>
+            <id>https://ocramius.github.io/blog/lazy-property-automatic-property-initialization</id>
             <content type="html"><![CDATA[<p>
     Yesterday, I worked on yet another interesting little experiment, which is called
     <a href="https://github.com/Ocramius/LazyProperty" target="_blank">
@@ -1807,9 +1807,9 @@ public function &amp; __get($name)
         </entry>
             <entry>
             <title type="html"><![CDATA[Fluent Interfaces are Evil]]></title>
-            <link href="/blog/fluent-interfaces-are-evil"/>
+            <link href="https://ocramius.github.io/blog/fluent-interfaces-are-evil"/>
             <updated>2013-11-07T00:00:00+00:00</updated>
-            <id>/blog/fluent-interfaces-are-evil</id>
+            <id>https://ocramius.github.io/blog/fluent-interfaces-are-evil</id>
             <content type="html"><![CDATA[<p>
     Today, I had again a discussion on IRC on why
     <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
@@ -2505,9 +2505,9 @@ return $someBuilder
         </entry>
             <entry>
             <title type="html"><![CDATA[Fast PHP Object to Array conversion]]></title>
-            <link href="/blog/fast-php-object-to-array-conversion"/>
+            <link href="https://ocramius.github.io/blog/fast-php-object-to-array-conversion"/>
             <updated>2013-08-09T00:00:00+00:00</updated>
-            <id>/blog/fast-php-object-to-array-conversion</id>
+            <id>https://ocramius.github.io/blog/fast-php-object-to-array-conversion</id>
             <content type="html"><![CDATA[<p>
     A couple of months ago, I found a forgotten feature of PHP itself.
 </p>
@@ -2687,9 +2687,9 @@ var_dump($foo-&gt;{"\0Foo\0tab"});
         </entry>
             <entry>
             <title type="html"><![CDATA[Accessing private PHP class members without reflection]]></title>
-            <link href="/blog/accessing-private-php-class-members-without-reflection"/>
+            <link href="https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection"/>
             <updated>2013-07-10T00:00:00+00:00</updated>
-            <id>/blog/accessing-private-php-class-members-without-reflection</id>
+            <id>https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection</id>
             <content type="html"><![CDATA[<p>
     A couple of weeks ago I was working on a
     <a href="https://github.com/Ocramius/ProxyManager/issues/62" target="_blank">very tricky issue</a> on
@@ -2977,9 +2977,9 @@ var_dump($kitchen);
         </entry>
             <entry>
             <title type="html"><![CDATA[Property Accessors in PHP Userland]]></title>
-            <link href="/blog/intercepting-public-property-access-in-php"/>
+            <link href="https://ocramius.github.io/blog/intercepting-public-property-access-in-php"/>
             <updated>2013-06-30T00:00:00+00:00</updated>
-            <id>/blog/intercepting-public-property-access-in-php</id>
+            <id>https://ocramius.github.io/blog/intercepting-public-property-access-in-php</id>
             <content type="html"><![CDATA[<p>
     Some time ago many people were disappointed by the fact that
     <a href="https://wiki.php.net/rfc/propertygetsetsyntax-v1.2" target="_blank">PHP wasn't going to have
