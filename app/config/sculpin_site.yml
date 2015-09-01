@@ -2,3 +2,5 @@
 twitter: Ocramius
 github: Ocramius
 google_analytics_tracking_id: UA-33922165-1
+# note: stash this when working locally
+url: https://ocramius.github.io
