@@ -9,6 +9,21 @@ title: Presentations
  <div class="clear"></div>
     <div class="span12">
         <iframe
+            src="https://player.vimeo.com/video/134178140"
+            width="640"
+            height="390"
+            frameborder="0"
+            webkitallowfullscreen mozallowfullscreen allowfullscreen>
+        </iframe>
+        <h4>Doctrine ORM Good Practices and Tricks</h4>
+        <a href="https://joind.in/talk/view/10378" target="_blank">Reviews</a>
+    </div>
+
+    <hr/>
+
+    <div class="clear"></div>
+    <div class="span12">
+        <iframe
             width="640"
             height="390"
             src="//www.youtube.com/embed/vS0Nn_ncH-8"
@@ -48,21 +63,6 @@ title: Presentations
     </div>
 
     <hr />
-
-    <div class="clear"></div>
-    <div class="span12">
-        <iframe
-            src="https://player.vimeo.com/video/134178140"
-            width="640"
-            height="390"
-            frameborder="0"
-            webkitallowfullscreen mozallowfullscreen allowfullscreen>
-        </iframe>
-        <h4>Doctrine ORM Good Practices and Tricks</h4>
-        <a href="https://joind.in/talk/view/10378" target="_blank">Reviews</a>
-    </div>
-
-    <hr/>
 
     <div class="clear-fix"></div>
     <div class="span12">
