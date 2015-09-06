@@ -64,7 +64,7 @@ title: Presentations
 
     <hr />
 
-    <div class="clear-fix"></div>
+    <div class="clear"></div>
     <div class="span12">
         <iframe
             width="640"
