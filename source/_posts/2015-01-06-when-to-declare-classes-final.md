@@ -63,11 +63,6 @@ tweet: 552547686134857728
 
 <h4>1. Preventing massive inheritance chain of doom</h4>
 
-<img 
-    src="http://dilbert.com/dyn/str_strip/000000000/00000000/0000000/100000/00000/4000/000/104040/104040.strip.gif" 
-    alt="Doomed"
-/>
-
 <p>
     Developers have the bad habit of fixing problems by providing specific subclasses of an existing (not adequate)
     solution. You probably saw it yourself with examples like following:
