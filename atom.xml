@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2015-11-19T02:09:24+00:00</updated>
+    <updated>2015-11-19T02:16:42+00:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -656,11 +656,6 @@ return $users;
 </p>
 
 <h4>1. Preventing massive inheritance chain of doom</h4>
-
-<p><img 
-    src="http://dilbert.com/dyn/str_strip/000000000/00000000/0000000/100000/00000/4000/000/104040/104040.strip.gif" 
-    alt="Doomed"
-/></p>
 
 <p>
     Developers have the bad habit of fixing problems by providing specific subclasses of an existing (not adequate)
