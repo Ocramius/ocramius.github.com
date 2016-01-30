@@ -7,14 +7,14 @@
     <priority>0.8</priority>
   </url>
     <url>
-    <loc>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration</loc>
-    <lastmod>2015-04-13T00:00:00+00:00</lastmod>
+    <loc>https://ocramius.github.io/blog/proxy-manager-2-0-0-release</loc>
+    <lastmod>2016-01-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
     <url>
-    <loc>https://ocramius.github.io/blog/proxy-manager-2-0-0-release</loc>
-    <lastmod>2015-01-29T00:00:00+00:00</lastmod>
+    <loc>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration</loc>
+    <lastmod>2015-04-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
