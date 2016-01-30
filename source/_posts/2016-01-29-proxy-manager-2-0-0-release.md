@@ -9,7 +9,7 @@ day: 12
 published: true
 summary: ProxyManager 2.0.0 has been released, with the expected support schedule for 2.x
 description: ProxyManager 2.0.0 is finally released, and an expected lifetime for the 2.x series is also attached!
-tweet: 
+tweet: 693368993881657344
 ---
 
 <p style="align: center;">
