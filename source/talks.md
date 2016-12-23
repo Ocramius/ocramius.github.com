@@ -4,6 +4,22 @@ title: Presentations
 
 ---
 <article>
+    <h2>Event Sourcing: the good, the bad and the complicated</h2>
+
+    <div class="clear"></div>
+    <div class="span12">
+        <iframe 
+            width="640"
+            height="390"
+            frameborder="0" 
+            src="https://www.youtube.com/embed/8NuHNtwjync" 
+            webkitallowfullscreen mozallowfullscreen allowfullscreen>
+        </iframe>
+    </div>
+
+    <hr/>
+
+    <div class="clear"></div>
     <h2>Here are some of my presentations</h2>
 
     <div class="clear"></div>
