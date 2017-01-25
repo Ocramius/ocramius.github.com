@@ -230,7 +230,7 @@ final class HandleCheckOutShoppingCart
     you already saw all of this coming: let's fix it!
 </p>
 
-<h3>A possible solution</h3>
+<h3>Moving domain logic back into the domain</h3>
 
 <p>
     What we did is putting logic from the domain layer (which should be in the aggregate)
