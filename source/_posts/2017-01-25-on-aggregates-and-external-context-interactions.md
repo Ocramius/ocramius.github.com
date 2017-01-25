@@ -197,7 +197,7 @@ final class HandleCheckOutShoppingCart
 
 <p>
     With this code, we are able to handle most unhappy paths, and eventually
-    also failures of the payment gateway.
+    also failures of the payment gateway (not in this article).
 </p>
 
 <h3>The problem</h3>
