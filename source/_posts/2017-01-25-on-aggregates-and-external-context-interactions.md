@@ -173,6 +173,16 @@ final class HandleCheckOutShoppingCart
     also failures of the payment gateway.
 </p>
 
+<h3>The problem</h3>
+
 <p>
-    
+    While the code above works, what we did is adding some domain-specific logic
+    to the command handler. Since the command handler is part of our application
+    layer, we are effectively diluting these checks into "less important layers". 
+</p>
+
+<p>
+    In addition to that, we now require the command handler when writing tests
+    that consume the above specification: without the command handler, our logic
+    will fail to handle the unhappy paths.
 </p>
