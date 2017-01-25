@@ -7,9 +7,9 @@ year: 2017
 month: 1
 day: 25
 published: true
-summary: IDDD/DDD Aggregates often have to talk to the external world somehow: a practical approachs
-description: A practical example of how DDD Aggregates can talk to the external world without the need to "know" about its 
-tweet: s
+summary: IDDD/DDD Aggregates often have to talk to the external world via domain services: here is a practical approach
+description: A practical example of how DDD Aggregates can talk to the external world without the need to "know" about their domain services upfront
+tweet: 
 ---
 
 <p>
