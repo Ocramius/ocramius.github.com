@@ -328,7 +328,7 @@ final class HandleCheckOutShoppingCart
 <p>
     This does not just apply to CQRS users: anyone having domain logic that
     is mixed up between services and entities can benefit from it. Feel free
-    to stuff business logic into your entity API.
+    to stuff your entity API with business logic!
 </p>
 
 <p>
