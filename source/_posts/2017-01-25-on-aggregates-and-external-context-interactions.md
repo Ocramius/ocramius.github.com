@@ -139,7 +139,7 @@ final class HandleCheckOutShoppingCart
         
         $payment = $this->gateway->captureCharge($command->charge());
         
-        $shoppingCart->checkOut($capturedCharge);
+        $shoppingCart->checkOut($payment);
     }
 }
 ~~~
@@ -180,7 +180,7 @@ final class HandleCheckOutShoppingCart
         
         $payment = $this->gateway->captureCharge($charge);
         
-        $shoppingCart->checkOut($capturedCharge);
+        $shoppingCart->checkOut($payment);
     }
 }
 ~~~
