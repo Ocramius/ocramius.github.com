@@ -209,14 +209,14 @@ final class HandleCheckOutShoppingCart
 </p>
 
 <p>
-    In addition to that, we now require the command handler when writing tests
+    In addition to that, the command handler is required in tests
     that consume the above specification: without the command handler, our logic
     will fail to handle the unhappy paths in our scenarios.
 </p>
 
 <p>
-    For those that are reading and apply CQRS+<abbr title="Event Sourcing>ES</abbr>:
-    you also know that those guard aren't that simple to implement!
+    For those that are reading and practice CQRS+<abbr title="Event Sourcing">ES</abbr>:
+    you also know that those guards aren't always simple to implement!
     Read models, projections... Oh my!
 </p>
 
@@ -226,8 +226,8 @@ final class HandleCheckOutShoppingCart
 </p>
 
 <p>
-    If you went the <abbr title="test driven development">TDD</abbr> way, then
-    you already saw all of this coming. Let's fix it!
+    If you went with the <abbr title="test driven development">TDD</abbr> way, then
+    you already saw all of this coming: let's fix it!
 </p>
 
 <h3>A possible solution</h3>
