@@ -123,3 +123,18 @@ final class HandleCheckOutShoppingCart
     }
 }
 ~~~
+
+<p>
+    This covers the "happy path" of our workflow, but we still lack:
+</p>
+
+<ul>
+    <li>The ability to check whether the payment has already occurred</li>
+    <li>Preventing payment for empty shopping carts</li>
+    <li>Handling of critical failures on the payment gateway</li>
+</ul>
+
+<p>
+    In order to do that, we have to add some "guards" that prevent the interaction:
+</p>
+
