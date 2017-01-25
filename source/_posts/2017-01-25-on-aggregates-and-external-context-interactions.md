@@ -1,6 +1,6 @@
 ---
 layout: post
-title: On Aggregates and their interaction with the external world
+title: On Aggregates and Domain Service interaction
 category: PHP
 tags: ["php", "ddd", "cqrs", "event sourcing", "aggregate", "aggregate root", "patterns", "clean code"]
 year: 2017
