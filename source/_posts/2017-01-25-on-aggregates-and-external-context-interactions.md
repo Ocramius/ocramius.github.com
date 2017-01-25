@@ -260,6 +260,8 @@ final class HandleCheckOutShoppingCart
 }
 ~~~
 
+<h3>Conclusions</h3>
+
 <p>
     We can obviously continue with what this enables, but I think that it is all very clear,
     so I will just list it here to keep things short and nice:
