@@ -326,13 +326,13 @@ final class HandleCheckOutShoppingCart
 </ol>
 
 <p>
-    This does not just apply to CQRS users: anyone having domain logic that
-    is mixed up between services and entities can benefit from it. Feel free
-    to stuff your entity API with business logic!
+    The approach described here fits any kind of application where there
+    is a concept of <abbr title="an object with an assigned identifier">Entity</abbr> or Aggregate.
+    Feel free to stuff your entity API with business logic!
 </p>
 
 <p>
     Just remember that entities should only be self-aware, and only context-aware
-    in the context of certain business interactions: don't inject services as
-    constructor dependencies.
+    in the context of certain business interactions: don't inject or statically
+    access domain services from within an entity.
 </p>
