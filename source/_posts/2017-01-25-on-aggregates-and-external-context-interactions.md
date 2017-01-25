@@ -82,8 +82,10 @@ final class CheckOutShoppingCart
 ~~~
 
 <p>
-    If you are unfamiliar with what a command is, it is just the object
-    that our frontend or API throws at our actual application logic.
+    If you are unfamiliar with what a
+    <abbr title="A command is a value object that encapsulates the intent and parameters of our business interaction">command</abbr>
+    is, it is just the object that our frontend or API throws at our actual
+    application logic.
 </p>
 
 <p>
