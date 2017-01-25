@@ -259,3 +259,29 @@ final class HandleCheckOutShoppingCart
     }
 }
 ~~~
+
+<p>
+    We can obviously continue with what this enables, but I think that it is all clear,
+    so I will just list it here:
+</p>
+
+<ol>
+    <li>
+        We can run the domain without infrastructure code (note: the payment gateway is a
+        domain service)
+    </li>
+    <li>
+        We can prevent invalid interactions to happen without having to push verification
+        data across layers
+    </li>
+    <li>
+        Our aggregate is now able to fullfill its role: being a domain-specific state machine.
+        If something goes wrong, then the aggregate is able to revert state mutations.
+    </li>
+    <li>
+        We can raise more domain events on failures.
+    </li>
+    <li>
+        The domain logic is in one place, easy to read and easy to change.
+    </li>
+</ol>
