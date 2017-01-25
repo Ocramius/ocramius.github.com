@@ -116,14 +116,18 @@ final class ShoppingCart
 ~~~php
 final class HandleCheckOutShoppingCart
 {
-    // ... 
+    public function __construct(Carts $carts, PaymentGateway $gateway)
+    {
+        $this->carts   = $carts;
+        $this->gateway = $gateway;
+    }
     
     public function __invoke(CheckOutShoppingCart $command) : void
     {
         // assignment is redundant for clarity to the reader
         $shoppingCart = $this->carts->get($command->shoppingCart());
         
-        $payment = $this->paymentGateway->captureCharge($command->charge());
+        $payment = $this->gateway->captureCharge($command->charge());
         
         $shoppingCart->checkOut($capturedCharge);
     }
@@ -164,7 +168,7 @@ final class HandleCheckOutShoppingCart
         ($this->nonPurchasedShoppingCart)($cartId);
         ($this->paymentAmountMatches)($cartId, $charge->amount());
         
-        $payment = $this->paymentGateway->captureCharge($charge);
+        $payment = $this->gateway->captureCharge($charge);
         
         $shoppingCart->checkOut($capturedCharge);
     }
@@ -270,7 +274,7 @@ final class HandleCheckOutShoppingCart
         $this
             ->shoppingCarts
             ->get($command->shoppingCart())
-            ->checkOut($command, $this->paymentGateway);
+            ->checkOut($command, $this->gateway);
     }
 }
 ~~~
