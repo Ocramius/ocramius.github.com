@@ -173,7 +173,7 @@ final class HandleCheckOutShoppingCart
 
         $shoppingCart = $this->carts->get($cartId);
         
-        // these guards are injected callables:
+        // these guards are injected callables. They throw exceptions:
         ($this->nonEmptyShoppingCart)($cartId);
         ($this->nonPurchasedShoppingCart)($cartId);
         ($this->paymentAmountMatches)($cartId, $charge->amount());
