@@ -275,8 +275,8 @@ final class ShoppingCart
 ~~~
 
 <p>
-    The command handler will also be massively simplified, since all what it
-    does is forward all the required information to the aggregate:
+    The command handler is also massively simplified, since all it
+    does is forwarding the required dependencies to the aggregate:
 </p>
 
 ~~~php
