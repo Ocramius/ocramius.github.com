@@ -285,3 +285,15 @@ final class HandleCheckOutShoppingCart
         The domain logic is in one place, easy to read and easy to change.
     </li>
 </ol>
+
+<p>
+    This does not just apply to CQRS users: anyone having domain logic that
+    is mixed up between services and entities can benefit from it. Feel free
+    to stuff business logic into your entity API.
+</p>
+
+<p>
+    Just remember that entities should only be self-aware, and only context-aware
+    in the context of certain business interactions: don't inject services as
+    constructor dependencies.
+</p>
