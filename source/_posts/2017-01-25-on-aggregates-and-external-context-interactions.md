@@ -211,7 +211,7 @@ final class HandleCheckOutShoppingCart
 <p>
     In addition to that, we now require the command handler when writing tests
     that consume the above specification: without the command handler, our logic
-    will fail to handle the unhappy paths correctly.
+    will fail to handle the unhappy paths in our scenarios.
 </p>
 
 <p>
