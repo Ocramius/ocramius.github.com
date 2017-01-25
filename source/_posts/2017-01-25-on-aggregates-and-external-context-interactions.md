@@ -51,7 +51,7 @@ Feature: credit card payment for a shopping cart checkout
 ~~~
 
 <p>
-    The scenario is quite generic, but you should what the application is supposed to do.
+    The scenario is quite generic, but you should be able to see what the application is supposed to do.
 </p>
 
 
