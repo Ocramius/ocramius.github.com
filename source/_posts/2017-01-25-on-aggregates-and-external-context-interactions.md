@@ -188,8 +188,11 @@ final class HandleCheckOutShoppingCart
 <p>
     As you can see, we are adding some logic to our command handler here.
     This is usually done because dependency injection on the command handler
-    is easy, whereas doing it on the aggregate root is generally <a
-    href="http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/" target="_blank">problematic</a>
+    is easy.
+    
+    Passing services to the aggregate via dependency injection is generally
+    problematic and to be avoided, since an aggregate is usually a 
+    <a href="http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/" target="_blank">"newable type"</a>.
 </p>
 
 <p>
