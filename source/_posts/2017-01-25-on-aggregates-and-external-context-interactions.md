@@ -172,9 +172,9 @@ final class HandleCheckOutShoppingCart
         $cartId = $command->shoppingCart();
         $charge = $command->charge();
 
-        // assignment is redundant for clarity to the reader
         $shoppingCart = $this->carts->get($cartId);
         
+        // these guards are injected callables:
         ($this->nonEmptyShoppingCart)($cartId);
         ($this->nonPurchasedShoppingCart)($cartId);
         ($this->paymentAmountMatches)($cartId, $charge->amount());
