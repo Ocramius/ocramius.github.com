@@ -9,7 +9,7 @@ day: 25
 published: true
 summary: IDDD/DDD Aggregates often have to talk to the external world via domain services: here is a practical approach
 description: A practical example of how DDD Aggregates can talk to the external world without the need to "know" about their domain services upfront
-tweet: 
+tweet: 824352805318250504
 ---
 
 <p>
