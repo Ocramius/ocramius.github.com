@@ -92,7 +92,7 @@ final class ShoppingCart
     {
         Assert::null($this->payment);
         Assert::greaterThan(0, $this->totalAmount);
-        Assert::same($this->totalAmount, $payment->amount);
+        Assert::same($this->totalAmount, $payment->amount());
         
         $this->charge = $charge;
         
@@ -115,7 +115,7 @@ final class HandleCheckOutShoppingCart
     public function __invoke(CheckOutShoppingCart $command) : void
     {
         // assignment is redundant for clarity to the reader
-        $shoppingCart = $this->shoppingCarts->get($command->shoppingCart);
+        $shoppingCart = $this->shoppingCarts->get($command->shoppingCart());
         
         $payment = $this->paymentGateway->captureCharge($command->charge());
         
@@ -135,6 +135,35 @@ final class HandleCheckOutShoppingCart
 </ul>
 
 <p>
-    In order to do that, we have to add some "guards" that prevent the interaction:
+    In order to do that, we have to add some "guards" that prevent the interaction.
+    This is the approach that I've seen being used in the wild:
 </p>
 
+
+~~~php
+final class HandleCheckOutShoppingCart
+{
+    // ... 
+    
+    public function __invoke(CheckOutShoppingCart $command) : void
+    {
+        $cartId = $command->shoppingCart();
+        // assignment is redundant for clarity to the reader
+        $shoppingCart = $this->shoppingCarts->get($cartId);
+        
+        ($this->nonEmptyShoppingCart)($cartId);
+        ($this->nonPurchasedShoppingCart)($cartId);
+        
+        $payment = $this->paymentGateway->captureCharge($command->charge());
+        
+        $shoppingCart->checkOut($capturedCharge);
+    }
+}
+~~~
+
+<p>
+    As you can see, we are adding some logic to our command handler here.
+    This is usually done because dependency injection on the command handler
+    is easy, whereas doing it on the aggregate root is generally <a
+    href="http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/" target="_blank">problematic</a>
+</p>
