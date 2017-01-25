@@ -112,10 +112,11 @@ final class ShoppingCart
 ~~~
 
 <p>
-    Also here, if you are unfamiliar with what an <i>aggregate</i> is,
-    it is the direct object in our interaction. In your
-    system, it would most likely (but not exclusively) be an entity
-    or a DB record or group of entities/DB records that you
+    If you are unfamiliar with what an <i>aggregate</i> is,
+    it is the direct object in our interaction (look at the
+    sentences in the scenario).
+    In your existing applications, it would most likely (but not exclusively)
+    be an entity or a DB record or group of entities/DB records that you
     are considering during a business interaction.
 </p>
 
