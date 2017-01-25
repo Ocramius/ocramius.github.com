@@ -22,7 +22,7 @@ tweet: s
 <p>
     The context was a <abbr title="command query responsibility segregation">CQRS</abbr>
     and Event Sourced architecture, but in general, the approach that I prefer also applies to most
-    imperative ORM entity code (assuming proper data-mapper).
+    imperative ORM entity code (assuming a proper data-mapper is involved).
 </p>
 
 <h3>Scenario</h3>
@@ -56,7 +56,7 @@ Feature: credit card payment for a shopping cart checkout
 </p>
 
 <p>
-    I will take an imperative command + event approach, but I will not dig into the patterns
+    I will take an imperative command + event approach, but will not dig into the patterns
     behind it. Hopefully, the pseudo-code will be sufficient for you to understand all
     of the examples.
 </p>
@@ -70,7 +70,10 @@ Feature: credit card payment for a shopping cart checkout
 ~~~php
 final class CheckOutShoppingCart
 {
-    public static function from(CreditCardCharge $charge, ShoppingCartId $shoppingCart) : self {
+    public static function from(
+        CreditCardCharge $charge,
+        ShoppingCartId $shoppingCart
+    ) : self {
         // ... not relevant ...
     }
     
@@ -92,7 +95,10 @@ final class ShoppingCart
     {
         $this->charge = $charge;
         
-        $this->raisedEvents[] = ShoppingCartCheckedOut::from($this->id, $this->charge);
+        $this->raisedEvents[] = ShoppingCartCheckedOut::from(
+            $this->id,
+            $this->charge
+        );
     }
     
     // ... 
@@ -111,7 +117,7 @@ final class HandleCheckOutShoppingCart
     public function __invoke(CheckOutShoppingCart $command) : void
     {
         // assignment is redundant for clarity to the reader
-        $shoppingCart = $this->shoppingCarts->get($command->shoppingCart());
+        $shoppingCart = $this->carts->get($command->shoppingCart());
         
         $payment = $this->paymentGateway->captureCharge($command->charge());
         
@@ -148,7 +154,7 @@ final class HandleCheckOutShoppingCart
         $charge = $command->charge();
 
         // assignment is redundant for clarity to the reader
-        $shoppingCart = $this->shoppingCarts->get($cartId);
+        $shoppingCart = $this->carts->get($cartId);
         
         ($this->nonEmptyShoppingCart)($cartId);
         ($this->nonPurchasedShoppingCart)($cartId);
@@ -223,17 +229,22 @@ final class ShoppingCart
 {
     // ... 
     
-    public function checkOut(CheckOutShoppingCart $checkOut, PaymentGateway $paymentGateway) : void
-    {
+    public function checkOut(
+        CheckOutShoppingCart $checkOut,
+        PaymentGateway $paymentGateway
+    ) : void {
         $charge = $checkOut->charge();
 
-        Assert::null($this->payment, 'Shopping cart was already purchased');
-        Assert::greaterThan(0, $this->totalAmount, 'Shopping cart price is invalid');
-        Assert::same($this->totalAmount, $charge->amount(), 'An incorrect amount is being paid');
+        Assert::null($this->payment, 'Already purchased');
+        Assert::greaterThan(0, $this->totalAmount, 'Price invalid');
+        Assert::same($this->totalAmount, $charge->amount());
 
         $this->charge = $paymentGateway->captureCharge($charge);
 
-        $this->raisedEvents[] = ShoppingCartCheckedOut::from($this->id, $this->charge);
+        $this->raisedEvents[] = ShoppingCartCheckedOut::from(
+            $this->id,
+            $this->charge
+        );
     }
     
     // ... 
