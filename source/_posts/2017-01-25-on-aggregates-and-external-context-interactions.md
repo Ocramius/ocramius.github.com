@@ -297,28 +297,31 @@ final class HandleCheckOutShoppingCart
 <h3>Conclusions</h3>
 
 <p>
-    We can obviously continue with what this enables, but I think that it is all very clear,
-    so I will just list it here to keep things short and nice:
+    Besides getting rid of the command handler in the scenario tests, here
+    is a list of advantages of what we just implemented:
 </p>
 
 <ol>
+    <li>
+        The domain logic is all in one place, easy to read and easy to change.
+    </li>
     <li>
         We can run the domain without infrastructure code (note: the payment gateway is a
         domain service)
     </li>
     <li>
         We can prevent invalid interactions to happen without having to push verification
-        data across layers
+        data across multiple layers
     </li>
     <li>
-        Our aggregate is now able to fullfill its role: being a domain-specific state machine.
+        Our aggregate is now able to fullfill its main role: being a domain-specific state machine,
+        preventing invalid state mutations.
+    </li>
+    <li>
         If something goes wrong, then the aggregate is able to revert state mutations.
     </li>
     <li>
-        We can raise more domain events on failures.
-    </li>
-    <li>
-        The domain logic is in one place, easy to read and easy to change.
+        We can raise domain events on failures, or execute custom domain logic.
     </li>
 </ol>
 
