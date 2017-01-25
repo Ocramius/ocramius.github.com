@@ -135,7 +135,6 @@ final class HandleCheckOutShoppingCart
     
     public function __invoke(CheckOutShoppingCart $command) : void
     {
-        // assignment is redundant for clarity to the reader
         $shoppingCart = $this->carts->get($command->shoppingCart());
         
         $payment = $this->gateway->captureCharge($command->charge());
