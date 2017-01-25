@@ -184,5 +184,10 @@ final class HandleCheckOutShoppingCart
 <p>
     In addition to that, we now require the command handler when writing tests
     that consume the above specification: without the command handler, our logic
-    will fail to handle the unhappy paths.
+    will fail to handle the unhappy paths correctly.
+</p>
+
+<p>
+    If you went the <abbr title="test driven development">TDD</abbr> way, then
+    you already saw all of this coming. Let's fix it!
 </p>
