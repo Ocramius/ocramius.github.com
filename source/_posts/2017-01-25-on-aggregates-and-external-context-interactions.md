@@ -89,7 +89,7 @@ final class CheckOutShoppingCart
 </p>
 
 <p>
-    And here is a naive aggregate performing the actual domain logic work
+    Then there is an aggregate performing the actual domain logic work:
 </p>
 
 ~~~php
@@ -110,6 +110,14 @@ final class ShoppingCart
     // ... 
 }
 ~~~
+
+<p>
+    Also here, if you are unfamiliar with what an <i>aggregate</i> is,
+    it is the direct object in our interaction. In your
+    system, it would most likely (but not exclusively) be an entity
+    or a DB record or group of entities/DB records that you
+    are considering during a business interaction.
+</p>
 
 <p>
     We need to glue this all together with a command handler:
