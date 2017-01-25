@@ -97,7 +97,7 @@ final class ShoppingCart
 {
     // ... 
     
-    public function checkOut(CapturedCreditCardCharge $payment) : void
+    public function checkOut(CapturedCreditCardCharge $charge) : void
     {
         $this->charge = $charge;
         
