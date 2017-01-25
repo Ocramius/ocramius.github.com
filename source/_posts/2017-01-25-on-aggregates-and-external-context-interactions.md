@@ -17,7 +17,7 @@ tweet: s
     aggregates.
 </p>
 
-<div data-tweet-id="810183374425980928" class="twitter-tweet"></div>
+<div data-tweet-id="808545609468801024" class="twitter-tweet"></div>
 
 <p>
     The context was a <abbr title="command query responsibility segregation">CQRS</abbr>
