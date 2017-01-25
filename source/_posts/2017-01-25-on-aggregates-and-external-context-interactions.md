@@ -167,3 +167,12 @@ final class HandleCheckOutShoppingCart
     is easy, whereas doing it on the aggregate root is generally <a
     href="http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/" target="_blank">problematic</a>
 </p>
+
+<p>
+    With this code, we are able to handle most unhappy paths, and eventually
+    also failures of the payment gateway.
+</p>
+
+<p>
+    
+</p>
