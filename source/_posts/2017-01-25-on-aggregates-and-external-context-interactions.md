@@ -215,7 +215,7 @@ final class HandleCheckOutShoppingCart
     Since we don't really want to inject a payment gateway as a constituent part
     of our aggregate root (it shouldn't be a dependency, after all!), we just borrow
     a brutally simple concept from functional programming: we pass the interactor
-    as a parameter:
+    as a parameter.
 </p>
 
 ~~~php
@@ -237,5 +237,25 @@ final class ShoppingCart
     }
     
     // ... 
+}
+~~~
+
+<p>
+    The command handler will also be massively simplified, since all what it
+    does is forward all the required information to the aggregate:
+</p>
+
+~~~php
+final class HandleCheckOutShoppingCart
+{
+    // ... 
+    
+    public function __invoke(CheckOutShoppingCart $command) : void
+    {
+        $this
+            ->shoppingCarts
+            ->get($command->shoppingCart())
+            ->checkOut($command, $this->paymentGateway);
+    }
 }
 ~~~
