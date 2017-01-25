@@ -13,11 +13,11 @@ tweet: s
 ---
 
 <p>
-    A bit of time ago, I was asked where I put I/O operations when dealing with
+    Some time ago, I was asked where I put I/O operations when dealing with
     aggregates.
 </p>
 
-<!-- link to verraes' tweet here -->
+<div data-tweet-id="810183374425980928" class="twitter-tweet"></div>
 
 <p>
     The context was a <abbr title="command query responsibility segregation">CQRS</abbr>
@@ -35,19 +35,19 @@ tweet: s
 Feature: credit card payment for a shopping cart checkout
 
   Scenario: a user must be able to check out a shopping cart
-  Given the user has added some products to their shopping cart
-  When the user checks out the shopping cart with their credit card
-  Then the user was charged for the shopping cart total price
+    Given the user has added some products to their shopping cart
+    When the user checks out the shopping cart with their credit card
+    Then the user was charged for the shopping cart total price
   
   Scenario: a user must not be able to check out an empty shopping cart
-  When the user checks out the shopping cart with their credit card
-  Then the user was not charged
+    When the user checks out the shopping cart with their credit card
+    Then the user was not charged
   
   Scenario: a user cannot check out an already purchased shopping cart
-  Given the user has added some products to their shopping cart
-  And the user has checked out the shopping cart with their credit card
-  When the user checks out the shopping cart with their credit card
-  Then the user was not charged
+    Given the user has added some products to their shopping cart
+    And the user has checked out the shopping cart with their credit card
+    When the user checks out the shopping cart with their credit card
+    Then the user was not charged
 ~~~
 
 <p>
@@ -74,7 +74,7 @@ final class CheckOutShoppingCart
         CreditCardCharge $charge,
         ShoppingCartId $shoppingCart
     ) : self {
-        // ... not relevant ...
+        // ...
     }
     
     public function charge() : CreditCardCharge { /* ... */ }
@@ -106,7 +106,7 @@ final class ShoppingCart
 ~~~
 
 <p>
-    And then we need to glue this all together with a command handler:
+    We need to glue this all together with a command handler:
 </p>
 
 ~~~php
