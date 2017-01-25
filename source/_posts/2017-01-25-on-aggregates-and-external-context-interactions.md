@@ -54,16 +54,16 @@ Feature: credit card payment for a shopping cart checkout
     The scenario is quite generic, but you should what the application is supposed to do.
 </p>
 
-<p>
-    I will take an imperative command + event approach, but will not dig into the patterns
-    behind it. Hopefully, the pseudo-code will be sufficient for you to understand all
-    of the examples.
-</p>
 
 <h3>An initial implementation</h3>
 
 <p>
-    At first glance, we are looking at a command like following:
+    I will take an imperative command + domain-events approach, but we don't need to
+    dig into the patterns behind it, as it is quite simple.
+</p>
+
+<p>
+    We are looking at a command like following:
 </p>
 
 ~~~php
@@ -82,7 +82,12 @@ final class CheckOutShoppingCart
 ~~~
 
 <p>
-    And here's a naive aggregate performing the actual domain logic work
+    If you are unfamiliar with what a command is, it is just the object
+    that our frontend or API throws at our actual application logic.
+</p>
+
+<p>
+    And here is a naive aggregate performing the actual domain logic work
 </p>
 
 ~~~php
