@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2017-01-25T21:50:50+00:00</updated>
+    <updated>2017-01-25T23:14:54+00:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -133,7 +133,7 @@
 
         $payment = $this-&gt;gateway-&gt;captureCharge($command-&gt;charge());
 
-        $shoppingCart-&gt;checkOut($capturedCharge);
+        $shoppingCart-&gt;checkOut($payment);
     }
 }
 </code></pre>
@@ -172,7 +172,7 @@
 
         $payment = $this-&gt;gateway-&gt;captureCharge($charge);
 
-        $shoppingCart-&gt;checkOut($capturedCharge);
+        $shoppingCart-&gt;checkOut($payment);
     }
 }
 </code></pre>

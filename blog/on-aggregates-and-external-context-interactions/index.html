@@ -188,7 +188,7 @@
 
         $payment = $this-&gt;gateway-&gt;captureCharge($command-&gt;charge());
 
-        $shoppingCart-&gt;checkOut($capturedCharge);
+        $shoppingCart-&gt;checkOut($payment);
     }
 }
 </code></pre>
@@ -227,7 +227,7 @@
 
         $payment = $this-&gt;gateway-&gt;captureCharge($charge);
 
-        $shoppingCart-&gt;checkOut($capturedCharge);
+        $shoppingCart-&gt;checkOut($payment);
     }
 }
 </code></pre>
