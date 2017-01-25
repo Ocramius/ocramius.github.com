@@ -90,13 +90,9 @@ final class ShoppingCart
     
     public function checkOut(CapturedCreditCardCharge $payment) : void
     {
-        Assert::null($this->payment);
-        Assert::greaterThan(0, $this->totalAmount);
-        Assert::same($this->totalAmount, $payment->amount());
-        
         $this->charge = $charge;
         
-        $this->raisedEvents[] = ShoppingCartCheckedOut::from($this->id);
+        $this->raisedEvents[] = ShoppingCartCheckedOut::from($this->id, $this->charge);
     }
     
     // ... 
@@ -131,6 +127,7 @@ final class HandleCheckOutShoppingCart
 <ul>
     <li>The ability to check whether the payment has already occurred</li>
     <li>Preventing payment for empty shopping carts</li>
+    <li>Preventing payment of an incorrect amount</li>
     <li>Handling of critical failures on the payment gateway</li>
 </ul>
 
@@ -148,13 +145,16 @@ final class HandleCheckOutShoppingCart
     public function __invoke(CheckOutShoppingCart $command) : void
     {
         $cartId = $command->shoppingCart();
+        $charge = $command->charge();
+
         // assignment is redundant for clarity to the reader
         $shoppingCart = $this->shoppingCarts->get($cartId);
         
         ($this->nonEmptyShoppingCart)($cartId);
         ($this->nonPurchasedShoppingCart)($cartId);
+        ($this->paymentAmountMatches)($cartId, $charge->amount());
         
-        $payment = $this->paymentGateway->captureCharge($command->charge());
+        $payment = $this->paymentGateway->captureCharge($charge);
         
         $shoppingCart->checkOut($capturedCharge);
     }
@@ -188,6 +188,54 @@ final class HandleCheckOutShoppingCart
 </p>
 
 <p>
+    For those that are reading and apply CQRS+<abbr title="Event Sourcing>ES</abbr>:
+    you also know that those guard aren't that simple to implement!
+    Read models, projections... Oh my!
+</p>
+
+<p>
+    Also: what if we wanted to react to those failures, rather than just stop
+    execution? Who is responsible or that?
+</p>
+
+<p>
     If you went the <abbr title="test driven development">TDD</abbr> way, then
     you already saw all of this coming. Let's fix it!
 </p>
+
+<h3>A possible solution</h3>
+
+<p>
+    What we did is putting logic from the domain layer (which should be in the aggregate)
+    into the application layer: let's turn around and put domain logic in the domain (reads:
+    in the aggregate logic).
+</p>
+
+<p>
+    Since we don't really want to inject a payment gateway as a constituent part
+    of our aggregate root (it shouldn't be a dependency, after all!), we just borrow
+    a brutally simple concept from functional programming: we pass the interactor
+    as a parameter:
+</p>
+
+~~~php
+final class ShoppingCart
+{
+    // ... 
+    
+    public function checkOut(CheckOutShoppingCart $checkOut, PaymentGateway $paymentGateway) : void
+    {
+        $charge = $checkOut->charge();
+
+        Assert::null($this->payment, 'Shopping cart was already purchased');
+        Assert::greaterThan(0, $this->totalAmount, 'Shopping cart price is invalid');
+        Assert::same($this->totalAmount, $charge->amount(), 'An incorrect amount is being paid');
+
+        $this->charge = $paymentGateway->captureCharge($charge);
+
+        $this->raisedEvents[] = ShoppingCartCheckedOut::from($this->id, $this->charge);
+    }
+    
+    // ... 
+}
+~~~
