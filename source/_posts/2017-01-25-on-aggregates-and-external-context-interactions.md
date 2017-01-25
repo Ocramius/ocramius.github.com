@@ -28,7 +28,7 @@ tweet: s
 <h3>Scenario</h3>
 
 <p>
-    Let's take a practical scenario as a reference:
+    Let's use a practical example:
 </p>
 
 ~~~gherkin
