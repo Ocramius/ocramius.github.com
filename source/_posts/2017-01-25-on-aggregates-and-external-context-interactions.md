@@ -240,9 +240,11 @@ final class HandleCheckOutShoppingCart
 
 <p>
     Since we don't really want to inject a payment gateway as a constituent part
-    of our aggregate root (it shouldn't be a dependency, after all!), we just borrow
-    a brutally simple concept from functional programming: we pass the interactor
-    as a parameter.
+    of our aggregate root (a newable shouldn't have non-newable depencencies),
+    we just borrow a brutally simple concept from functional programming:
+    we pass the <abbr
+    title="An interactor is just an object to which we delegate some work. In this case, a service">interactor</abbr>
+    as a method parameter.
 </p>
 
 ~~~php
