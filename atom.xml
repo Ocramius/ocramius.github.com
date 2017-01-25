@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2017-01-25T20:27:44+00:00</updated>
+    <updated>2017-01-25T21:50:50+00:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -49,7 +49,7 @@
 </code></pre>
 
 <p>
-    The scenario is quite generic, but you should what the application is supposed to do.
+    The scenario is quite generic, but you should be able to see what the application is supposed to do.
 </p>
 
 <h3>An initial implementation</h3>
