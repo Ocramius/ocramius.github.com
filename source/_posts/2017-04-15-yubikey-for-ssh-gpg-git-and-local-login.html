@@ -197,7 +197,7 @@ tweet:
 <h2>Setting up PAM authentication</h2>
 
 <p class="alert alert-warning">
-    <span class="label warning">CAUTION:</span> this procedure
+    <span class="label label-warning">CAUTION:</span> this procedure
     can potentially lead you to lose access to <code>sudo</code>
     access from your account, as well as lock you out of your account.
     I take no responsibility: try it in a
@@ -217,3 +217,33 @@ tweet:
     command should require both our account password and our YubiKey.
 </p>
 
+<p>
+    What you will have to do is basically:
+</p>
+
+<ol>
+    <li>Install <code>libpam-yubico</code></li>
+    <li>
+        Enable some capabilities of your YubiKeys with
+        <code>ykpersonalize</code>
+    </li>
+    <li>
+        Generate an initial challenge file for each YubiKey (you
+        bought at least 2, right?) with
+        <code>ykpamcfg</code>
+    </li>
+    <li>Deploy the generated files in a root-only accessible path</li>
+    <li>
+        <span class="label label-warning">IMPORTANT</span>
+        start a
+        <code>sudo</code>
+        session, and be ready to revert changes from there
+    </li>
+    <li>
+        Configure
+        <abbr title="Pluggable Authentication Modules">PAM</abbr>
+        to also expect a challenge response from a YubiKey (reads:
+        a recognized YubiKey must be plugged in when trying to
+        authenticate)
+    </li>
+</ol>
