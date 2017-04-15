@@ -359,3 +359,28 @@ tweet:
     keys, no malicious program can copy it, plus you can use
     it from any workstation.
 </p>
+
+<p>
+    Also, you will need to set a
+    <strong>pin</strong>
+    and an
+    <strong>admin pin</strong>.
+    These two are respectively
+    <code>123456</code>
+    and
+    <code>12345678</code>
+    by default.
+    The
+    <strong>pin</strong>
+    will be needed each time you plug in your YubiKey to use
+    any of the private keys stored in it.
+</p>
+
+<p class="alert alert-warning">
+    <span class="label label-warning">CAUTION:</span>
+    you only have
+    <code>3</code>
+    attempts for entering your pin. Should you fail all
+    attempts, then the YubiKey will be locked, and you
+    will have to move new GPG sub-keys to it.
+</p>
