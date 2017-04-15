@@ -338,3 +338,16 @@ tweet:
     Do not use <code>4096</code> for the sub-key length unless you know
     that your key type supports it.
 </p>
+
+<p>
+    After that, we will move the private keys to the YubiKeys
+    with the <code>gpg</code> <code>keytocard</code> command.
+</p>
+
+<p class="alert alert-warning">
+    <span class="label label-warning">CAUTION:</span> the
+    <code>keytocard</code> command is destructive. Once you moved
+    a private key to a YubiKey, it is removed from your local
+    machine, and it cannot be recovered. Be sure to only move
+    the correct sub-keys.
+</p>
