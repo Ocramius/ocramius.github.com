@@ -295,4 +295,39 @@ tweet:
 
 <h2>Setting up GPG</h2>
 
-<p></p>
+<p>
+    This is probably the messiest part of the setup, as a lot of
+    CLI tool usage is required.
+</p>
+
+<p>
+    Each YubiKey has the ability to store 3 separate keys for
+    <i>signing</i>, <i>encrypting</i> and <i>authenticating</i>.
+</p>
+
+<p>
+    We will therefore create a series of GPG keys:
+</p>
+
+<ol>
+    <li>A GPG master key (if you don't already have a GPG key)</li>
+    <li>
+        A sub-key for signing (marked
+        <code>[S]</code>
+        in the gpg interactive console)
+    </li>
+    <li>
+        A sub-key for encrypting (marked
+        <code>[E]</code>
+        in the gpg interactive console)
+    </li>
+    <li>
+        A sub-key for authenticating (marked
+        <code>[A]</code>
+        in the gpg interactive console)
+    </li>
+    <li>
+        Generate these 3 sub-keys for each YubiKey
+        you have (3 keys per YubiKey)
+    </li>
+</ol>
