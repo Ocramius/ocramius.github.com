@@ -9,7 +9,7 @@ day: 15
 published: true
 summary: Using a single YubiKey for Two-Factor Auth, SSH login, GPG signing (GIT too) and to log into your computer
 description: A little walk-through on how to effectively use a YubiKey for everyday security: GPG, SSH, Login, 2FA
-tweet:
+tweet: 853287534465617920
 ---
 
 <p>
