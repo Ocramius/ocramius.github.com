@@ -453,3 +453,31 @@ tweet:
     Nobody can release software on your behalf without physical
     access to your YubiKey, as well as your YubiKey PIN.
 </p>
+
+<h2>Signing/Encrypting email messages</h2>
+
+<p>
+    In order to sign/encrypt emails, you will need to install
+    <a href="https://www.mozilla.org/en-US/thunderbird/" target="_blank">
+        Mozilla Thunderbird
+    </a>
+    and
+    <a href="https://www.enigmail.net/index.php/en/" target="_blank">
+        Enigmail
+    </a>.
+</p>
+
+<p>
+    The setup will crash a few times. I suggest going through the
+    "advanced" settings, then actually selecting a signing/encryption
+    key when trying to send a signed/encrypted message. Enigmail
+    expects the key to be a file or similar, but this approach
+    will allow you to just give it the private GPG key identifier.
+</p>
+
+<p>
+    Sending mails is still a bit buggy: Thunderbird will ask for the
+    pin 3 times, as if it failed to authenticate, but the third attempt
+    will actually succeed. This behavior will be present in a number of
+    prompts, not just within Thunderbird.
+</p>
