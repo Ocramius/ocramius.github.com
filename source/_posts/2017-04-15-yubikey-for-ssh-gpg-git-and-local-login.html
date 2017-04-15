@@ -488,3 +488,62 @@ tweet:
     is plugged in. If your laptop is stolen, these secrets will be
     protected.
 </p>
+
+<h2>SSH authentication</h2>
+
+<p>
+    There is one GPG key that we didn't use yet:
+    the authentication one.
+</p>
+
+<p>
+    There is a (relatively) recent functionality of
+    <code>gpg-agent</code>
+    that allows it to behave as an
+    <code>ssh-agent</code>.
+</p>
+
+<p>
+    To make that work, we will simply kill all existing
+    SSH and GPG agents:
+</p>
+
+~~~sh
+sudo killall gpg-agent
+sudo killall ssh-agent
+# note: eval is used because the produced STDOUT is a bunch of ENV settings
+eval $( gpg-agent --daemon --enable-ssh-support )
+~~~
+
+<p>
+    Once you've done that, try running:
+</p>
+
+<p>
+    <code>ssh-add -L</code>
+</p>
+
+<p>
+    Assuming you don't have any local SSH keys, the output
+    should be something like:
+</p>
+
+~~~
+ocramius@ocramius-XPS-15-9560:~$ ssh-add -L
+The agent has no identities.
+~~~
+
+<p>
+    If you plug in your YubiKey and try again,
+    the output will be:
+</p>
+
+~~~
+ocramius@ocramius-XPS-15-9560:~$ ssh-add -L
+ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
+~~~
+
+<p>
+    MAGIC! <code>gpg-agent</code> is exposing the public GPG key as
+    an SSH key.
+</p>
