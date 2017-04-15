@@ -567,3 +567,10 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
     that can run gpg-agent. Just bring your YubiKey with
     you.
 </p>
+
+<p class="alert alert-warning">
+    <span class="label label-warning">CAUTION:</span>
+    Each YubiKey with an authentication gpg sub-key
+    will produce a different public SSH key: you will
+    need to seed your server with all the SSH public keys.
+</p>
