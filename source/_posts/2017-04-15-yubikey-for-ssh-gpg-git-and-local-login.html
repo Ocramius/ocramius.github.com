@@ -427,3 +427,23 @@ tweet:
         drduh/YubiKey-Guide
     </a>.
 </p>
+
+<h2>GIT commit signing</h2>
+
+<p>
+    Now that you can sign messages using the GPG key stored
+    in your YubiKey, usage with GIT becomes trivial:
+</p>
+
+<p>
+    <code>git config --global user.signingkey=&lt;yubikey-signing-sub-key-id&gt;</code>
+</p>
+
+<p>
+    You will now need to plug in your YubiKey and enter your
+    PIN when signing a tag:
+</p>
+
+<p>
+    <code>git tag -s this-is-a-signed-tag -m "foo"</code>
+</p>
