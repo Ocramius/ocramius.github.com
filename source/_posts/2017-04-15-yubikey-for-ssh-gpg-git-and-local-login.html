@@ -91,7 +91,9 @@ tweet:
     In order to follow this tutorial, you should have at least
     2 (two) YubiKey Neo or equivalent devices. This means that
     you will have to spend approximately USD 100: these things
-    are quite expensive.
+    are quite expensive. You absolutely need a backup key,
+    because all these security measures may lock you out of
+    your systems if you lose or damage a YubiKey.
 </p>
 
 <p>
@@ -111,4 +113,22 @@ tweet:
         src="/img/posts/2017-04-15-yubikey-for-ssh-gpg-git-and-local-login/yubikey-features.jpg"
         alt="Covered YubiKey features"
     />
+</p>
+
+<h2>Setting up NFC 2FA</h2>
+
+<p>
+    Simple NFC-based 2FA with authentication codes will
+    be useful for most readers, even non-technical ones.
+</p>
+
+<p>
+    What we are doing is simply seed the YubiKey with
+    Google Authenticator codes, except that we will
+    use the
+    <a href="https://play.google.com/store/apps/details?id=com.yubico.yubioath&hl=en" target="_blank">
+        Yubico Authenticator
+    </a>.
+    This will only work for the "primary" key (the one
+    we will likely bring with us).
 </p>
