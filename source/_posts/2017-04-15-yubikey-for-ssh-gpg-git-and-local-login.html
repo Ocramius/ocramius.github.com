@@ -547,3 +547,22 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
     MAGIC! <code>gpg-agent</code> is exposing the public GPG key as
     an SSH key.
 </p>
+
+<p>
+    If you upload this public key to a server, and then
+    try logging in with the YubiKey plugged in, you will
+    be asked for the YubiKey PIN, and will then just be able
+    to log in as usual.
+</p>
+
+<p class="alert label-success">
+    <span class="label label-success">GREAT!</span>
+    Nobody can log into your remote servers without having
+    the physical device.
+</p>
+
+<p class="alert label-success">
+    <span class="label label-success">GREAT!</span>
+    You can log into your remote servers from any computer
+    that can run gpg-agent.
+</p>
