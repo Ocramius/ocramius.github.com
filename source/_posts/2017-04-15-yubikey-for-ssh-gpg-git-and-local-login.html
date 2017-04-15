@@ -331,3 +331,10 @@ tweet:
         you have (3 keys per YubiKey)
     </li>
 </ol>
+
+<p class="alert alert-warning">
+    <span class="label label-warning">CAUTION:</span> as far as I know,
+    the YubiKey Neo only supports RSA keys up to <code>2048</code> long.
+    Do not use <code>4096</code> for the sub-key length unless you know
+    that your key type supports it.
+</p>
