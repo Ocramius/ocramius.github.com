@@ -148,7 +148,7 @@ tweet:
 </p>
 
 <p>
-    What you will have to do is basically:
+    What we will have to do is basically:
 </p>
 
 <ol>
@@ -170,17 +170,17 @@ tweet:
 </p>
 
 <p>
-    Once you configured your YubiKey with at least one
+    Once the YubiKey is configured with at least one
     <a href="https://twofactorauth.org/" target="_blank">
         website
     </a>
     that supports the "Google Authenticator" workflow,
-    you should be able to:
+    we should be able to:
 </p>
 
 <ol>
     <li>Open the Yubico Authenticator</li>
-    <li>Tap your YubiKey against your phone's NFC sensor</li>
+    <li>Tap the YubiKey against our phone's NFC sensor</li>
     <li>Use the generated authentication code</li>
 </ol>
 
@@ -193,9 +193,9 @@ tweet:
 
 <p>
     One very nice (and unclear, at first) advantage of
-    having your YubiKey seeded with 2FA codes is that
-    you can now generate 2FA codes on any phone, as long
-    as you have your YubiKey.
+    having a YubiKey seeded with 2FA codes is that
+    we can now generate 2FA codes on any phone, as long
+    as we have our YubiKey with us.
 </p>
 
 <p>
@@ -206,15 +206,15 @@ tweet:
 </p>
 
 <p class="alert alert-success">
-    Also, a YubiKey is water-proof: your 2017 phone probably isn't.
+    Also, a YubiKey is water-proof: our 2017 phone probably isn't.
 </p>
 
 <h2>Setting up PAM authentication</h2>
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span> this procedure
-    can potentially lead you to lose <code>sudo</code>
-    access from your account, as well as lock you out of your account.
+    can potentially lead us to lose <code>sudo</code>
+    access from our account, as well as lock us out of our computer.
     I take no responsibility: try it in a
     <abbr title="Virtual Machine">VM</abbr>
     first, if you do not feel confident.
@@ -233,13 +233,13 @@ tweet:
 </p>
 
 <p>
-    What you will have to do is basically:
+    What we will have to do is basically:
 </p>
 
 <ol>
     <li>Install <code>libpam-yubico</code></li>
     <li>
-        Enable some capabilities of your YubiKeys with
+        Enable some capabilities of our YubiKeys with
         <code>ykpersonalize</code>
     </li>
     <li>
@@ -271,14 +271,14 @@ tweet:
 </p>
 
 <p>
-    If everything is done correctly, every prompt asking for your
+    If everything is done correctly, every prompt asking for our
     Linux/Mac account password should fail when no YubiKey is plugged
     in.
 </p>
 
 <p class="alert alert-info">
     <span class="label label-info">TIP:</span> configure the
-    libpam-yubico integration in debug mode, as you will often
+    libpam-yubico integration in debug mode, as we will often
     have a "WTH?" reaction when authentication isn't working.
     That may happen if there are communication errors with the
     YubiKey.
@@ -286,18 +286,18 @@ tweet:
 
 <p>
     This setup has the advantage of locking out anyone trying to
-    bruteforce your password, as well as stopping potentially malicious
+    bruteforce our password, as well as stopping potentially malicious
     background programs from performing authentication or
     <code>sudo</code>
-    commands while you aren't watching.
+    commands while we aren't watching.
 </p>
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span> the point
     of this sort of setup is to guarantee that login can only
-    happen with the physical person at the computer. If you want
-    to go to the crapper, lock your computer, and bring your
-    YubiKey with you.
+    happen with the physical person at the computer. If we want
+    to go to the crapper, we lock lock computer, and bring our
+    YubiKey with us.
 </p>
 
 <h2>Setting up GPG</h2>
@@ -317,7 +317,7 @@ tweet:
 </p>
 
 <ol>
-    <li>A GPG master key (if you don't already have a GPG key)</li>
+    <li>A GPG master key (if we don't already have a GPG key)</li>
     <li>
         A sub-key for signing (marked
         <code>[S]</code>
@@ -335,15 +335,15 @@ tweet:
     </li>
     <li>
         Generate these 3 sub-keys for each YubiKey
-        you have (3 keys per YubiKey)
+        we have (3 keys per YubiKey)
     </li>
 </ol>
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span> as far as I know,
     the YubiKey Neo only supports RSA keys up to <code>2048</code> long.
-    Do not use <code>4096</code> for the sub-key length unless you know
-    that your key type supports it.
+    Do not use <code>4096</code> for the sub-key length unless we know
+    that the key type supports it.
 </p>
 
 <p>
@@ -353,8 +353,8 @@ tweet:
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span> the
-    <code>keytocard</code> command is destructive. Once you moved
-    a private key to a YubiKey, it is removed from your local
+    <code>keytocard</code> command is destructive. Once we moved
+    a private key to a YubiKey, it is removed from our local
     machine, and it cannot be recovered. Be sure to only move
     the correct sub-keys.
 </p>
@@ -363,56 +363,56 @@ tweet:
     <span class="label label-info">NOTE:</span> being unable
     to recover the private sub-key is precisely the
     point of using a YubiKey: nobody can steal or misuse that
-    keys, no malicious program can copy it, plus you can use
+    keys, no malicious program can copy it, plus we can use
     it from any workstation.
 </p>
 
 <p>
-    Also, you will need to set a
+    Also, we will need to set a
     <strong>PIN</strong>
     and an
     <strong>admin PIN</strong>.
-    These two are respectively
+    These defaults for these two are respectively
     <code>123456</code>
     and
-    <code>12345678</code>
-    by default.
+    <code>12345678</code>.
     The
     <strong>PIN</strong>
-    will be needed each time you plug in your YubiKey to use
+    will be needed each time we plug in we YubiKey to use
     any of the private keys stored in it.
 </p>
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span>
-    you only have
+    we only have
     <code>3</code>
-    attempts for entering your PIN. Should you fail all
-    attempts, then the YubiKey will be locked, and you
-    will have to move new GPG sub-keys to it. This prevents
+    attempts for entering our PIN. Should we fail all
+    attempts, then the YubiKey will be locked, and yweou
+    will have to move new GPG sub-keys to it before being
+    able to use it again. This prevents
     bruteforcing after physical theft.
 </p>
 
 <p>
-    After your gpg sub-keys and PINs are written to the
-    YubiKeys, make a couple of secure backups of your master
-    gpg secret key, then delete it from your computer. Keep
+    After our gpg sub-keys and PINs are written to the
+    YubiKeys, let's make a couple of secure backups of our master
+    gpg secret key. Then delete it from the computer  Keep
     just the public key.
 </p>
 
 <p>
-    The master private gp key should only be used to generate
-    new sub-keys, if needed, or to revoke them, if you lose
-    one or more of your physical devices.
+    The master private gpg key should only be used to generate
+    new sub-keys, if needed, or to revoke them, if we lose
+    one or more of our physical devices.
 </p>
 
 <p>
-    You should now be able to:
+    We should now be able to:
 </p>
 
 <ul>
     <li>
-        Sign messages with the signing key stored in your
+        Sign messages with the signing key stored in our
         YubiKey (only if plugged in) and its PIN
     </li>
     <li>
@@ -423,7 +423,7 @@ tweet:
     </li>
     <li>
         Decrypt messages with the encryption key stored in
-        your YubiKey (only if plugged in) and its PIN
+        the YubiKey (only if plugged in) and its PIN
     </li>
 </ul>
 
@@ -438,8 +438,8 @@ tweet:
 <h2>GIT commit signing</h2>
 
 <p>
-    Now that you can sign messages using the GPG key stored
-    in your YubiKey, usage with GIT becomes trivial:
+    Now that we can sign messages using the GPG key stored
+    in our YubiKey, usage with GIT becomes trivial:
 </p>
 
 <p>
@@ -447,7 +447,7 @@ tweet:
 </p>
 
 <p>
-    You will now need to plug in your YubiKey and enter your
+    We will now need to plug in our YubiKey and enter our
     PIN when signing a tag:
 </p>
 
@@ -456,14 +456,14 @@ tweet:
 </p>
 
 <p class="alert alert-success">
-    Nobody can release software on your behalf without physical
-    access to your YubiKey, as well as your YubiKey PIN.
+    Nobody can release software on our behalf without physical
+    access to our YubiKey, as well as our YubiKey PIN.
 </p>
 
 <h2>Signing/Encrypting email messages</h2>
 
 <p>
-    In order to sign/encrypt emails, you will need to install
+    In order to sign/encrypt emails, we will need to install
     <a href="https://www.mozilla.org/en-US/thunderbird/" target="_blank">
         Mozilla Thunderbird
     </a>
@@ -478,7 +478,7 @@ tweet:
     "advanced" settings, then actually selecting a signing/encryption
     key when trying to send a signed/encrypted message. Enigmail
     expects the key to be a file or similar, but this approach
-    will allow you to just give it the private GPG key identifier.
+    will allow us to just give it the private GPG key identifier.
 </p>
 
 <p>
@@ -490,8 +490,8 @@ tweet:
 
 <p class="alert alert-success">
     <span class="label label-success">!</span>
-    Nobody can read your encrypted emails, unless the YubiKey
-    is plugged in. If your laptop is stolen, these secrets will be
+    Nobody can read our encrypted emails, unless the YubiKey
+    is plugged in. If our laptop is stolen, these secrets will be
     protected.
 </p>
 
@@ -522,7 +522,7 @@ eval $( gpg-agent --daemon --enable-ssh-support )
 ~~~
 
 <p>
-    Once you've done that, try running:
+    Once we've done that, let's try running:
 </p>
 
 <p>
@@ -530,7 +530,7 @@ eval $( gpg-agent --daemon --enable-ssh-support )
 </p>
 
 <p>
-    Assuming you don't have any local SSH keys, the output
+    Assuming we don't have any local SSH keys, the output
     should be something like:
 </p>
 
@@ -540,7 +540,7 @@ The agent has no identities.
 ~~~
 
 <p>
-    If you plug in your YubiKey and try again,
+    If we plug in our YubiKey and try again,
     the output will be:
 </p>
 
@@ -555,35 +555,35 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
 </p>
 
 <p>
-    If you upload this public key to a server, and then
-    try logging in with the YubiKey plugged in, you will
+    If we upload this public key to a server, and then
+    try logging in with the YubiKey plugged in, we will
     be asked for the YubiKey PIN, and will then just be able
     to log in as usual.
 </p>
 
 <p class="alert alert-success">
-    Nobody can log into your remote servers without having
+    Nobody can log into our remote servers without having
     the physical key device.
 </p>
 
 <p class="alert alert-success">
-    You can log into your remote servers from any computer
-    that can run gpg-agent. Just bring your YubiKey with
-    you.
+    We can log into our remote servers from any computer
+    that can run gpg-agent. Just always bring our YubiKey with
+    ourselves.
 </p>
 
 <p class="alert alert-warning">
     <span class="label label-warning">CAUTION:</span>
     Each YubiKey with an authentication gpg sub-key
-    will produce a different public SSH key: you will
-    need to seed your server with all the SSH public keys.
+    will produce a different public SSH key: we will
+    need to seed our server with all the SSH public keys.
 </p>
 
 <p class="alert alert-info">
     <span class="label label-info">TIP:</span>
     consider using the YubiKey identifier (written on
-    the back of the device) as the comment for your
-    public SSH key.
+    the back of the device) as the comment for the
+    public SSH key, before storing it.
 </p>
 
 <p>
@@ -603,7 +603,7 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
 </p>
 
 <p>
-    At this point, I suggest keeping one always with yourself,
+    At this point, I suggest keeping one always with ourselves,
     and treating it with extreme care. I made a custom
     <a href="https://www.thingiverse.com/thing:532575" target="_blank">
         3d-printed case for my YubiKey
@@ -620,6 +620,6 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
 <p>
     The backup key is to be kept in a secure location: while
     theft isn't a big threat with YubiKeys, getting locked
-    out of all your systems is a problem. Make sure you can
+    out of all our systems is a problem. Make sure that you can
     always either recover a YubiKey or the master GPG key.
 </p>
