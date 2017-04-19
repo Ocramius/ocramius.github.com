@@ -70,8 +70,8 @@ Feature: credit card payment for a shopping cart checkout
 final class CheckOutShoppingCart
 {
     public static function from(
-        CreditCardCharge $charge,
-        ShoppingCartId $shoppingCart
+        ShoppingCartId $shoppingCart,
+        CreditCardCharge $charge
     ) : self {
         // ...
     }
