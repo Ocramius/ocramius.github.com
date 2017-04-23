@@ -372,10 +372,10 @@ tweet: 853287534465617920
     <strong>PIN</strong>
     and an
     <strong>admin PIN</strong>.
-    These defaults for these two are respectively
+    These defaults for these two are respectively
     <code>123456</code>
-    and
-    <code>12345678</code>.
+    and
+    <code>12345678</code>.
     The
     <strong>PIN</strong>
     will be needed each time we plug in we YubiKey to use
@@ -383,12 +383,12 @@ tweet: 853287534465617920
 </p>
 
 <p class="alert alert-warning">
-    <span class="label label-warning">CAUTION:</span>
-    we only have
-    <code>3</code>
+    <span class="label label-warning">CAUTION:</span>
+    we only have
+    <code>3</code>
     attempts for entering our PIN. Should we fail all
-    attempts, then the YubiKey will be locked, and yweou
-    will have to move new GPG sub-keys to it before being
+    attempts, then the YubiKey will be locked, and we
+    will have to move new GPG sub-keys to it before being
     able to use it again. This prevents
     bruteforcing after physical theft.
 </p>
