@@ -17,8 +17,8 @@ description: Slides I wrote to introduce the Proxy OOP Pattern to the developers
 </p>
 <p>
     You can find my slides at
-    <a href="http://marco-pivetta.com/proxy-pattern-in-php/" target="_blank" title="The Proxy OOP pattern in PHP">
-    http://marco-pivetta.com/proxy-pattern-in-php/</a>.
+    <a href="https://ocramius.github.io/presentations/proxy-pattern-in-php/" target="_blank" title="The Proxy OOP pattern in PHP">
+    https://ocramius.github.io/presentations/proxy-pattern-in-php/</a>.
 </p>
 <p>
     The covered topics were:
