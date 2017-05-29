@@ -313,7 +313,8 @@ $a[1]('subscribed');
 </p>
 
 <p>
-    Please don't do any of what is discussed above.
+    Please don't do any of what is discussed above, it
+    is a badly crafted oxymoron.
 </p>
 
 <p>
@@ -322,7 +323,8 @@ $a[1]('subscribed');
 
 <p>
     Please do use type systems when they are available,
-    they actually reduce visual debt.
+    they actually reduce visual debt, helping you
+    distinguish apples from pies.
 </p>
 
 <p>
