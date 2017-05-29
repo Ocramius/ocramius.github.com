@@ -51,7 +51,7 @@ final class Event implements EventInterface {
             return false;
         }
         
-        foreach ($this->>events[$name] as $event) {
+        foreach ($this->events[$name] as $event) {
             $event();
         }
         
@@ -116,7 +116,7 @@ final class Event implements EventInterface {
             return false;
         }
         
-        foreach ($this->>events[$name] as $event) {
+        foreach ($this->events[$name] as $event) {
             $event();
         }
         
@@ -156,7 +156,7 @@ final class Event {
             return false;
         }
         
-        foreach ($this->>events[$name] as $event) {
+        foreach ($this->events[$name] as $event) {
             $event();
         }
         
