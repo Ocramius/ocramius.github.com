@@ -329,7 +329,8 @@ $a[1]('subscribed');
 
 <p>
     Please do use interfaces, as they reduce clutter,
-    making things easier to follow from a consumer perspective.
+    making things easier to follow from a consumer perspective,
+    be it a human or an automated tool.
 </p>
 
 <p>
