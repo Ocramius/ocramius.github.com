@@ -302,3 +302,10 @@ $a[1]('subscribed');
     towards reducing the learning and comprehension
     overhead.
 </p>
+
+<h2>Conclusion</h2>
+
+<div data-tweet-id="869277621904912389" class="twitter-tweet">
+    @PHPeeHaa: Question *everything*...
+</div>
+
