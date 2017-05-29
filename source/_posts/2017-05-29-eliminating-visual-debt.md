@@ -72,3 +72,22 @@ $event->listen('subscribed', function () {
 
 $event->fire('subscribed');
 ~~~
+
+<p>
+    So far, so good.
+</p>
+
+<p>
+    We have an event that obviously fires itself, a concrete
+    implementation and a few subscribers
+</p>
+
+<p>
+    Our code works, but it contains a lot of useless artifacts
+    that do not really influence our ability to make it run.
+</p>
+
+<p>
+    These artifacts are also distracting, moving our focus from
+    the runtime to the declarative requirements of the code.
+</p>
