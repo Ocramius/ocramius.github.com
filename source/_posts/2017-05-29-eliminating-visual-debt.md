@@ -318,5 +318,37 @@ $a[1]('subscribed');
 </p>
 
 <p>
-    
+    Please don't do any of what is discussed above.
+</p>
+
+<p>
+    Please don't accept what Jeffrey says in that video.
+</p>
+
+<p>
+    Please do use type systems when they are available,
+    they actually reduce visual debt.
+</p>
+
+<p>
+    Please do use interfaces, as they reduce clutter,
+    making things easier to follow from a consumer perspective.
+</p>
+
+<p>
+    This is all you
+    need to understand that `Event` mumbo-jumbo (which
+    has broken naming, by the way, but this isn't an
+    architecture workshop), no:
+</p>
+
+~~~php
+interface EventInterface {
+    public function listen($name, $handler);
+    public function fire($name);
+}
+~~~
+
+<p>
+    Please do follow best practices. They work.
 </p>
