@@ -134,3 +134,43 @@ final class Event implements EventInterface {
     manual or end to end testing. A quick read will also
     provide sufficient proof of correctness.
 </p>
+
+<p>
+    Since the code is trivial and we know what we are doing
+    when using it, we can remove also the contract that
+    dictates the intended usage. Let's remove those
+    `implements` and `interface` symbols.
+</p>
+
+~~~php
+final class Event {
+    protected $events = [];
+    
+    public function listen($name, $handler)
+    {
+        $this->events[$name][] = $handler;
+    }
+    
+    public function fire($name)
+    {
+        if (! array_key_exists($name, $this->events)) {
+            return false;
+        }
+        
+        foreach ($this->>events[$name] as $event) {
+            $event();
+        }
+        
+        return true;
+    }
+}
+~~~
+
+<p>
+    Removing the contract doesn't change the runtime
+    behavior of our code, which is still technically
+    correct. Consumers will also not need to worry
+    about correctness when they use `Event`, as a
+    quick skim over the implementation will reveal
+    its intended usage.
+</p>
