@@ -183,7 +183,7 @@ final class Event {
 </p>
 
 ~~~php
-final class Event {
+class Event {
     // ... 
 }
 ~~~
