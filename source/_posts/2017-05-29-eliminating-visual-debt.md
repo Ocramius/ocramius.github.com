@@ -201,4 +201,7 @@ final class Event {
     much copying stale discussions about coding approaches:
 </p>
 
-<div data-tweet-id="808545609468801024" class="twitter-tweet"></div>
+<div data-tweet-id="869265813857075200" class="twitter-tweet">
+    @jeffrey_way: Best practices aren’t real. It’s just a
+    group of people who copied what a handful of others did.
+</div>
