@@ -193,3 +193,12 @@ final class Event {
     the point is to "question everything".
 </p>
 
+<h2>Bringing it further</h2>
+
+<p>
+    Jeffrey then pushed this a bit further, saying that
+    best practices don't exist, and people are pretty
+    much copying stale discussions about coding approaches:
+</p>
+
+<div data-tweet-id="808545609468801024" class="twitter-tweet"></div>
