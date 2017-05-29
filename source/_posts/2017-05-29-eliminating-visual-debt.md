@@ -17,13 +17,12 @@ tweet:
 </p>
 
 <p>
-    As an introduction, I suggest you to watch
+    As an introduction, I suggest to watch
     <a href="https://laracasts.com/series/php-bits/episodes/1" target="_blank">
         this short tutorial
     </a>
-    about visual debt, in which
-    <a href="https://twitter.com/jeffrey_way" target="_blank">@jeffrey_way</a>
-    provides an overview of what visual debt is.
+    about visual debt by
+    <a href="https://twitter.com/jeffrey_way" target="_blank">@jeffrey_way</a>.
 </p>
 
 <p>
@@ -362,8 +361,8 @@ interface EventInterface {
     because that's what makes it to the news.
     <a href="https://www.owasp.org/index.php/" target="_blank">
         OWASP
-     </a>
-     knows more about all this.
+    </a>
+    knows more about all this.
 </p>
 
 <p>
