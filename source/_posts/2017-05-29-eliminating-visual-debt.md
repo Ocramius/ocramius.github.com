@@ -350,5 +350,23 @@ interface EventInterface {
 ~~~
 
 <p>
-    Please do follow best practices. They work.
+    Please <strong>do</strong> follow best practices.
+    <a href="https://www.youtube.com/watch?v=8d2AtAGJPno" target="_blank">
+        They work.
+        They help you avoiding stupid mistakes.
+    </a>.
+    <a href="http://www.edn.com/design/automotive/4423428/Toyota-s-killer-firmware--Bad-design-and-its-consequences" target="_blank">
+        Bad code can lead to terrible consequences, and you don't know where your code will be used.
+    </a>
+    And yes, I'm picking examples about real-time computing,
+    because that's what makes it to the news.
+    <a href="https://www.owasp.org/index.php/" target="_blank">
+        OWASP
+     </a>
+     knows more about all this.
+</p>
+
+<p>
+    Please remember that your job is reading, understanding and thinking
+    before typing, and typing is just a side-effect.
 </p>
