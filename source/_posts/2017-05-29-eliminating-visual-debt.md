@@ -244,13 +244,13 @@ class A {
     Effectively, this shows us that
     there are upsides to this approach, as we move
     from read overhead to less engine overhead. We also
-    stop obsessing after the details of our `Event`,
+    stop obsessing after the details of our <code>Event</code>,
     as we already previously defined it, so we remember
     how to use it.
 </p>
 
 <p>
-    Since the `Event` type is not really useful to us,
+    Since the <code>Event</code> type is not really useful to us,
     as nothing type-hints against it, we can remove it.
     Let's move back to dealing with a structure of
     function pointers:
@@ -334,9 +334,9 @@ $a[1]('subscribed');
 
 <p>
     This is all you
-    need to understand that `Event` mumbo-jumbo (which
+    need to understand that <code>Event</code> mumbo-jumbo (which
     has broken naming, by the way, but this isn't an
-    architecture workshop), no:
+    architecture workshop). Maybe add some API doc:
 </p>
 
 ~~~php
