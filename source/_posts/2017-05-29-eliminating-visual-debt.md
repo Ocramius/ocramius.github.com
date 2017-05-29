@@ -302,9 +302,7 @@ $a[1]('subscribed');
 
 <h2>Conclusion</h2>
 
-<div data-tweet-id="869277621904912389" class="twitter-tweet">
-    @PHPeeHaa: Question *everything*...
-</div>
+<div data-tweet-id="869277621904912389" class="twitter-tweet"></div>
 
 <p>
     If you haven't noticed before, this entire post
