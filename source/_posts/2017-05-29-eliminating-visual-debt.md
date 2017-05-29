@@ -78,7 +78,7 @@ $event->fire('subscribed');
 
 <p>
     We have an event that obviously fires itself, a concrete
-    implementation and a few subscribers
+    implementation and a few subscribers.
 </p>
 
 <p>
@@ -200,10 +200,7 @@ class Event {
     much copying stale discussions about coding approaches:
 </p>
 
-<div data-tweet-id="869265813857075200" class="twitter-tweet">
-    @jeffrey_way: Best practices aren’t real. It’s just a
-    group of people who copied what a handful of others did.
-</div>
+<div data-tweet-id="869265813857075200" class="twitter-tweet"></div>
 
 <p>
     According to that, I'm going to question the naming
@@ -238,7 +235,7 @@ class A {
 
 <p>
     This effectively removes our need to look at the
-    code details, making the code more coincise and
+    code details, making the code shorter and
     runtime-friendly. We're also saving some space
     in the PHP engine!
 </p>
@@ -253,9 +250,10 @@ class A {
 </p>
 
 <p>
-    Since our type is not really useful to our purposes,
-    we can move back to dealing with the functional bits
-    of our architecture as pointers to functions:
+    Since the `Event` type is not really useful to us,
+    as nothing type-hints against it, we can remove it.
+    Let's move back to dealing with a structure of
+    function pointers:
 </p>
 
 ~~~php
