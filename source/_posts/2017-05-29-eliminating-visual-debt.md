@@ -359,8 +359,8 @@ interface EventInterface {
 
 <p>
     This is not a really good interface, but it's a clear, simple
-    and readable one. No "visual debt". Somebody reading will thank
-    you later.
+    and readable one. No "visual debt". Somebody reading this will
+    thank you later. Maybe it will be you, next year.
 </p>
 
 <p>
