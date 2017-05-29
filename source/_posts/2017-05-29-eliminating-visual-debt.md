@@ -272,7 +272,7 @@ function A () {
                 return false;
             }
             
-            foreach ($a as $a2) {
+            foreach ($a[$a1] as $a2) {
                 $a2();
             }
             
