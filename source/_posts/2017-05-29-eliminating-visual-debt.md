@@ -205,3 +205,51 @@ class Event {
     @jeffrey_way: Best practices aren’t real. It’s just a
     group of people who copied what a handful of others did.
 </div>
+
+<p>
+    According to that, I'm going to question the naming
+    chosen for our code. Since the code is trivial and 
+    understandable at first glance, we don't need to pick
+    meaningful names for variables, methods and classes:
+</p>
+
+~~~php
+class A {
+    protected $a = [];
+    
+    public function a1($a1, $a2)
+    {
+        $this->events[$a1][] = $a2;
+    }
+    
+    public function a2($a1)
+    {
+        if (! array_key_exists($a1, $this->a)) {
+            return false;
+        }
+        
+        foreach ($this->a[$a1] as $a) {
+            $a();
+        }
+        
+        return true;
+    }
+}
+~~~
+
+<p>
+    This effectively removes our need to look at the
+    code details, making the code more coincise and
+    runtime-friendly. We're also saving some space
+    in the PHP engine!
+</p>
+
+<p>
+    Effectively, this shows us that
+    there are upsides to this approach, as we move
+    from read overhead to less engine overhead. We also
+    stop obsessing after the details of our `Event`,
+    as we already previously defined it, so we remember
+    how to use it.
+</p>
+
