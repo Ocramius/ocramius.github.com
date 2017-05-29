@@ -138,7 +138,7 @@ final class Event implements EventInterface {
     Since the code is trivial and we know what we are doing
     when using it, we can remove also the contract that
     dictates the intended usage. Let's remove those
-    `implements` and `interface` symbols.
+    <code>implements</code> and <code>interface</code> symbols.
 </p>
 
 ~~~php
