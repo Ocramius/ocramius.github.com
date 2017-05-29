@@ -253,3 +253,52 @@ class A {
     how to use it.
 </p>
 
+<p>
+    Since our type is not really useful to our purposes,
+    we can move back to dealing with the functional bits
+    of our architecture as pointers to functions:
+</p>
+
+~~~php
+function A () {
+    $a = [];
+    
+    return [
+        function ($a1, $a2) use (& $a) {
+            $a[$a1][] = $a2;
+        },
+        function ($a1) use (& $a) {
+            if (! array_key_exists($a1, $a)) {
+                return false;
+            }
+            
+            foreach ($a as $a2) {
+                $a2();
+            }
+            
+            return true;
+        },
+    ];
+}
+
+
+$a = A();
+
+$a[0]('subscribed', function () {
+    var_dump('handling it');
+});
+
+$a[0]('subscribed', function () {
+    var_dump('handling it again');
+});
+
+$a[1]('subscribed');
+~~~
+
+<p>
+    This code is equivalent, and doesn't use any
+    particularly fancy structures coming from the PHP
+    language, such as classes. We are working
+    towards reducing the learning and comprehension
+    overhead.
+</p>
