@@ -309,3 +309,14 @@ $a[1]('subscribed');
     @PHPeeHaa: Question *everything*...
 </div>
 
+<p>
+    If you haven't noticed before, this entire post
+    is just
+    <a href="https://www.youtube.com/watch?v=82CtZX9gmZ8" target="_blank">
+        sarcasm.
+    </a>
+</p>
+
+<p>
+    
+</p>
