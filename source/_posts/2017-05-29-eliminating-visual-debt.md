@@ -174,3 +174,22 @@ final class Event {
     quick skim over the implementation will reveal
     its intended usage.
 </p>
+
+<p>
+    Also, since the code imposes no limitations on the
+    consumer, who is responsible for the correctness
+    of any code touching ours, we are not going to limit
+    the usage of inheritance.
+</p>
+
+~~~php
+final class Event {
+    // ... 
+}
+~~~
+
+<p>
+    That's as far as the video goes, with a note that
+    the point is to "question everything".
+</p>
+
