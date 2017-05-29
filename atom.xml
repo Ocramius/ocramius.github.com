@@ -3,9 +3,386 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2017-04-15T18:44:19+02:00</updated>
+    <updated>2017-05-30T00:02:31+02:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Eliminating Visual Debt]]></title>
+            <link href="https://ocramius.github.io/blog/eliminating-visual-debt"/>
+            <updated>2017-05-29T00:00:00+02:00</updated>
+            <id>https://ocramius.github.io/blog/eliminating-visual-debt</id>
+            <content type="html"><![CDATA[<p>
+    Today we're talking about <strong>Visual debt</strong> in our code.
+</p>
+
+<p>
+    As an introduction, I suggest to watch
+    <a href="https://laracasts.com/series/php-bits/episodes/1" target="_blank">
+        this short tutorial
+    </a>
+    about visual debt by
+    <a href="https://twitter.com/jeffrey_way" target="_blank">@jeffrey_way</a>.
+</p>
+
+<p>
+    The concept is simple: let's take the example from Laracasts and re-visit
+    the steps taken to remove visual debt.
+</p>
+
+<pre><code class="php">interface EventInterface {
+    public function listen(string $name, callable $handler) : void;
+    public function fire(string $name) : bool;
+}
+
+final class Event implements EventInterface {
+    protected $events = [];
+
+    public function listen(string $name, callable $handler) : void
+    {
+        $this-&gt;events[$name][] = $handler;
+    }
+
+    public function fire(string $name) : bool
+    {
+        if (! array_key_exists($name, $this-&gt;events)) {
+            return false;
+        }
+
+        foreach ($this-&gt;&gt;events[$name] as $event) {
+            $event();
+        }
+
+        return true;
+    }
+}
+
+$event = new Event;
+
+$event-&gt;listen('subscribed', function () {
+    var_dump('handling it');
+});
+
+$event-&gt;listen('subscribed', function () {
+    var_dump('handling it again');
+});
+
+$event-&gt;fire('subscribed');
+</code></pre>
+
+<p>
+    So far, so good.
+</p>
+
+<p>
+    We have an event that obviously fires itself, a concrete
+    implementation and a few subscribers.
+</p>
+
+<p>
+    Our code works, but it contains a lot of useless artifacts
+    that do not really influence our ability to make it run.
+</p>
+
+<p>
+    These artifacts are also distracting, moving our focus from
+    the runtime to the declarative requirements of the code.
+</p>
+
+<p>
+    Let's start removing the bits that aren't needed by starting
+    from the method parameter and return type declarations:
+</p>
+
+<pre><code class="php">interface EventInterface {
+    public function listen($name, $handler);
+    public function fire($name);
+}
+
+final class Event implements EventInterface {
+    protected $events = [];
+
+    public function listen($name, $handler)
+    {
+        $this-&gt;events[$name][] = $handler;
+    }
+
+    public function fire($name)
+    {
+        if (! array_key_exists($name, $this-&gt;events)) {
+            return false;
+        }
+
+        foreach ($this-&gt;&gt;events[$name] as $event) {
+            $event();
+        }
+
+        return true;
+    }
+}
+</code></pre>
+
+<p>
+    Our code is obvious, so the parameters don't need
+    redundant declarations or type checks. Also, we are
+    aware of our own implementation, so the runtime checks
+    are not needed, as the code will work correctly as per
+    manual or end to end testing. A quick read will also
+    provide sufficient proof of correctness.
+</p>
+
+<p>
+    Since the code is trivial and we know what we are doing
+    when using it, we can remove also the contract that
+    dictates the intended usage. Let's remove those
+    <code>implements</code> and <code>interface</code> symbols.
+</p>
+
+<pre><code class="php">final class Event {
+    protected $events = [];
+
+    public function listen($name, $handler)
+    {
+        $this-&gt;events[$name][] = $handler;
+    }
+
+    public function fire($name)
+    {
+        if (! array_key_exists($name, $this-&gt;events)) {
+            return false;
+        }
+
+        foreach ($this-&gt;&gt;events[$name] as $event) {
+            $event();
+        }
+
+        return true;
+    }
+}
+</code></pre>
+
+<p>
+    Removing the contract doesn't change the runtime
+    behavior of our code, which is still technically
+    correct. Consumers will also not need to worry
+    about correctness when they use `Event`, as a
+    quick skim over the implementation will reveal
+    its intended usage.
+</p>
+
+<p>
+    Also, since the code imposes no limitations on the
+    consumer, who is responsible for the correctness
+    of any code touching ours, we are not going to limit
+    the usage of inheritance.
+</p>
+
+<pre><code class="php">class Event {
+    // ... 
+}
+</code></pre>
+
+<p>
+    That's as far as the video goes, with a note that
+    the point is to "question everything".
+</p>
+
+<h2>Bringing it further</h2>
+
+<p>
+    Jeffrey then pushed this a bit further, saying that
+    best practices don't exist, and people are pretty
+    much copying stale discussions about coding approaches:
+</p>
+
+<div data-tweet-id="869265813857075200" class="twitter-tweet"></div>
+
+<p>
+    According to that, I'm going to question the naming
+    chosen for our code. Since the code is trivial and 
+    understandable at first glance, we don't need to pick
+    meaningful names for variables, methods and classes:
+</p>
+
+<pre><code class="php">class A {
+    protected $a = [];
+
+    public function a1($a1, $a2)
+    {
+        $this-&gt;events[$a1][] = $a2;
+    }
+
+    public function a2($a1)
+    {
+        if (! array_key_exists($a1, $this-&gt;a)) {
+            return false;
+        }
+
+        foreach ($this-&gt;a[$a1] as $a) {
+            $a();
+        }
+
+        return true;
+    }
+}
+</code></pre>
+
+<p>
+    This effectively removes our need to look at the
+    code details, making the code shorter and
+    runtime-friendly. We're also saving some space
+    in the PHP engine!
+</p>
+
+<p>
+    Effectively, this shows us that
+    there are upsides to this approach, as we move
+    from read overhead to less engine overhead. We also
+    stop obsessing after the details of our <code>Event</code>,
+    as we already previously defined it, so we remember
+    how to use it.
+</p>
+
+<p>
+    Since the <code>Event</code> type is not really useful to us,
+    as nothing type-hints against it, we can remove it.
+    Let's move back to dealing with a structure of
+    function pointers:
+</p>
+
+<pre><code class="php">function A () {
+    $a = [];
+
+    return [
+        function ($a1, $a2) use (&amp; $a) {
+            $a[$a1][] = $a2;
+        },
+        function ($a1) use (&amp; $a) {
+            if (! array_key_exists($a1, $a)) {
+                return false;
+            }
+
+            foreach ($a[$a1] as $a2) {
+                $a2();
+            }
+
+            return true;
+        },
+    ];
+}
+
+
+$a = A();
+
+$a[0]('subscribed', function () {
+    var_dump('handling it');
+});
+
+$a[0]('subscribed', function () {
+    var_dump('handling it again');
+});
+
+$a[1]('subscribed');
+</code></pre>
+
+<p>
+    This code is equivalent, and doesn't use any
+    particularly fancy structures coming from the PHP
+    language, such as classes. We are working
+    towards reducing the learning and comprehension
+    overhead.
+</p>
+
+<h2>Conclusion</h2>
+
+<div data-tweet-id="869277621904912389" class="twitter-tweet"></div>
+
+<p>
+    If you haven't noticed before, this entire post
+    is just
+    <a href="https://www.youtube.com/watch?v=82CtZX9gmZ8" target="_blank">
+        sarcasm.
+    </a>
+</p>
+
+<p>
+    Please don't do any of what is discussed above, it
+    is a badly crafted oxymoron.
+</p>
+
+<p>
+    Please don't accept what Jeffrey says in that video.
+</p>
+
+<p>
+    Please do use type systems when they are available,
+    they actually reduce "visual debt" (is it even a thing?),
+    helping you distinguish apples from pies.
+</p>
+
+<p>
+    Please do use interfaces, as they reduce clutter,
+    making things easier to follow from a consumer perspective,
+    be it a human or an automated tool.
+</p>
+
+<p>
+    This is all you
+    need to understand that <code>Event</code> mumbo-jumbo (which
+    has broken naming, by the way, but this isn't an
+    architecture workshop). Maybe add some API doc:
+</p>
+
+<pre><code class="php">interface EventInterface {
+    /**
+     * Attach an additional listener to be fired when calling 
+     * `fire` with `$name`
+     */
+    public function listen(string $name, callable $handler) : void;
+
+    /**
+     * Execute all listeners assigned to `$name`
+     *
+     * @return bool whether any listener was executed
+     */
+    public function fire(string $name) : bool;
+}
+</code></pre>
+
+<p>
+    This is not a really good interface, but it's a clear, simple
+    and readable one. No "visual debt". Somebody reading this will
+    thank you later. Maybe it will be you, next year.
+</p>
+
+<p>
+    Please <strong>do</strong> follow best practices.
+    <a href="https://www.youtube.com/watch?v=8d2AtAGJPno" target="_blank">
+        They work.
+        They help you avoiding stupid mistakes.
+    </a>.
+    <a href="http://www.edn.com/design/automotive/4423428/Toyota-s-killer-firmware--Bad-design-and-its-consequences" target="_blank">
+        Bad code can lead to terrible consequences, and you don't know where your code will be used.
+    </a>
+    And yes, I'm picking examples about real-time computing,
+    because that's what makes it to the news.
+    <a href="https://www.owasp.org/index.php/" target="_blank">
+        OWASP
+    </a>
+    knows more about all this.
+</p>
+
+<p>
+    Please remember that your job is reading, understanding and thinking
+    before typing, and typing is just a side-effect.
+</p>
+
+<p>
+    And please, please, please: remember that most of your time you are
+    not coding for yourself alone. You are coding for your employer, for
+    your team, for your project, for your future self.
+</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[YubiKey for SSH, Login, 2FA, GPG and Git Signing]]></title>
             <link href="https://ocramius.github.io/blog/yubikey-for-ssh-gpg-git-and-local-login"/>
@@ -371,10 +748,10 @@
     <strong>PIN</strong>
     and an
     <strong>admin PIN</strong>.
-    These defaults for these two are respectively
+    These defaults for these two are respectively
     <code>123456</code>
-    and
-    <code>12345678</code>.
+    and
+    <code>12345678</code>.
     The
     <strong>PIN</strong>
     will be needed each time we plug in we YubiKey to use
@@ -382,12 +759,12 @@
 </p>
 
 <p class="alert alert-warning">
-    <span class="label label-warning">CAUTION:</span>
-    we only have
-    <code>3</code>
+    <span class="label label-warning">CAUTION:</span>
+    we only have
+    <code>3</code>
     attempts for entering our PIN. Should we fail all
-    attempts, then the YubiKey will be locked, and yweou
-    will have to move new GPG sub-keys to it before being
+    attempts, then the YubiKey will be locked, and we
+    will have to move new GPG sub-keys to it before being
     able to use it again. This prevents
     bruteforcing after physical theft.
 </p>
@@ -2817,704 +3194,6 @@ public function &amp; __get($name)
     Please let me know if you like this project by giving it a
     <a href="https://github.com/Ocramius/LazyProperty" target="_blank">star</a>, or just drop me a tweet if
     you think it can be enhanced!
-</p>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[Fluent Interfaces are Evil]]></title>
-            <link href="https://ocramius.github.io/blog/fluent-interfaces-are-evil"/>
-            <updated>2013-11-07T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/fluent-interfaces-are-evil</id>
-            <content type="html"><![CDATA[<p>
-    Today, I had again a discussion on IRC on why
-    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
-        Doctrine's EntityManager
-    </a> doesn't (and won't) implement a fluent interface. Here are my thoughts on why that's the case.
-</p>
-
-<hr/>
-
-<h2>Recap: What is a Fluent interface?</h2>
-
-<p>
-    A <a href="http://en.wikipedia.org/wiki/Fluent_interface" target="_blank">Fluent Interface</a>
-    is an object oriented API that provides "more readable" code.
-    <br/>
-    In general, the template for a fluent interface can be like following:
-</p>
-
-<pre><code class="php">&lt;?php
-
-interface {InterfaceName}
-{
-    /** @return self */
-    public function {MethodName}({Params});
-}
-</code></pre>
-
-<p>
-    Obviously, PHP doesn't provide return type hints, which means that I limited myself to define a
-    <code>/** @return self */</code>
-    <a href="http://www.phpdoc.org/docs/latest/for-users/tags/return.html" target="_blank">docblock</a>.
-</p>
-
-<p>
-    A fluent interface allows you to chain method calls, which results in less typed characters
-    when applying multiple operations on the same object:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$foo
-    -&gt;doBar()
-    -&gt;doBaz()
-    -&gt;setTaz('taz')
-    -&gt;otherCall()
-    -&gt;allTheThings();
-</code></pre>
-
-<hr/>
-
-<h2>When does a fluent interface make sense?</h2>
-
-<p>
-    Fluent interfaces make sense in some APIs, like the
-    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
-        QueryBuilder
-    </a>, or in general builder objects, especially when it comes to putting together nodes into
-    a hierarchical structure.
-</p>
-
-<p>
-    Here's an example of good usage of a fluent interface:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$queryBuilder
-    -&gt;select('u')
-    -&gt;from('User u')
-    -&gt;where('u.id = :identifier')
-    -&gt;orderBy('u.name', 'ASC')
-    -&gt;setParameter('identifier', 100);
-</code></pre>
-
-<hr/>
-
-<h2>What's the problem with fluent interfaces?</h2>
-
-<p>
-    I've identified some issues while working with fluent interfaces. Here they are listed in
-    descending order of relevance:
-</p>
-
-<ol>
-    <li>
-        Fluent Interfaces break
-        <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
-            Encapsulation
-        </a>
-    </li>
-    <li>Fluent Interfaces break Decorators (and sometimes Composition)</li>
-    <li>Fluent Interfaces are harder to Mock</li>
-    <li>Fluent Interfaces make diffs harder to read</li>
-    <li>Fluent Interfaces are less readable (personal feeling)</li>
-    <li>
-        Fluent Interfaces cause <abbr title="Backwards Compatibility">BC</abbr> breaks during early development stages
-    </li>
-</ol>
-
-<hr/>
-
-<h2>Fluent Interfaces break Encapsulation</h2>
-
-<p>
-    The entire idea behind a fluent interface bases on an assumption:
-</p>
-
-<blockquote>
-    In a Fluent Interface, the return value of a method will be the same instance on which the method was called.
-</blockquote>
-
-<p>
-    First of all, "assuming" facts that are not safely constrained by the language is a mistake.
-    <br/>
-    Additionally, in OOP, you cannot rely on the identity of the returned value of an object, but just on its
-    interface.
-</p>
-
-<p>
-    What does that mean? Let's make an example with a <code>Counter</code> interface:
-</p>
-
-<pre><code class="php">&lt;?php
-
-interface Counter
-{
-    /** @return self */
-    public function count();
-
-    /** @return int */
-    public function getCount();
-}
-</code></pre>
-
-<p>Here's a fluent implementation of the interface:</p>
-
-<pre><code class="php">&lt;?php
-
-class FluentCounter implements Counter
-{
-    private $count = 0;
-
-    public function count()
-    {
-        $this-&gt;count += 1;
-
-        return $this;
-    }
-
-    public function getCount()
-    {
-        return $this-&gt;count;
-    }
-}
-</code></pre>
-
-<p>
-    Here's an Immutable implementation of the interface:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class ImmutableCounter implements Counter
-{
-    private $count;
-
-    public function __construct($count = 0)
-    {
-        $this-&gt;count = (int) $count;
-    }
-
-    public function count()
-    {
-        return new ImmutableCounter($this-&gt;count + 1);
-    }
-
-    public function getCount()
-    {
-        return $this-&gt;count;
-    }
-}
-</code></pre>
-
-<p>
-    Here is how you <a href="http://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new FluentCounter();
-
-echo $counter-&gt;count()-&gt;count()-&gt;count()-&gt;getCount(); // 3!
-</code></pre>
-
-<p>
-    Here is how you <a href="http://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new ImmutableCounter();
-
-$counter = $counter-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount(); // 3!
-</code></pre>
-
-<p>
-    We managed to implement an immutable counter even though the author of <code>Counter</code> maybe
-    assumed that all implementations should be mutable.
-</p>
-
-<p>
-    The same can be seen in the opposite direction: interface author may want to have all implementations
-    immutable, but then people implement a mutable version of it.
-</p>
-
-<p>
-    Turns out that the only correct way of
-    <a href="http://3v4l.org/fILUc" target="_blank">using such an interface</a>
-    is the "immutable" way, so:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = $counter-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount(); // 3!
-</code></pre>
-
-<p>
-    This ensures that <code>FluentCounter#getCount()</code> works as expected, but obviously defeats the
-    purpose of the fluent interface.
-</p>
-
-<p>
-    On top of that, there is nothing that the author of <code>Counter</code> can do to enforce either one or
-    the other way of implementing the contract, and that's a limitation of the language itself (and it's
-    most probably for good!).
-</p>
-
-<p>
-    None of the implementors/implementations are wrong. What is wrong here is the interface by trying to
-    force implementation details, therefore breaking encapsulation.
-</p>
-
-<p>Wrapping it up:</p>
-
-<ul>
-    <li>In OOP, a contract cannot guarantee the identity of a method return value</li>
-    <li>Therefore, In OOP, fluent interfaces cannot be guaranteed by a contract</li>
-    <li>Assumptions not backed by a contract are wrong</li>
-    <li>Following wrong assumptions leads to wrong results</li>
-</ul>
-
-<hr/>
-
-<h2>Fluent Interfaces break Decorators (and Composition)</h2>
-
-<p>
-    As some of you may know, I'm putting a lot of effort in writing libraries that
-    <a href="https://github.com/Ocramius/ProxyManager/" target="_blank">generate decorators and proxies</a>.
-    <br/>
-    While working on those, I came to a very complex use case where I needed to build a generic wrapper around
-    an object.
-</p>
-
-<p>
-    I'm picking the <code>Counter</code> example again:
-</p>
-
-<pre><code class="php">&lt;?php
-
-interface Counter
-{
-    /** @return self */
-    public function count();
-
-    /** @return int */
-    public function getCount();
-}
-</code></pre>
-
-<p>
-    Assuming that the implementor of the wrapper doesn't know anything about the implementations of this
-    interface, he goes on and builds a wrapper.
-</p>
-
-<p>
-    In this example, the implementor simply writes a wrapper that echoes every time one of the methods is called:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class EchoingCounter implements Counter
-{
-    private $counter;
-
-    public function __construct(Counter $counter)
-    {
-        $this-&gt;counter = $counter;
-    }
-
-    public function count()
-    {
-        echo __METHOD__ . "\n";
-
-        return $this-&gt;counter-&gt;count();
-    }
-
-    public function getCount()
-    {
-        echo __METHOD__ . "\n";
-
-        return $this-&gt;counter-&gt;getCount();
-    }
-}
-</code></pre>
-
-<p>
-    Let's <a href="http://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new EchoingCounter(new FluentCounter());
-
-$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount();
-</code></pre>
-
-<p>
-    Noticed anything wrong? Yes, the string
-    <strong><code>"EchoingCounter::count"</code> is echoed only once!</strong>
-</p>
-
-<p>
-    That happens because we're just trusting the interface, so the <code>FluentCounter</code> instance
-    gets "un-wrapped" when we call <code>EchoingCounter::count()</code>.
-</p>
-
-<p>
-    Same happens when
-    <a href="http://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new EchoingCounter(new ImmutableCounter());
-
-$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount();
-</code></pre>
-
-<p>Same results. Let's try to fix them:</p>
-
-<pre><code class="php">&lt;?php
-
-class EchoingCounter implements Counter
-{
-    private $counter;
-
-    public function __construct(Counter $counter)
-    {
-        $this-&gt;counter = $counter;
-    }
-
-    public function count()
-    {
-        echo __METHOD__ . "\n";
-
-        $this-&gt;counter-&gt;count();
-
-        return $this;
-    }
-
-    public function getCount()
-    {
-        echo __METHOD__ . "\n";
-
-        return $this-&gt;counter-&gt;getCount();
-    }
-}
-</code></pre>
-
-<p>And now let's <a href="http://3v4l.org/AilJu" target="_blank">retry</a>:</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new EchoingCounter(new FluentCounter());
-
-$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount();
-</code></pre>
-
-<p>
-    Works! We now see the different <code>EchoingCounter::count</code> being echoed.
-    <br/>
-    What about the immutable implementation?
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = new EchoingCounter(new ImmutableCounter());
-
-// we're using the "SAFE" solution here
-$counter = $counter-&gt;count()-&gt;count()-&gt;count()-&gt;count();
-
-echo $counter-&gt;getCount();
-</code></pre>
-
-<p>
-    <a href="http://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
-    the reported count is wrong. Now the wrapper is working, but not the real logic!
-</p>
-
-<p>
-    Additionally, we cannot fix this with a generic solution.
-    <br/>
-    We don't know if the wrapped instance is supposed to return itself or a new instance.
-    <br/>
-    We <em>can</em> manually fix the wrapper with some assumptions though:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class EchoingCounter implements Counter
-{
-    private $counter;
-
-    public function __construct(Counter $counter)
-    {
-        $this-&gt;counter = $counter;
-    }
-
-    public function count()
-    {
-        echo __METHOD__ . "\n";
-
-        $this-&gt;counter = $this-&gt;counter-&gt;count();
-
-        return $this;
-    }
-
-    public function getCount()
-    {
-        echo __METHOD__ . "\n";
-
-        return $this-&gt;counter-&gt;getCount();
-    }
-}
-</code></pre>
-
-<p>
-    As you can see, we have to manually patch the <code>count()</code> method, but then again, this breaks
-    the case when the API is neither Immutable nor Fluent.
-    <br/>
-    Additionally, our wrapper is now opinionated about the usage of the <code>count()</code> method, and it is
-    not possible to build a generic wrapper anymore.
-</p>
-
-<p>
-    I conclude this section by simply stating that fluent interfaces are problematic for wrappers, and require
-    a lot of assumptions to be catched by a human decision, which has to be done per-method, based on
-    assumptions.
-</p>
-
-<hr/>
-
-<h2>Fluent Interfaces are harder to Mock</h2>
-
-<p>
-    Mock classes (at least in PHPUnit) are
-    <a href="http://en.wikipedia.org/wiki/Null_Object_pattern" target="_blank">null objects</a> by default,
-    which means that all the return values of methods have to be manually defined:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = $this-&gt;getMock('Counter');
-
-$counter
-    -&gt;expects($this-&gt;any())
-    -&gt;method('count')
-    -&gt;will($this-&gt;returnSelf());
-</code></pre>
-
-<p>
-    There are 2 major problems with this:
-</p>
-
-<ol>
-    <li>All fluent methods need explicit mocking</li>
-    <li>We are assuming that a fluent interface is implemented, whereas the implementation may be immutable (as shown before)</li>
-</ol>
-
-<p>
-    That basically means that we have to code assumptions in our unit tests (bad, and hard to follow).
-</p>
-
-<p>
-    Also, we have to make decisions on the implementation of a mocked object
-</p>
-
-<p>
-    The correct way of mocking the <code>Counter</code> interface would be something like:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$counter = $this-&gt;getMock('Counter');
-
-$counter
-    -&gt;expects($this-&gt;any())
-    -&gt;method('count')
-    -&gt;will($this-&gt;returnValue($this-&gt;getMock('Counter')));
-</code></pre>
-
-<p>
-    As you can see, we can break our code by making the mock behave differently, but still respecting the
-    interface. Additionally, we need to mock every fluent method regardless of the parameters or even when
-    we don't have expectations on the API.
-</p>
-
-<p>
-    That is a lot of work, and a lot of <strong>wrong</strong> work to be done.
-</p>
-
-<hr/>
-
-<h2>Fluent Interfaces make diffs harder to read</h2>
-
-<p>
-    The problem with diffs is minor, but it's something that really
-    <a href="http://knowyourmeme.com/memes/that-really-rustled-my-jimmies" target="_blank">rustles my jimmies</a>,
-    especially because people abuse fluent interfaces to write giant chained method calls like:
-</p>
-
-<pre><code class="php">&lt;?php
-
-$foo
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-    -&gt;addTab('tab');
-</code></pre>
-
-<p>
-    Let's assume that a line is changed in the middle of the chain:
-</p>
-
-<pre><code class="sh">$ diff -p left.txt right.txt
-</code></pre>
-
-<pre><code class="diff">*** left.txt    Fri Nov  8 15:05:09 2013
---- right.txt   Fri Nov  8 15:05:22 2013
-***************
-*** 11,16 ****
---- 11,17 ----
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-+     -&gt;addBaz('tab')
-    -&gt;addTab('tab')
-    -&gt;addBar('bar')
-    -&gt;addBaz('baz')
-</code></pre>
-
-<p>
-    Not really useful, huh? Where do we see the object this <code>addBaz()</code> is being called on?
-</p>
-
-<p>
-    This may look like nitpicking, but it makes code reviews harder, and I personally do a lot of code reviews.
-</p>
-
-<hr/>
-
-<h2>Fluent Interfaces are less readable</h2>
-
-<p>
-    This is a personal feeling, but when reading a fluent interface, I cannot recognize if what is going on
-    is just a massive violation of the
-    <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a>, or if we're
-    dealing with the same object over and over again.
-    <br/>
-    I'm picking an obvious example to show where this may happen:
-</p>
-
-<pre><code class="php">&lt;?php
-return $queryBuilder
-    -&gt;select('u')
-    -&gt;from('User u')
-    -&gt;where('u.id = :identifier')
-    -&gt;orderBy('u.name', 'ASC')
-    -&gt;setFirstResult(5)
-    -&gt;setParameter('identifier', 100)
-    -&gt;getQuery()
-    -&gt;setMaxResults(10)
-    -&gt;getResult();
-</code></pre>
-
-<p>
-    This one is quite easy to follow: <code>getQuery()</code> and <code>getResult()</code> are returning
-    different objects that have a different API.
-    <br/>
-    The problem occurs when a method does not look like a getter:
-</p>
-
-<pre><code class="php">&lt;?php
-return $someBuilder
-    -&gt;addThing('thing')
-    -&gt;addOtherThing('other thing')
-    -&gt;compile()
-    -&gt;write()
-    -&gt;execute()
-    -&gt;gimme();
-</code></pre>
-
-<p>
-    Which of these method calls is part of a fluent interface? Which is instead
-    returning a different object? You can't really tell that...
-</p>
-
-<hr/>
-
-<h2>Fluent Interfaces cause <abbr title="Backwards Compatibility">BC</abbr> breaks</h2>
-
-<p>
-    Declaring an <code>@return void</code> type allows you to change the method behavior later on.
-</p>
-
-<p>
-    Eagerly declaring a <code>@return self</code> precludes that choice, and changing the signature of the
-    method will inevitably result in a <abbr title="Backwards Compatibility">BC</abbr> break.
-</p>
-
-<p>
-    Using <code>void</code> as a default return type allows for more flexible and rapid design while 
-    we are prototyping around a piece of our codebase.
-</p>
-
-<hr/>
-
-<h2>Conclusion</h2>
-
-<p>
-    I know the article is titled <q>"Fluent Interfaces are Evil"</q>, but that doesn't mean it's an absolute.
-</p>
-
-<p>
-    Fluent interfaces are useful and easy to read in <strong>some contexts</strong>.
-    What I am showing here is a set of problems that raise when inheriting them or making every piece of your
-    code fluent.
-</p>
-
-<p>
-    I just want you to think carefully next time you want fluent interfaces in your libraries,
-    especially about the downsides that I have just exposed.
-</p>
-
-<p>
-    You must have a <strong>very good reason</strong> to implement a fluent interface, otherwise it's just
-    a problem that you are possibly dragging into your codebase.
 </p>
 ]]></content>
         </entry>
