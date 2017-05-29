@@ -323,8 +323,8 @@ $a[1]('subscribed');
 
 <p>
     Please do use type systems when they are available,
-    they actually reduce visual debt, helping you
-    distinguish apples from pies.
+    they actually reduce "visual debt" (is it even a thing?),
+    helping you distinguish apples from pies.
 </p>
 
 <p>
