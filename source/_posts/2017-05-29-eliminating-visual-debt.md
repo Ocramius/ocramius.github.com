@@ -91,3 +91,46 @@ $event->fire('subscribed');
     These artifacts are also distracting, moving our focus from
     the runtime to the declarative requirements of the code.
 </p>
+
+<p>
+    Let's start removing the bits that aren't needed by starting
+    from the method parameter and return type declarations:
+</p>
+
+~~~php
+interface EventInterface {
+    public function listen($name, $handler);
+    public function fire($name);
+}
+
+final class Event implements EventInterface {
+    protected $events = [];
+    
+    public function listen($name, $handler)
+    {
+        $this->events[$name][] = $handler;
+    }
+    
+    public function fire($name)
+    {
+        if (! array_key_exists($name, $this->events)) {
+            return false;
+        }
+        
+        foreach ($this->>events[$name] as $event) {
+            $event();
+        }
+        
+        return true;
+    }
+}
+~~~
+
+<p>
+    Our code is obvious, so the parameters don't need
+    redundant declarations or type checks. Also, we are
+    aware of our own implementation, so the runtime checks
+    are not needed, as the code will work correctly as per
+    manual or end to end testing. A quick read will also
+    provide sufficient proof of correctness.
+</p>
