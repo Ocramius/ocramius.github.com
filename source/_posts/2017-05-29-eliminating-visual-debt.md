@@ -365,3 +365,9 @@ interface EventInterface {
     Please remember that your job is reading, understanding and thinking
     before typing, and typing is just a side-effect.
 </p>
+
+<p>
+    And please, please, please: remember that most of your time you are
+    not coding for yourself alone. You are coding for your employer, for
+    your team, for your project, for your future self.
+</p>
