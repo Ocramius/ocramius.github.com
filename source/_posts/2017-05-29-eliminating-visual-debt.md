@@ -9,7 +9,7 @@ day: 29
 published: true
 summary: Visual debt is damaging our productivity and increasing maintenance load every day - let's delete it
 description: Visual debt clutters the screen, increases code to be read and understood, makes us less productive and makes us focus on things that don't matter
-tweet: 
+tweet: 869313772002963457
 ---
 
 <p>
