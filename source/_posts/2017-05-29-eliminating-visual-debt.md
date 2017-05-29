@@ -25,3 +25,50 @@ tweet:
     <a href="https://twitter.com/jeffrey_way" target="_blank">@jeffrey_way</a>
     provides an overview of what visual debt is.
 </p>
+
+<p>
+    The concept is simple: let's take the example from Laracasts and re-visit
+    the steps taken to remove visual debt.
+</p>
+
+
+~~~php
+interface EventInterface {
+    public function listen(string $name, callable $handler) : void;
+    public function fire(string $name) : bool;
+}
+
+final class Event implements EventInterface {
+    protected $events = [];
+    
+    public function listen(string $name, callable $handler) : void
+    {
+        $this->events[$name][] = $handler;
+    }
+    
+    public function fire(string $name) : bool
+    {
+        if (! array_key_exists($name, $this->events)) {
+            return false;
+        }
+        
+        foreach ($this->>events[$name] as $event) {
+            $event();
+        }
+        
+        return true;
+    }
+}
+
+$event = new Event;
+
+$event->listen('subscribed', function () {
+    var_dump('handling it');
+});
+
+$event->listen('subscribed', function () {
+    var_dump('handling it again');
+});
+
+$event->fire('subscribed');
+~~~
