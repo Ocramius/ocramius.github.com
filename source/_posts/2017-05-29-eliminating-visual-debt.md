@@ -341,10 +341,25 @@ $a[1]('subscribed');
 
 ~~~php
 interface EventInterface {
-    public function listen($name, $handler);
-    public function fire($name);
+    /**
+     * Attach an additional listener to be fired when calling 
+     * `fire` with `$name`
+     */
+    public function listen(string $name, callable $handler) : void;
+    
+    /**
+     * Execute all listeners assigned to `$name`
+     *
+     * @return bool whether any listener was executed
+     */
+    public function fire(string $name) : bool;
 }
 ~~~
+
+<p>
+    This is not a really good interface, but it's a clear, simple
+    and readable one. No "visual debt".
+</p>
 
 <p>
     Please <strong>do</strong> follow best practices.
