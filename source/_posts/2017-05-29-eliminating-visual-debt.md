@@ -215,7 +215,7 @@ class A {
     
     public function a1($a1, $a2)
     {
-        $this->events[$a1][] = $a2;
+        $this->a[$a1][] = $a2;
     }
     
     public function a2($a1)
