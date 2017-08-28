@@ -57,7 +57,7 @@ class Foo
 
 <p>
     In order to do so, we can use a simple wrapper for our <code>Foo</code> object. Because we want to
-    respect the <a title="Liskov Substitution Principle" href="http://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank">LSP</a>,
+    respect the <a title="Liskov Substitution Principle" href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank">LSP</a>,
     we have this wrapper extending <code>Foo</code>:
 </p>
 
@@ -86,7 +86,7 @@ echo $foo->publicProperty;
 ~~~
 
 <p>
-    Weirdly, this <a href="http://3v4l.org/gRtoj" target="_blank">will produce</a>
+    Weirdly, this <a href="https://3v4l.org/gRtoj" target="_blank">will produce</a>
     something like following:
 </p>
 
@@ -144,7 +144,7 @@ echo $foo->publicProperty = 'test';
 ~~~
 
 <p>
-    This <a href="http://3v4l.org/mmMZU" target="_blank">will produce</a> following output:
+    This <a href="https://3v4l.org/mmMZU" target="_blank">will produce</a> following output:
 </p>
 
 ~~~sh

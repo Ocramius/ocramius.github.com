@@ -101,7 +101,7 @@ class PatchedBot extends BotThatDoesSpecialThings { /* ... */ }
 <p>
     There will be less stuffing functionality in existing code via inheritance, which, in my
     opinion, is a symptom of haste combined with 
-    <a href="http://en.wikipedia.org/wiki/Feature_creep" target="_blank">feature creep</a>.
+    <a href="https://en.wikipedia.org/wiki/Feature_creep" target="_blank">feature creep</a>.
 </p>
 
 <p>

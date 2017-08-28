@@ -15,8 +15,8 @@ description: Slides I wrote to guide newcomers while integrating Doctrine 2 ORM 
     A couple of weeks ago, I spoke about integrating
     <a href="https://github.com/doctrine/doctrine2" target="_blank">Doctrine 2 ORM</a> in
     <a href="https://github.com/zendframework/zf2" target="_blank">Zend Framework 2</a> applications in a
-    <a href="http://www.zend.com/en/webinars/recorded/show/336_doctrine%202%20orm%20and%20zend%20framework%202%20an%20introduction%20to%20doctrinemodule" target="_blank">webinar</a>
-    that I prepared for <a href="http://twitter.com/webinarsatzend" target="_blank">@webinarsatzend</a>.
+    <a href="https://www.zend.com/en/webinars/recorded/show/336_doctrine%202%20orm%20and%20zend%20framework%202%20an%20introduction%20to%20doctrinemodule" target="_blank">webinar</a>
+    that I prepared for <a href="https://twitter.com/webinarsatzend" target="_blank">@webinarsatzend</a>.
 </p>
 <p>
     You can find my slides at

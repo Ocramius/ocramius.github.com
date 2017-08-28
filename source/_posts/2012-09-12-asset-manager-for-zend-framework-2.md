@@ -22,7 +22,7 @@ summary: A tutorial to start using assets from your modules within your ZF2 appl
 <h2>ZF2 Module structure</h2>
 <p>
     When <a href="https://twitter.com/weierophinney" target="_blank">Matthew Weier
-    O'Phinney</a> blogged about <a href="http://mwop.net/blog/why-conventions-matter.html"
+    O'Phinney</a> blogged about <a href="https://mwop.net/blog/why-conventions-matter.html"
     target="_blank">Why Conventions Matter</a> in ZF2 Modules, we were still defining the
     basic concepts of modules, and didn't really have a decent solution about how to
     serve assets. The idea is to ship assets with modules themselves, thus avoiding to
@@ -31,7 +31,7 @@ summary: A tutorial to start using assets from your modules within your ZF2 appl
 </p>
 <p>
     AssetManager solves this problem and is a
-    <a href="http://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/"
+    <a href="https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/"
     target="_blank">high quality and well tested module</a>.
 </p>
 
@@ -40,7 +40,7 @@ summary: A tutorial to start using assets from your modules within your ZF2 appl
 <p>
     We will use a standard <a href="https://github.com/zendframework/ZendSkeletonApplication"
     target="_blank">ZF2 skeleton application</a> and
-    <a href="http://getcomposer.org/" target="_blank">Composer</a>:
+    <a href="https://getcomposer.org/" target="_blank">Composer</a>:
 </p>
 
 ~~~sh
