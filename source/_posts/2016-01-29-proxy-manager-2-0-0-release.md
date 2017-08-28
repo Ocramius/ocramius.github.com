@@ -21,7 +21,7 @@ tweet: 693368993881657344
 </p>
 
 <p>
-    <a href="http://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
+    <a href="https://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/2.0.0" target="_blank">2.0.0</a>
     was finally released today!
 </p>

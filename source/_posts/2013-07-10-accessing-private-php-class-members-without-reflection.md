@@ -19,13 +19,13 @@ tweet: 354936007868686337
 </p>
 <p>
     The problem is simple: instantiating
-    <a href="http://php.net/manual/en/class.reflectionclass.php" target="_blank">ReflectionClass</a> or
-    <a href="http://php.net/manual/en/class.reflectionproperty.php" target="_blank">ReflectionProperty</a> is
+    <a href="https://secure.php.net/manual/en/class.reflectionclass.php" target="_blank">ReflectionClass</a> or
+    <a href="https://secure.php.net/manual/en/class.reflectionproperty.php" target="_blank">ReflectionProperty</a> is
     slow, and by slow, I mean <strong>really slow!</strong>
 </p>
 <p>
     The reason for this reasearch is that I'm trying to optimize a
-    "<a href="http://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
+    "<a href="https://framework.zend.com/manual/2.2/en/modules/zend.stdlib.hydrator.html" target="_blank">hydrator</a>"
     to work with larger data-sets by still keeping a low initialization overhead.
 </p>
 
@@ -35,7 +35,7 @@ tweet: 354936007868686337
 
 <p>
     PHP 5.4 comes with a new API for Closures, which is
-    <a href="http://php.net/manual/en/closure.bind.php" target="_blank"><code>Closure#bind()</code></a>.
+    <a href="https://secure.php.net/manual/en/closure.bind.php" target="_blank"><code>Closure#bind()</code></a>.
 </p>
 
 <p>
@@ -89,7 +89,7 @@ var_dump($sweetsThief($kitchen));
 ~~~
 
 <p>
-    Sadly, this <a href="http://3v4l.org/ET06l" target="_blank">will result</a> in <code>$sweetsThief</code>
+    Sadly, this <a href="https://3v4l.org/ET06l" target="_blank">will result</a> in <code>$sweetsThief</code>
     being caught with a fatal error that looks like following:
 </p>
 
@@ -113,7 +113,7 @@ var_dump($sweetsThief($kitchen));
 ~~~
 
 <p>
-    <a href="http://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
+    <a href="https://3v4l.org/2E2mr" target="_blank">Success</a>! We can now get to the <code>cake</code>!
 </p>
 
 <hr/>
@@ -209,7 +209,7 @@ for ($i = 0; $i < 100000; $i += 1) {
 
 <p>
     There's actually one big advantage in using a Closure instead of ReflectionProperty, which is that you can
-    now <a href="http://3v4l.org/W12Hf" target="_blank">retrieve a private property by reference</a>!
+    now <a href="https://3v4l.org/W12Hf" target="_blank">retrieve a private property by reference</a>!
 </p>
 
 ~~~php
@@ -254,7 +254,7 @@ var_dump($kitchen);
 ~~~
 
 <p>
-    Here's the <a href="http://3v4l.org/JE0eX" target="_blank">working example</a>.
+    Here's the <a href="https://3v4l.org/JE0eX" target="_blank">working example</a>.
 </p>
 
 <p>

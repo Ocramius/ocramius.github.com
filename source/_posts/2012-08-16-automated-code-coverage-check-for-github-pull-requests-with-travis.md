@@ -45,14 +45,14 @@ tweet: 236012181685170177
     least a given percentage of the
     <a href="http://pdepend.org/documentation/software-metrics/index.html" target="_blank">]
         <abbr title="Executable Lines Of Code">ELOC</abbr></a>.
-    The script should exit with an <a href="http://en.wikipedia.org/wiki/Exit_status" target="_blank">exit code</a>
+    The script should exit with an <a href="https://en.wikipedia.org/wiki/Exit_status" target="_blank">exit code</a>
     different from <strong>1</strong> if the check wasn't successful, thus being recognized by our test runner as a
     failure.
 </p>
 <p>
-    I will use <a href="http://travis-ci.org/" target="_blank">Travis-CI</a> for my examples, but what I am going to
+    I will use <a href="https://travis-ci.org/" target="_blank">Travis-CI</a> for my examples, but what I am going to
     show can be easily integrated also in other
-    <a href="http://en.wikipedia.org/wiki/Continuous_integration" target="_blank">Continuous Integration</a>
+    <a href="https://en.wikipedia.org/wiki/Continuous_integration" target="_blank">Continuous Integration</a>
     environments.
 </p>
 
@@ -117,8 +117,8 @@ tweet: 236012181685170177
 <h2>The PHP script</h2>
 <p>
     And here's the PHP script that will handle all this. It is just using
-    <a href="http://www.php.net/manual/en/simplexml.examples-basic.php" target="_blank">SimpleXMLElement</a> and
-    an <a href="http://en.wikipedia.org/wiki/XPath" target="_blank">XPath</a> expression to find elements relevant
+    <a href="https://secure.php.net/manual/en/simplexml.examples-basic.php" target="_blank">SimpleXMLElement</a> and
+    an <a href="https://en.wikipedia.org/wiki/XPath" target="_blank">XPath</a> expression to find elements relevant
     to us and extract them from the XML.
 </p>
 

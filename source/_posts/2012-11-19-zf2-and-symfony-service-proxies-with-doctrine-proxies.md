@@ -14,7 +14,7 @@ tweet: 270851711395045377
 <h2>Dependency Injection Containers and Performance</h2>
 
 <p>
-    <a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank">Dependency Injection Containers</a>
+    <a href="https://en.wikipedia.org/wiki/Dependency_injection" target="_blank">Dependency Injection Containers</a>
     are a vital tool for developers of complex and modular applications.
     <br/>
     Using a Dependency Injection Container in your application brings you great benefits, allowing you to compose
@@ -103,7 +103,7 @@ class HelloWorld
 
 <p>
     To solve the performance issues, some may be tempted to start using a
-    <a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
+    <a href="https://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank">Service Locator</a>
     within their services:
 </p>
 ~~~php
@@ -202,8 +202,8 @@ class HelloWorld
 <p>
     <a href="https://github.com/Ocramius/common/blob/DCOM-96/lib/Doctrine/Common/Proxy/Proxy.php"
     target="_blank">Doctrine Proxies</a> are a PHP implementation of the
-    <a href="http://en.wikipedia.org/wiki/Proxy_pattern" target="_blank">proxy pattern</a> used to achieve
-    <a href="http://www.martinfowler.com/eaaCatalog/lazyLoad.html" target="_blank">lazy loading</a> of objects from
+    <a href="https://en.wikipedia.org/wiki/Proxy_pattern" target="_blank">proxy pattern</a> used to achieve
+    <a href="https://www.martinfowler.com/eaaCatalog/lazyLoad.html" target="_blank">lazy loading</a> of objects from
     a persistent storage.
     <br/>
     Doctrine implements this pattern by having <strong>Virtual Proxies</strong> that behave like
@@ -247,7 +247,7 @@ class UserProxy extends User
 <p>
     The implementation has been enhanced with <a href="https://github.com/doctrine/common/pull/168" target="_blank">
     a patch I'm working on</a>, now allowing many different uses of the proxy pattern. This is mainly possible
-    because of <a href="http://php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
+    because of <a href="https://secure.php.net/manual/en/functions.anonymous.php" target="_blank">lambda functions</a>
     used as initialization logic holders:
 </p>
 ~~~php
@@ -274,7 +274,7 @@ class UserProxy extends User
 }
 ~~~
 <p>
-    Using a <a href="http://php.net/manual/en/class.closure.php" target="_blank">Closure</a> as an initializer
+    Using a <a href="https://secure.php.net/manual/en/class.closure.php" target="_blank">Closure</a> as an initializer
     now enables us to swap the initialization logic used for our proxy object. I won't get into details, but this
     is a requirement for our next step.
 </p>
@@ -361,7 +361,7 @@ class HelloWorld
 <ol>
     <li>
         You can now pass an instance of <code>D_Proxy</code> to <code>HelloWorld</code>. Since <code>D_Proxy</code>
-        extends <code>D</code>, it respects the <a href="http://en.wikipedia.org/wiki/Liskov_substitution_principle"
+        extends <code>D</code>, it respects the <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"
         target="_blank">Liskov substitution principle</a>.
     </li>
     <li>
@@ -486,7 +486,7 @@ class HelloWorld
     on writing clean and robust classes that are easy to test.
 </p>
 <p>
-    They surely add some hidden magic to our code, and I've been already told by <a href="http://mwop.net/" target="_blank">
+    They surely add some hidden magic to our code, and I've been already told by <a href="https://mwop.net/" target="_blank">
     Matthew Weier 'o Phinney</a> that some newcomers may be confused by the additional calls they will in stack
     traces when looking at exceptions. Since proxies are an optional feature, I'm not really concerned about it.
 </p>

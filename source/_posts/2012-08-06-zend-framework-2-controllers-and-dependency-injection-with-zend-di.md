@@ -65,10 +65,10 @@ summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retriev
 <p>
     <span class="label label-info">For the lazy:</span> If you just prefer to look at the code and run it
     without having to reproduce my example, you can just look at the already modified skeleton at
-    <a href="http://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di/module">
+    <a href="https://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di/module">
         Ocramius/ZendSkeletonApplication - branch demo/zf2-controllers-from-zend-di
     </a> and see what I did in the
-    <a href="http://github.com/Ocramius/ZendSkeletonApplication/compare/master...demo;zf2-controllers-from-zend-di" target="_blank">diff</a>.
+    <a href="https://github.com/Ocramius/ZendSkeletonApplication/compare/master...demo;zf2-controllers-from-zend-di" target="_blank">diff</a>.
 </p>
 
 <p>
@@ -324,19 +324,19 @@ return array(
 <p>
    <span class="label label-info">Note:</span>  Please also note that in this example, all dependency injection
      are based on type hints of concret  implementations. I cleaned up my code and invite you to check
-    <a href="http://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di-cleanup/module" target="_blank">
+    <a href="https://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di-cleanup/module" target="_blank">
         Ocramius/ZendSkeletonApplication - demo/zf2-controllers-from-zend-di-cleanup
     </a> and see what I did in the
-    <a href="http://github.com/Ocramius/ZendSkeletonApplication/compare/demo;zf2-controllers-from-zend-di...demo;zf2-controllers-from-zend-di-cleanup" target="_blank">diff</a>.
+    <a href="https://github.com/Ocramius/ZendSkeletonApplication/compare/demo;zf2-controllers-from-zend-di...demo;zf2-controllers-from-zend-di-cleanup" target="_blank">diff</a>.
     In this case I simply exchanged the type hints with abstract types (which allow more flexibility) and taught
     <code>Zend\Di</code> how to handle injections for them.
 </p>
 
 <p>
     To check how I improved performance using <code>ocramius/ocra-di-compiler</code>, please refer to branch
-    <a href="http://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di-with-compiled-di/module" target="_blank">
+    <a href="https://github.com/Ocramius/ZendSkeletonApplication/tree/demo/zf2-controllers-from-zend-di-with-compiled-di/module" target="_blank">
         Ocramius/ZendSkeletonApplication - demo/zf2-controllers-from-zend-di-with-compiled-di
-    </a> and to the related <a href="http://github.com/Ocramius/ZendSkeletonApplication/compare/demo;zf2-controllers-from-zend-di-cleanup...demo;zf2-controllers-from-zend-di-with-compiled-di" target="_blank">diff</a>.
+    </a> and to the related <a href="https://github.com/Ocramius/ZendSkeletonApplication/compare/demo;zf2-controllers-from-zend-di-cleanup...demo;zf2-controllers-from-zend-di-with-compiled-di" target="_blank">diff</a>.
 </p>
 
 <hr/>

@@ -34,7 +34,7 @@ $arrayFoo = (array) $foo;
 var_dump($arrayFoo);
 ~~~
 <p>
-    This <a href="http://3v4l.org/dj6Ei" target="_blank">will produce</a> something like:
+    This <a href="https://3v4l.org/dj6Ei" target="_blank">will produce</a> something like:
 </p>
 
 ~~~php
@@ -69,7 +69,7 @@ var_dump($arrayFoo);
 ~~~
 
 <p>
-    The output <a href="http://3v4l.org/vK1t6" target="_blank">will be</a> like following in this case:
+    The output <a href="https://3v4l.org/vK1t6" target="_blank">will be</a> like following in this case:
 </p>
 
 ~~~php
@@ -95,7 +95,7 @@ var_dump($arrayFoo['Footab']);
 
 <p>
     Something even more strange happens here:
-    <a href="http://3v4l.org/JimNP" target="_blank">we get two notices</a>.
+    <a href="https://3v4l.org/JimNP" target="_blank">we get two notices</a>.
 </p>
 
 ~~~php
@@ -109,7 +109,7 @@ NULL
 <p>
     I actually spent some time trying to understand why this was happening, and even the debugger was failing
     me! Then I tried using
-    <a href="http://www.php.net/manual/en/function.var-export.php" target="_blank"><code>var_export</code></a>:
+    <a href="https://secure.php.net/manual/en/function.var-export.php" target="_blank"><code>var_export</code></a>:
 </p>
 
 
@@ -120,7 +120,7 @@ var_export($arrayFoo);
 ~~~
 
 <p>
-    The <a href="http://3v4l.org/UQlb0" target="_blank">output</a> is quite interesting:
+    The <a href="https://3v4l.org/UQlb0" target="_blank">output</a> is quite interesting:
 </p>
 
 ~~~php
@@ -154,7 +154,7 @@ var_dump($foo->{"\0Foo\0tab"});
 
 <p>
     Looks like the engine was patched after PHP 5.1 to fix this (un-documented break),
-    since <a href="http://3v4l.org/e5hWG" target="_blank">we get a fatal</a>:
+    since <a href="https://3v4l.org/e5hWG" target="_blank">we get a fatal</a>:
 </p>
 
 ~~~php

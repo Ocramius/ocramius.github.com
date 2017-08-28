@@ -195,7 +195,7 @@ class UserService
 
 <p>
     What is going on? I'm simply exploiting an feature of the PHP language on which I've already
-    blogged at <a href="http://ocramius.github.io/blog/intercepting-public-property-access-in-php/" target="_blank">
+    blogged at <a href="https://ocramius.github.io/blog/intercepting-public-property-access-in-php/" target="_blank">
         Property Accessors in PHP Userland
     </a>.
 </p>

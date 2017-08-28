@@ -24,7 +24,7 @@ tweet: 399854614503108608
 <h2>Recap: What is a Fluent interface?</h2>
 
 <p>
-    A <a href="http://en.wikipedia.org/wiki/Fluent_interface" target="_blank">Fluent Interface</a>
+    A <a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">Fluent Interface</a>
     is an object oriented API that provides "more readable" code.
     <br/>
     In general, the template for a fluent interface can be like following:
@@ -100,7 +100,7 @@ $queryBuilder
 <ol>
     <li>
         Fluent Interfaces break
-        <a href="http://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
+        <a href="https://en.wikipedia.org/wiki/Encapsulation_%28object-oriented_programming%29" target="_blank">
             Encapsulation
         </a>
     </li>
@@ -201,7 +201,7 @@ class ImmutableCounter implements Counter
 ~~~
 
 <p>
-    Here is how you <a href="http://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
+    Here is how you <a href="https://3v4l.org/l5rr0" target="_blank">use a <code>FluentCounter</code></a>:
 </p>
 
 ~~~php
@@ -213,7 +213,7 @@ echo $counter->count()->count()->count()->getCount(); // 3!
 ~~~
 
 <p>
-    Here is how you <a href="http://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
+    Here is how you <a href="https://3v4l.org/AP62m" target="_blank">use an <code>ImmutableCounter</code></a>:
 </p>
 
 ~~~php
@@ -236,7 +236,7 @@ echo $counter->getCount(); // 3!
 </p>
 <p>
     Turns out that the only correct way of
-    <a href="http://3v4l.org/fILUc" target="_blank">using such an interface</a>
+    <a href="https://3v4l.org/fILUc" target="_blank">using such an interface</a>
     is the "immutable" way, so:
 </p>
 
@@ -339,7 +339,7 @@ class EchoingCounter implements Counter
 ~~~
 
 <p>
-    Let's <a href="http://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
+    Let's <a href="https://3v4l.org/i5m5r" target="_blank">try it out with our fluent counter</a>:
 </p>
 
 ~~~php
@@ -364,7 +364,7 @@ echo $counter->getCount();
 
 <p>
     Same happens when
-    <a href="http://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
+    <a href="https://3v4l.org/bUMJ7" target="_blank">using the <code>ImmutableCounter</code></a>
 </p>
 
 ~~~php
@@ -409,7 +409,7 @@ class EchoingCounter implements Counter
 }
 ~~~
 
-<p>And now let's <a href="http://3v4l.org/AilJu" target="_blank">retry</a>:</p>
+<p>And now let's <a href="https://3v4l.org/AilJu" target="_blank">retry</a>:</p>
 
 ~~~php
 <?php
@@ -439,7 +439,7 @@ echo $counter->getCount();
 ~~~
 
 <p>
-    <a href="http://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
+    <a href="https://3v4l.org/FuX4X" target="_blank">Seems to work</a>, but if you look closely,
     the reported count is wrong. Now the wrapper is working, but not the real logic!
 </p>
 
@@ -501,7 +501,7 @@ class EchoingCounter implements Counter
 
 <p>
     Mock classes (at least in PHPUnit) are
-    <a href="http://en.wikipedia.org/wiki/Null_Object_pattern" target="_blank">null objects</a> by default,
+    <a href="https://en.wikipedia.org/wiki/Null_Object_pattern" target="_blank">null objects</a> by default,
     which means that all the return values of methods have to be manually defined:
 </p>
 
@@ -639,7 +639,7 @@ $ diff -p left.txt right.txt
 <p>
     This is a personal feeling, but when reading a fluent interface, I cannot recognize if what is going on
     is just a massive violation of the
-    <a href="http://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a>, or if we're
+    <a href="https://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank">Law of Demeter</a>, or if we're
     dealing with the same object over and over again.
     <br/>
     I'm picking an obvious example to show where this may happen:
