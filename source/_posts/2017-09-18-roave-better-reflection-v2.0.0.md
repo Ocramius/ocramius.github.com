@@ -151,7 +151,7 @@ $reflectionClass = new ReflectionClass($myClass);
 <p>
     The hard part is tracking the miriad of details of the PHP language,
     which is very complex and cluttered with scope, visibility and inheritance
-    rules. We take care of that work for you.
+    rules: we take care of it for you.
 </p>
 
 <h3>Use cases</h3>
