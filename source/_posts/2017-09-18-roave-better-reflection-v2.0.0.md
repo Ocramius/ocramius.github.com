@@ -128,10 +128,8 @@ $reflectionClass = new ReflectionClass($myClass);
     How does that work?
 </p>
 
-<!-- @TODO insert magic gif? -->
-
 <p>
-    The working concept is quite simple, really:
+    The operational concept is quite simple, really:
 </p>
 
 <ol>
