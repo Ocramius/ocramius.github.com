@@ -204,7 +204,7 @@ class Evil {}
 
 <p>
     If you are more into code analysis, you may decide to compare two different
-    versions of a library, and scan for <abbr title="Backwards Compatibility>BC</abbr>
+    versions of a library, and scan for <abbr title="Backwards Compatibility">BC</abbr>
     breaks:
 </p>
 
