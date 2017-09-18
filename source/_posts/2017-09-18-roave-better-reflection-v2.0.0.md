@@ -245,7 +245,10 @@ class SomeAPI
 
 <p>
     In addition to the above use-case scenarios, we are working on additional
-    functionality that would allow changing code before loading it. 
+    functionality that would allow
+    <a href="https://github.com/Roave/BetterReflection/blob/2.0.0/demo/monkey-patching/index.php" target="_blank">
+        changing code before loading it
+    </a>. 
 </p>
 
 <p>
