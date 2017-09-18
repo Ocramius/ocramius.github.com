@@ -9,7 +9,7 @@ day: 18
 published: true
 summary: BetterReflection version 2 was released: let's look at its main features and improvements
 description: BetterReflection is a library that aims at providing additional and improved Reflection API compared to PHP's ext-reflection
-tweet: 
+tweet: 909888939942711301
 ---
 <p>
     <a href="https://twitter.com/RoaveTeam" target="_blank" rel="fn org">Roave</a>'s
