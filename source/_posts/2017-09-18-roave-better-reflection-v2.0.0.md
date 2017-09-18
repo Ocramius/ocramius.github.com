@@ -270,3 +270,12 @@ class SomeAPI
 </p>
 
 <h3>Credits</h3>
+
+<p>
+    To conclude, I would like to thank <a href="https://github.com/asgrim" target="_blank">James Titcumb</a>, 
+    <a href="https://github.com/kukulich" target="_blank">Jaroslav Hanslík</a>,
+    <a href="https://github.com/marcosh" target="_blank">Marco Perone</a> and
+    <a href="https://github.com/POPSuL" target="_blank">Viktor Suprun</a> for the effort they put in this release,
+    providing patches, improvements and overall helping us building something that may become
+    extremely useful in the PHP ecosystem.
+</p>
