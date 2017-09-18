@@ -43,12 +43,12 @@ tweet:
     <small>(I did some work too, by the way!)</small>
 </p>
 
+<h3>What the heck is BetterReflection?</h3>
+
 <p>
     Jokes apart, the project is quite ambitious, and it aims at reproducing the entirety of the PHP
     reflection API without having any actual autoloading being triggered.
 </p>
-
-<h3>What the heck is BetterReflection?</h3>
 
 <p>
     When put in use, it looks something like this:
