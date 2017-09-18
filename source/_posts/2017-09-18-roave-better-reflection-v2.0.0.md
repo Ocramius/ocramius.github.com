@@ -154,7 +154,7 @@ $reflectionClass = new ReflectionClass($myClass);
     rules: we take care of it for you.
 </p>
 
-<h3>Use cases</h3>
+<h3>Use case scenarios</h3>
 
 <p>
     The main use-cases for BetterReflection are most likely around security, code
