@@ -28,14 +28,19 @@ tweet:
     would lay back and get drunk on Drambuie.
 </p>
 
-<!-- @TODO add drunken marco pic -->
-
 <p>
-    Yes, that actually happened. Thank you, James, for all the hard work! <!-- TODO beer -->
+    <img
+        src="../img/posts/2017-09-18-roave-better-reflection-v2.0.0"
+        alt="Me, drunk in bed. Photo by @Asgrim, since I was too drunk to human"
+    />
 </p>
 
 <p>
-    <small>(I did some work too!)</small>
+    Yes, that actually happened. Thank you, James, for all the hard work! 🍻
+</p>
+
+<p>
+    <small>(I did some work too, by the way!)</small>
 </p>
 
 <p>
