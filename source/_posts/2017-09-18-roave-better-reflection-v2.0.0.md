@@ -24,7 +24,7 @@ tweet:
 </p>
 
 <p>
-    The initial idea was simple: I would get to watch James implement all my wicked ideas, while I
+    The initial idea was simple: James would implement all my wicked ideas, while I
     would lay back and get drunk on Drambuie.
 </p>
 
