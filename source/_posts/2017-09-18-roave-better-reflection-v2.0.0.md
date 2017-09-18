@@ -51,7 +51,7 @@ tweet:
 </p>
 
 <p>
-    When put in use, it looks something like this:
+    When put in use, it looks like this:
 </p>
 
 ~~~php
