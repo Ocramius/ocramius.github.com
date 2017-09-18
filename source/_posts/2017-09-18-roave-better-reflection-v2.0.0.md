@@ -30,7 +30,7 @@ tweet:
 
 <p>
     <img
-        src="../img/posts/2017-09-18-roave-better-reflection-v2.0.0"
+        src="../../img/posts/2017-09-18-roave-better-reflection-v2.0.0/drunken-coding.jpg"
         alt="Me, drunk in bed. Photo by @Asgrim, since I was too drunk to human"
     />
 </p>
