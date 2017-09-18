@@ -235,15 +235,24 @@ class SomeAPI
     kind of change!).
 </p>
 
+<p>
+    Another way to leverage the power of this factory is to compile factory code into highly 
+    optimised dependency injection containers, like
+    <a href="https://github.com/PHP-DI/PHP-DI/pull/507" target="_blank">PHP-DI</a> started doing.
+</p>
+
 <h3>Future use cases?</h3>
 
 <p>
     In addition to the above use-case scenarios, we are working on additional
     functionality that would allow changing code before loading it. 
 </p>
+
 <p>
     Is that a good idea?
 </p>
+
+<p>
     ... I honestly don't know.
 </p>
 
