@@ -139,7 +139,7 @@ $reflectionClass = new ReflectionClass($myClass);
         hacks to find the file without wasting disk I/O.
     </li>
     <li>
-        We feed your PHP file to <a href="https://github.com/nikic/PHP-Parserr" target="_blank">PHP-Parser</a>
+        We feed your PHP file to <a href="https://github.com/nikic/PHP-Parser" target="_blank">PHP-Parser</a>
     </li>
     <li>
         We analyse the produced <abbr title="Abstract Syntax Tree">AST</abbr> and
