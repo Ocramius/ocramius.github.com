@@ -148,7 +148,7 @@ for ($i = 0; $i < 100000; $i += 1) {
 ~~~
 
 <p>
-    On a freshly compiled PHP 5.5 (Ubuntu 13.04 amd64 box), the fist script takes around
+    On a freshly compiled PHP 5.5 (Ubuntu 13.04 amd64 box), the first script takes around
     <strong>0.325</strong> seconds to run, while the second one requires <strong>0.658</strong> seconds.
 </p>
 
