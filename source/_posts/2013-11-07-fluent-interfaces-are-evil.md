@@ -67,7 +67,7 @@ $foo
 
 <p>
     Fluent interfaces make sense in some APIs, like the
-    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/EntityManager.php" target="_blank">
+    <a href="https://github.com/doctrine/doctrine2/blob/2.4/lib/Doctrine/ORM/QueryBuilder.php" target="_blank">
         QueryBuilder
     </a>, or in general builder objects, especially when it comes to putting together nodes into
     a hierarchical structure.
