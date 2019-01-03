@@ -8,11 +8,11 @@ title: Presentations
 
     <div class="clear"></div>
     <div class="span12">
-        <iframe 
+        <iframe
             width="640"
             height="390"
-            frameborder="0" 
-            src="https://www.youtube.com/embed/8NuHNtwjync" 
+            frameborder="0"
+            src="https://www.youtube.com/embed/8NuHNtwjync"
             webkitallowfullscreen mozallowfullscreen allowfullscreen>
         </iframe>
     </div>
@@ -24,11 +24,11 @@ title: Presentations
 
     <div class="clear"></div>
     <div class="span12">
-        <iframe 
+        <iframe
             width="640"
             height="390"
-            frameborder="0" 
-            src="https://www.youtube.com/embed/rzGeNYC3oz0" 
+            frameborder="0"
+            src="https://www.youtube.com/embed/rzGeNYC3oz0"
             webkitallowfullscreen mozallowfullscreen allowfullscreen>
         </iframe>
         <h4>Doctrine ORM Good Practices and Tricks</h4>
@@ -37,7 +37,22 @@ title: Presentations
 
     <hr/>
 
- <div class="clear"></div>
+    <div class="clear"></div>
+    <div class="span12">
+        <iframe
+            width="640"
+            height="390"
+            frameborder="0"
+            src="https://www.youtube.com/embed/j4nS_dGxxs8"
+            webkitallowfullscreen mozallowfullscreen allowfullscreen>
+        </iframe>
+        <h4>Doctrine ORM Good Practices and Tricks @ PHP Antwerp</h4>
+        <a href="https://joind.in/event/php-antwerp---pre-phpbenelux-meetup/doctrine-orm-good-practices-and-tricks" target="_blank">Reviews</a>
+    </div>
+
+    <hr/>
+
+    <div class="clear"></div>
     <div class="span12">
         <iframe
             src="https://player.vimeo.com/video/134178140"
@@ -127,11 +142,11 @@ title: Presentations
 
     <div class="clear"></div>
     <div class="span12">
-        <iframe 
-            width="640" 
-            height="390" 
-            src="//www.youtube.com/embed/Qu-wFNBrhr4" 
-            frameborder="0" 
+        <iframe
+            width="640"
+            height="390"
+            src="//www.youtube.com/embed/Qu-wFNBrhr4"
+            frameborder="0"
             allowfullscreen>
         </iframe>
         <h4>Doctrine 2 ORM and Zend Framework 2: an introduction to DoctrineModule</h4>
