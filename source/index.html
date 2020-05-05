@@ -8,6 +8,27 @@ pagination:
 use:
     - posts
 ---
+{% if page.page_type == "home" %}
+<section>
+    <p>These companies are, very kindly, contributing a monthly amount to help sustain my <abbr title="Open Source Software">OSS</abbr> efforts:</p>
+
+    <p class="sponsors">
+        <a class="sponsor" href="https://e3n.de/" rel="sponsored">
+            <img src="img/sponsors/e3n-logo.svg" alt="E3N Internet Agentur"/>
+        </a>
+        <a class="sponsor" href="https://www.amezmo.com/" rel="sponsored">
+            <img src="img/sponsors/amezmo-logo.png" alt="Amezmo - The Modern PHP hosting platform"/>
+        </a>
+    </p>
+
+    <p>For more details, please take a look at my <a href="https://github.com/sponsors/Ocramius" rel="me">sponsorship page</a>.</p>
+</section>
+
+<div class="clear"></div>
+<p class="text-center remove-margin">
+    <img src="{{ site.url }}/img/separator.png" alt=""/>
+</p>
+{% endif %}
 {% for post in page.pagination.items %}
     <article class="overview">
         <header>

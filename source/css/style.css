@@ -313,3 +313,16 @@ pre code {
     color: rgba(0, 0, 0, 0);
     background-position: center;
 }
+
+.sponsors {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.sponsors .sponsor {
+    align-self: center;
+    flex-basis: 45%;
+    max-width: 50%;
+}
