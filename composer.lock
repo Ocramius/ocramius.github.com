@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "3cd93eace73c129cd5e2db065c51d19a",
@@ -683,7 +683,7 @@
                 "extensibility"
             ],
             "abandoned": "dflydev/embedded-composer",
-            "time": "2014-09-17 04:02:52"
+            "time": "2014-09-17T04:02:52+00:00"
         },
         {
             "name": "dflydev/embedded-composer-core",
@@ -740,7 +740,7 @@
                 "extensibility"
             ],
             "abandoned": "dflydev/embedded-composer",
-            "time": "2015-03-23 20:10:26"
+            "time": "2015-03-23T20:10:26+00:00"
         },
         {
             "name": "dflydev/placeholder-resolver",
@@ -1148,6 +1148,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "abandoned": true,
             "time": "2015-05-20T03:37:09+00:00"
         },
         {
@@ -1198,6 +1199,7 @@
                 "Guzzle",
                 "stream"
             ],
+            "abandoned": true,
             "time": "2014-10-12T19:18:40+00:00"
         },
         {
@@ -1886,6 +1888,7 @@
                 }
             ],
             "description": "Allows installation of Components via Composer.",
+            "abandoned": "oomphinc/composer-installers-extender",
             "time": "2015-08-10T12:35:38+00:00"
         },
         {
@@ -1985,7 +1988,7 @@
                 "site",
                 "static"
             ],
-            "time": "2015-07-15 07:51:38"
+            "time": "2015-07-15T07:51:38+00:00"
         },
         {
             "name": "sculpin/sculpin-theme-composer-plugin",
@@ -1993,16 +1996,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sculpin/sculpin-theme-composer-plugin.git",
-                "reference": "8b5bb152bd7d4516edb3493a9cf3204ed99e9ef5"
+                "reference": "f22bbf89971054e0e37983263828ca39ffca2437"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sculpin/sculpin-theme-composer-plugin/zipball/8b5bb152bd7d4516edb3493a9cf3204ed99e9ef5",
-                "reference": "8b5bb152bd7d4516edb3493a9cf3204ed99e9ef5",
+                "url": "https://api.github.com/repos/sculpin/sculpin-theme-composer-plugin/zipball/f22bbf89971054e0e37983263828ca39ffca2437",
+                "reference": "f22bbf89971054e0e37983263828ca39ffca2437",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0"
+                "composer-plugin-api": "^1.1"
             },
             "type": "composer-plugin",
             "extra": {
@@ -2020,7 +2023,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-05-24 19:51:53"
+            "time": "2017-02-27T17:40:03+00:00"
         },
         {
             "name": "seld/cli-prompt",
@@ -2389,16 +2392,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.8.16",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "b75356611675364607d697f314850d9d870a84aa"
+                "reference": "c306198fee8f872a8f5f031e6e4f6f83086992d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/b75356611675364607d697f314850d9d870a84aa",
-                "reference": "b75356611675364607d697f314850d9d870a84aa",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/c306198fee8f872a8f5f031e6e4f6f83086992d8",
+                "reference": "c306198fee8f872a8f5f031e6e4f6f83086992d8",
                 "shasum": ""
             },
             "require": {
@@ -2448,7 +2451,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-10T14:27:01+00:00"
+            "time": "2019-04-16T11:33:46+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -3240,6 +3243,7 @@
                 "escaper",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-escaper",
             "time": "2016-06-30T19:48:38+00:00"
         }
     ],
@@ -3876,6 +3880,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {
