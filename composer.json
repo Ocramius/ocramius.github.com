@@ -1,38 +1,24 @@
 {
-    "name": "sculpin/blog-skeleton",
     "description": "A Skeleton for a Sculpin Based Blog",
     "type": "sculpin-skeleton",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Dragonfly Development Inc.",
-            "email": "info@dflydev.com",
-            "homepage": "http://dflydev.com"
-        },
-        {
-            "name": "Beau Simensen",
-            "email": "beau@dflydev.com",
-            "homepage": "http://beausimensen.com"
-        }
-    ],
     "require": {
         "guzzlehttp/guzzle": "~5.0",
-        "components/jquery": "~1.9.1",
-        "sculpin/sculpin": "2.0.*@DEV",
-        "composer/composer": "1.0.*@DEV",
+        "components/jquery": "^v3.7.1",
+        "sculpin/sculpin": "^3.2.0",
         "components/bootstrap": "~2.3.1",
         "components/highlightjs": "~7.3.0",
-        "dflydev/embedded-composer-core": "1.0.*@DEV",
-        "dflydev/embedded-composer-console": "1.0.*@DEV",
         "sculpin/sculpin-theme-composer-plugin": "1.0.*@DEV",
-        "zendframework/zend-escaper": "2.*",
-        "roave/security-advisories": "dev-master"
+        "zendframework/zend-escaper": "2.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "^12.1.1"
     },
     "config": {
-        "component-dir": "source/components"
+        "component-dir": "source/components",
+        "allow-plugins": {
+            "sculpin/sculpin-theme-composer-plugin": true,
+            "robloach/component-installer": true
+        }
     },
     "autoload": {
         "psr-0": {

@@ -2,10 +2,11 @@
 
 namespace JoindInBundle;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client as HttpClient;
 
-class ClientTest extends PHPUnit_Framework_TestCase
+/** @covers \JoindInBundle\Client */
+class ClientTest extends TestCase
 {
     public function testThrowsAnExceptionIfGivenAInvalidConfigData()
     {
@@ -15,9 +16,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
         new Client([], $httpClient);
     }
 
-    /**
-     * @covers JoindInBundle\Client::getUserInfo
-     */
     public function testCanGetDataOfAUser()
     {
         $httpClient = new HttpClient();
@@ -29,9 +27,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ocramius', $userInfo['users'][0]['username']);
     }
 
-    /**
-     * @covers JoindInBundle\Client::getTalks
-     */
     public function testCanGetTalksFromUser()
     {
         $httpClient = new HttpClient();
