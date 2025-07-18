@@ -5,7 +5,7 @@
         "guzzlehttp/guzzle": "~5.0",
         "components/jquery": "^v3.7.1",
         "sculpin/sculpin": "^3.2.0",
-        "components/bootstrap": "~2.3.1",
+        "components/bootstrap": "^4.6.2",
         "components/highlightjs": "~7.3.0",
         "sculpin/sculpin-theme-composer-plugin": "1.0.*@DEV",
         "zendframework/zend-escaper": "2.*"

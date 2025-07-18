@@ -24,10 +24,10 @@
         <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/atom.xml" title="{{ site.title }} activity feed" />
     </head>
     <script src="{{ site.url }}/js/snap.svg-min.js"></script>
-    <body{% if page.layout != "post" %} class="show-menu"{% endif %}>
+    <body>
         <div class="container">
 
-            <div class='menu-wrap{% if page.layout != "post" %} display{% endif %}'>
+            <div class='menu-wrap display'>
                 <nav class="menu">
                     <div class="icon-list">
                         <a href="{{ site.url }}/"><i class="fa fa-solid fa-newspaper"></i><span>Latest Posts</span></a>
@@ -88,10 +88,8 @@
 
         <script src="{{ site.url }}/js/shifty.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.min.js"></script>
-        <script src="{{ site.url }}/components/bootstrap/js/bootstrap.min.js"></script>
         <script src="{{ site.url }}/components/jquery/jquery.min.js"></script>
-        <script src ="{{ site.url }}/js/blogpost-tweets.js" type="text/javascript"></script>
-        <script src="https://platform.twitter.com/widgets.js"></script>
+        <script src="{{ site.url }}/components/bootstrap/js/bootstrap.min.js"></script>
 
         {% if site.google_analytics_tracking_id %}
         <script type="text/javascript">

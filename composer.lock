@@ -4,27 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4c806f5e2e13a23aa62aaaa2d7b6b2c",
+    "content-hash": "deddc2024225c5cfd598b35c36f61321",
     "packages": [
         {
             "name": "components/bootstrap",
-            "version": "2.3.2",
+            "version": "4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/bootstrap.git",
-                "reference": "4e517c991623b3bd913e2becd44831b2c9b0be90"
+                "reference": "fca56bda4c5c40cb2a163a143e8e4271a6721492"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/bootstrap/zipball/4e517c991623b3bd913e2becd44831b2c9b0be90",
-                "reference": "4e517c991623b3bd913e2becd44831b2c9b0be90",
+                "url": "https://api.github.com/repos/components/bootstrap/zipball/fca56bda4c5c40cb2a163a143e8e4271a6721492",
+                "reference": "fca56bda4c5c40cb2a163a143e8e4271a6721492",
                 "shasum": ""
             },
             "require": {
-                "components/jquery": "*"
-            },
-            "suggest": {
-                "components/bootstrap-default": "Provide a theme for Bootstrap as components/bootstrap only provides the CSS as file assets"
+                "components/jquery": ">=2"
             },
             "type": "component",
             "extra": {
@@ -35,9 +32,10 @@
                         ]
                     },
                     "files": [
-                        "js/bootstrap.min.js",
+                        "js/*.js",
+                        "js/*.map",
                         "css/*.css",
-                        "img/*.png"
+                        "css/*.map"
                     ],
                     "scripts": [
                         "js/bootstrap.js"
@@ -46,24 +44,34 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Twitter, Inc"
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                },
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
                 }
             ],
-            "description": "Sleek, intuitive, and powerful front-end framework for faster and easier web development.",
-            "homepage": "http://twitter.github.com/bootstrap/",
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com",
             "keywords": [
-                "bootstrap",
-                "css"
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
             ],
             "support": {
                 "issues": "https://github.com/components/bootstrap/issues",
-                "source": "https://github.com/components/bootstrap/tree/master"
+                "source": "https://github.com/components/bootstrap/tree/4.6.2"
             },
-            "time": "2013-07-18T20:01:48+00:00"
+            "time": "2022-07-29T06:50:47+00:00"
         },
         {
             "name": "components/highlightjs",
