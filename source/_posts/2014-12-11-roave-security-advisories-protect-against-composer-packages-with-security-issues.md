@@ -1,6 +1,6 @@
 ---
 layout: post
-title: roave/security-advisories: Composer against Security Vulnerabilities
+title: "roave/security-advisories: Composer against Security Vulnerabilities"
 category: PHP
 tags: ["php", "security", "composer", "packagist"]
 year: 2014
