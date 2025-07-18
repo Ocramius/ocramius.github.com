@@ -57,7 +57,7 @@ title: About me, Marco Pivetta, aka Ocramius
     </p>
 
     <p>
-        You can also say "hi" to me on <a href="https://twitter.com/Ocramius" rel="me" class="twitter url" target="_blank">Twitter</a>,
+        You can also say "hi" to me on <a href="https://mastodon.social/@ocramius" rel="me" class="mastodon url" target="_blank">Mastodon</a>,
         where I post professional and personal thoughts, suggestions, rants and silly things that I find on the
         intertubes.
     </p>

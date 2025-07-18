@@ -266,7 +266,7 @@ pre code {
     background: transparent;
 }
 
-.ocramius, .twitter, .github, .roave, .zendframework, .doctrine {
+.ocramius, .mastodon, .github, .roave, .zendframework, .doctrine {
     padding-left: 1.5em;
     background-repeat: no-repeat;
     background-position: left;
@@ -287,8 +287,8 @@ pre code {
     background-image: url('../img/marco-pivetta-ocramius.gif');
 }
 
-.twitter {
-    background-image: url('../img/twitter.svg');
+.mastodon {
+    background-image: url('../img/mastodon.svg');
 }
 
 .github {

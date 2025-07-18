@@ -36,12 +36,12 @@
                         <a href="{{ site.url }}/joindin"><i class="fa fa-solid fa-star"></i><span>Talks</span></a>
                         <a href="{{ site.url }}/about"><i class="fa fa-solid fa-user"></i><span>About</span></a>
 
-                        {% if site.twitter %}
-                        <a href="https://twitter.com/{{ site.twitter }}" rel="me" title="{{ site.twitter }} twitter profile" target="_blank"><i class="fa fa-fw fa-twitter"></i><span>Twitter</span></a>
+                        {% if site.fediverse_account %}
+                        <a href="{{ site.fediverse_account }}" rel="me" title="{{ site.fediverse_account }} mastodon profile" target="_blank"><i class="fa fa-brands fa-mastodon"></i><span>Mastodon</span></a>
                         {% endif %}
 
                         {% if site.github %}
-                        <a href="https://github.com/{{ site.github }}" rel="me" title="{{ site.twitter }} github profile" target="_blank"><i class="fa fa-fw fa-github"></i><span>Github</span></a>
+                        <a href="https://github.com/{{ site.github }}" rel="me" title="{{ site.github }} github profile" target="_blank"><i class="fa fa-brands fa-github"></i><span>Github</span></a>
                         {% endif %}
                     </div>
                 </nav>
@@ -65,9 +65,9 @@
                         <p id="shield-container" class="logo-cont left" style="width: 200px; padding: 0; margin: 0; height: 200px;
 "></p>
                         {% if page.page_type == "home" %}
-                        <h1 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h1>
+                        <h1 class="left text-center">Marco Pivetta <span>(<a href="{{ site.fediverse_account }}" target="blank">Ocramius</a>)</span></h1>
                         {% else %}
-                        <h2 class="left text-center">Marco Pivetta <span>(<a href="//twitter.com/{{ site.twitter }}" target="blank">Ocramius</a>)</span></h2>
+                        <h2 class="left text-center">Marco Pivetta <span>(<a href="{{ site.fediverse_account }}" target="blank">Ocramius</a>)</span></h2>
                         {% endif %}
                     </div>
 
