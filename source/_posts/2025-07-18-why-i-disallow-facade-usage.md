@@ -152,6 +152,11 @@ $result = $service->doSomeHeavyWork(); // this will crash: the cache was never c
     @TODO expose concept of "simple" != "easy". Systems can be complex and easy, or harder to use, but simple.
 </p>
 
+<p>
+    @TODO expose how the facade is "hidden API" - not all interactions with the object are exposed by the public
+    class signature anymore, while constructor shows clear inputs/outputs.
+</p>
+
 <h2>The simple solution</h2>
 
 <p>
