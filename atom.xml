@@ -3,12 +3,14 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2020-09-21T04:35:24+02:00</updated>
-    <id>https://ocramius.github.io/</id>    <generator uri="http://sculpin.io/">Sculpin</generator>        <entry>
+    <updated>2025-07-18T05:08:41+00:00</updated>
+    <id>https://ocramius.github.io/</id>
+        <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
             <title type="html"><![CDATA[BetterReflection version 2.0.0 released]]></title>
-            <link href="https://ocramius.github.io/blog/roave-better-reflection-v2.0"/>
-            <updated>2017-09-18T00:00:00+02:00</updated>
-            <id>https://ocramius.github.io/blog/roave-better-reflection-v2.0</id>
+            <link href="https://ocramius.github.io/blog/roave-better-reflection-v2.0/"/>
+            <updated>2017-09-18T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/roave-better-reflection-v2.0/</id>
             <content type="html"><![CDATA[<p>
     <a href="https://twitter.com/RoaveTeam" target="_blank" rel="fn org">Roave</a>'s
     <a href="https://github.com/Roave/BetterReflection" target="_blank">BetterReflection</a>
@@ -270,12 +272,14 @@ class SomeAPI
     <a href="https://github.com/POPSuL" target="_blank">Viktor Suprun</a> for the effort they put in this release,
     providing patches, improvements and overall helping us building something that may become
     extremely useful in the PHP ecosystem.
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[Eliminating Visual Debt]]></title>
-            <link href="https://ocramius.github.io/blog/eliminating-visual-debt"/>
-            <updated>2017-05-29T00:00:00+02:00</updated>
-            <id>https://ocramius.github.io/blog/eliminating-visual-debt</id>
+            <link href="https://ocramius.github.io/blog/eliminating-visual-debt/"/>
+            <updated>2017-05-29T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/eliminating-visual-debt/</id>
             <content type="html"><![CDATA[<p>
     Today we're talking about <strong>Visual debt</strong> in our code.
 </p>
@@ -645,12 +649,14 @@ $a[1]('subscribed');
     And please, please, please: remember that most of your time you are
     not coding for yourself alone. You are coding for your employer, for
     your team, for your project, for your future self.
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[YubiKey for SSH, Login, 2FA, GPG and Git Signing]]></title>
-            <link href="https://ocramius.github.io/blog/yubikey-for-ssh-gpg-git-and-local-login"/>
-            <updated>2017-04-15T00:00:00+02:00</updated>
-            <id>https://ocramius.github.io/blog/yubikey-for-ssh-gpg-git-and-local-login</id>
+            <link href="https://ocramius.github.io/blog/yubikey-for-ssh-gpg-git-and-local-login/"/>
+            <updated>2017-04-15T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/yubikey-for-ssh-gpg-git-and-local-login/</id>
             <content type="html"><![CDATA[<p>
     I've been using a
     <a href="https://www.yubico.com/products/yubikey-hardware/yubikey-neo/" target="_blank">
@@ -1263,12 +1269,14 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
     theft isn't a big threat with YubiKeys, getting locked
     out of all our systems is a problem. Make sure that you can
     always either recover a YubiKey or the master GPG key.
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[On Aggregates and Domain Service interaction]]></title>
-            <link href="https://ocramius.github.io/blog/on-aggregates-and-external-context-interactions"/>
-            <updated>2017-01-25T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/on-aggregates-and-external-context-interactions</id>
+            <link href="https://ocramius.github.io/blog/on-aggregates-and-external-context-interactions/"/>
+            <updated>2017-01-25T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/on-aggregates-and-external-context-interactions/</id>
             <content type="html"><![CDATA[<p>
     Some time ago, I was asked where I put I/O operations when dealing with
     aggregates.
@@ -1583,12 +1591,14 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
     Just remember that entities should only be self-aware, and only context-aware
     in the context of certain business interactions: don't inject or statically
     access domain services from within an entity.
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[ProxyManager 2.0.0 release and expected 2.x lifetime]]></title>
-            <link href="https://ocramius.github.io/blog/proxy-manager-2-0-0-release"/>
-            <updated>2016-01-29T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/proxy-manager-2-0-0-release</id>
+            <link href="https://ocramius.github.io/blog/proxy-manager-2-0-0-release/"/>
+            <updated>2016-01-29T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/proxy-manager-2-0-0-release/</id>
             <content type="html"><![CDATA[<p style="align: center;">
     <img
         src="https://raw.githubusercontent.com/Ocramius/ProxyManager/2.0.0/proxy-manager.png"
@@ -1659,12 +1669,14 @@ ssh-rsa AAAAB3NzaC ... pdqtlwX6m1 cardno:000123457915
     <li><a href="https://github.com/vonalbert" target="_blank">Alberto Avon</a></li>
     <li><a href="https://github.com/malukenho" target="_blank">Jefersson Nathan</a></li>
     <li><a href="https://github.com/jbafford" target="_blank">John Bafford</a></li>
-</ul>]]></content>
-        </entry>        <entry>
+</ul>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[Doctrine ORM Hydration Performance Optimization]]></title>
-            <link href="https://ocramius.github.io/blog/doctrine-orm-optimization-hydration"/>
-            <updated>2015-04-13T00:00:00+02:00</updated>
-            <id>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration</id>
+            <link href="https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/"/>
+            <updated>2015-04-13T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/</id>
             <content type="html"><![CDATA[<p class="alert alert-warning">
     <span class="label label-warning">PRE-REQUISITE:</span>
     Please note that this article explains complexity in internal ORM operations with the <strong>Big-O</strong>
@@ -2252,12 +2264,14 @@ return $users;
 
 <p>
     Give it a spin and see the results for yourself!
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[When to declare classes final]]></title>
-            <link href="https://ocramius.github.io/blog/when-to-declare-classes-final"/>
-            <updated>2015-01-06T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/when-to-declare-classes-final</id>
+            <link href="https://ocramius.github.io/blog/when-to-declare-classes-final/"/>
+            <updated>2015-01-06T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/when-to-declare-classes-final/</id>
             <content type="html"><![CDATA[<p>
     <strong>
         <abbr title="too long, didn't read">TL;DR</abbr>: 
@@ -2583,12 +2597,14 @@ class SwitchableDbRegistrationService extends RegistrationService
 
 <p>
     You will see the rest just getting in place as expected.
-</p>]]></content>
-        </entry>        <entry>
+</p>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[ProxyManager 1.0.0 release and expected 1.x lifetime]]></title>
-            <link href="https://ocramius.github.io/blog/proxy-manager-1-0-0-release"/>
-            <updated>2014-12-12T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/proxy-manager-1-0-0-release</id>
+            <link href="https://ocramius.github.io/blog/proxy-manager-1-0-0-release/"/>
+            <updated>2014-12-12T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/proxy-manager-1-0-0-release/</id>
             <content type="html"><![CDATA[<p style="align: center;">
     <img
         src="https://raw.githubusercontent.com/Ocramius/ProxyManager/1.0.0/proxy-manager.png"
@@ -2703,12 +2719,14 @@ class SwitchableDbRegistrationService extends RegistrationService
     <li><a href="https://github.com/leedavis81" target="_blank">leedavis81</a></li>
     <li><a href="https://github.com/lisachenko" target="_blank">lisachenko</a></li>
     <li><a href="https://github.com/Pittiplatsch" target="_blank">Pittiplatsch</a></li>
-</ul>]]></content>
-        </entry>        <entry>
+</ul>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[roave/security-advisories: Composer against Security Vulnerabilities]]></title>
-            <link href="https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues"/>
-            <updated>2014-12-11T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues</id>
+            <link href="https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues/"/>
+            <updated>2014-12-11T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues/</id>
             <content type="html"><![CDATA[<p><hr/></p>
 
 <p>
@@ -2829,12 +2847,14 @@ curl -sS https://getcomposer.org/installer | php --
 
 <hr/>
 
-<h2>Fin</h2>]]></content>
-        </entry>        <entry>
+<h2>Fin</h2>
+]]></content>
+        </entry>
+            <entry>
             <title type="html"><![CDATA[Delegator Factories in Zend Framework 2]]></title>
-            <link href="https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained"/>
-            <updated>2014-03-16T00:00:00+01:00</updated>
-            <id>https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained</id>
+            <link href="https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained/"/>
+            <updated>2014-03-16T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/zend-framework-2-delegator-factories-explained/</id>
             <content type="html"><![CDATA[<p>
     Last year, I
     <a href="https://github.com/zendframework/zf2/pull/4145" target="_blank">worked on a feature</a>
@@ -3149,5 +3169,7 @@ return [
 
 <p>
     I hope this helps you with your day-to-day hacking around your ZF2 apps!
-</p>]]></content>
-        </entry></feed>
+</p>
+]]></content>
+        </entry>
+    </feed>
