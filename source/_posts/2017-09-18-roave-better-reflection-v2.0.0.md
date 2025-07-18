@@ -4,7 +4,7 @@ title: BetterReflection version 2.0.0 released
 category: Security
 tags: ["PHP", "Library", "Roave", "Clean Code", "Tools"]
 year: 2017
-month: 9
+month: 09
 day: 18
 published: true
 summary: "BetterReflection version 2 was released: let's look at its main features and improvements"

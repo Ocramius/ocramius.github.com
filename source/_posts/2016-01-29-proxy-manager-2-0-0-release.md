@@ -4,7 +4,7 @@ title: ProxyManager 2.0.0 release and expected 2.x lifetime
 category: PHP
 tags: ["php", "proxy"]
 year: 2016
-month: 1
+month: 01
 day: 29
 published: true
 summary: ProxyManager 2.0.0 has been released, with the expected support schedule for 2.x

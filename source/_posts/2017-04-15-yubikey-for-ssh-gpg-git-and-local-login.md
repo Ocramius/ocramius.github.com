@@ -4,7 +4,7 @@ title: YubiKey for SSH, Login, 2FA, GPG and Git Signing
 category: Security
 tags: ["YubiKey", "GPG", "SSH", "security", "GPG", "2FA", "GIT", "Authentication"]
 year: 2017
-month: 4
+month: 04
 day: 15
 published: true
 summary: Using a single YubiKey for Two-Factor Auth, SSH login, GPG signing (GIT too) and to log into your computer

@@ -4,7 +4,7 @@ title: A tutorial for Doctrine 2 ORM with Zend Framework 2
 category: Coding Tutorials
 tags: ["zf2", "zendframework", "doctrine", "orm", "php"]
 year: 2013
-month: 2
+month: 02
 day: 14
 published: true
 summary: An introduction to Doctrine 2 ORM with ZF2

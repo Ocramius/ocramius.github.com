@@ -4,8 +4,8 @@ title: Fast PHP Object to Array conversion
 category: PHP
 tags: ["php", "oop"]
 year: 2013
-month: 8
-day: 9
+month: 08
+day: 09
 published: true
 summary: Fast PHP Object to Array conversion
 description: A simple way of converting PHP Objects to Arrays regardless of their API

@@ -4,7 +4,7 @@ title: On Aggregates and Domain Service interaction
 category: PHP
 tags: ["php", "ddd", "cqrs", "event sourcing", "aggregate", "aggregate root", "patterns", "clean code"]
 year: 2017
-month: 1
+month: 01
 day: 25
 published: true
 summary: "IDDD/DDD Aggregates often have to talk to the external world via domain services: here is a practical approach"

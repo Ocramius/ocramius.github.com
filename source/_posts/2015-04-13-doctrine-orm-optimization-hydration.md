@@ -4,7 +4,7 @@ title: Doctrine ORM Hydration Performance Optimization
 category: PHP
 tags: ["php", "doctrine", "orm", "hydration", "performance", "speed"]
 year: 2015
-month: 4
+month: 04
 day: 13
 published: true
 summary: Squeezing performance out of the most expensive operation that Doctrine ORM is doing for you 

@@ -4,8 +4,8 @@ title: ZF2, Zend Di and Controllers for fast SOA development
 category: PHP
 tags: ["zend", "zendframework", "dependency", "injection", "di", "dic", "soa", "mvc"]
 year: 2012
-month: 8
-day: 6
+month: 08
+day: 06
 published: true
 summary: A quick overview of how to use Zend\Di from Zend Framework 2 to retrieve controllers in a SOA architecture using ZF2's Zend\Mvc
 ---

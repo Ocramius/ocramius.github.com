@@ -4,7 +4,7 @@ title: Property Accessors in PHP Userland
 category: PHP
 tags: ["php", "oop", "access", "property accessors"]
 year: 2013
-month: 6
+month: 06
 day: 30
 published: true
 summary: Implementing Property Accessors in PHP

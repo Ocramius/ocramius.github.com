@@ -4,7 +4,7 @@ title: Eliminating Visual Debt
 category: Security
 tags: ["PHP", "Design", "Type Systems", "Visual Debt", "Sarcasm"]
 year: 2017
-month: 5
+month: 05
 day: 29
 published: true
 summary: Visual debt is damaging our productivity and increasing maintenance load every day - let's delete it

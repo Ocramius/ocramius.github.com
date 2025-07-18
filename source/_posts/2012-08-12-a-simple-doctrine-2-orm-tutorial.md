@@ -4,7 +4,7 @@ title: A Doctrine 2 ORM Tutorial for beginners
 category: Coding Tutorials
 tags: ["doctrine2", "ORM", "tutorial"]
 year: 2012
-month: 8
+month: 08
 day: 12
 published: true
 summary: An introduction to Doctrine 2 ORM

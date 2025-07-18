@@ -4,7 +4,7 @@ title: The Proxy Pattern in PHP
 category: Coding Tutorials
 tags: ["proxy patterns", "php", "oop"]
 year: 2013
-month: 1
+month: 01
 day: 20
 published: true
 summary: An introduction to the Proxy OOP Pattern for PHP developers

@@ -4,7 +4,7 @@ title: Accessing private PHP class members without reflection
 category: PHP
 tags: ["php", "oop", "access", "property", "reflection", "private"]
 year: 2013
-month: 7
+month: 07
 day: 10
 published: true
 summary: Getting access to private class members in PHP (without reflection)

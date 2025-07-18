@@ -4,7 +4,7 @@ title: JS/CSS/Images with Zend Framework 2 and the Asset Manager Module
 category: Coding
 tags: ["zf2", "module", "assets"]
 year: 2012
-month: 9
+month: 09
 day: 12
 published: true
 summary: A tutorial to start using assets from your modules within your ZF2 applications

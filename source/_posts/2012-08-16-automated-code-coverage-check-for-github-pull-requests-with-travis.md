@@ -4,7 +4,7 @@ title: Automated Test Coverage Checks with Travis, PHPUnit for Github Pull Reque
 category: PHP
 tags: ["phpunit", "code", "coverage", "travis", "travis", "continuos integration", "testing"]
 year: 2012
-month: 8
+month: 08
 day: 16
 published: true
 summary: Developers are lazy, and their Pull Requests in Github often do not respect our code quality standards. Automate testing so that you can enforce a minimum PHPUnit Code Coverage in Travis!
