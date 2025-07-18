@@ -3,9 +3,9 @@
 use JoindInBundle\JoindInBundle;
 use Sculpin\Bundle\SculpinBundle\HttpKernel\AbstractKernel;
 
-class SculpinKernel extends AbstractKernel
+final class SculpinKernel extends AbstractKernel
 {
-    public function getAdditionalSculpinBundles()
+    public function getAdditionalSculpinBundles(): array
     {
         return [
             JoindInBundle::class,

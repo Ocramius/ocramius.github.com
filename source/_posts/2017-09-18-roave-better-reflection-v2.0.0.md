@@ -7,7 +7,7 @@ year: 2017
 month: 9
 day: 18
 published: true
-summary: BetterReflection version 2 was released: let's look at its main features and improvements
+summary: "BetterReflection version 2 was released: let's look at its main features and improvements"
 description: BetterReflection is a library that aims at providing additional and improved Reflection API compared to PHP's ext-reflection
 tweet: 909888939942711301
 ---

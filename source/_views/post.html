@@ -38,22 +38,9 @@
         {% endif %}
         </article>
 
-        {% if page.tweet %}
-        <div data-tweet-id="{{ page.tweet }}" class="twitter-tweet"></div>
-        {% endif %}
-        
-        <div id="disqus_thread"></div>
-
         <script>
             if (typeof prettyPrint !== 'undefined') {
                 $(prettyPrint);
             }
         </script>
-        <script>
-            var disqus_shortname = 'ocramius-dev';
-            var disqus_identifier = '{{ page.url }}';
-            var disqus_url = 'https://ocramius.github.io{{ page.url }}';
-        </script>
-        <script src="https://ocramius-dev.disqus.com/count.js"></script>
-        <script src="https://ocramius-dev.disqus.com/embed.js"></script>
 {% endblock %}
