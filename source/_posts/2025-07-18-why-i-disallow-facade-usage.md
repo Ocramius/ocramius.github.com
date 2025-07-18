@@ -11,7 +11,7 @@ summary: "Laravel Facades: why I disallow their usage in my software project"
 description: A technical overview of why Facades are problematic from a software engineering point of view, and why I disallow them in my software projects
 ---
 
-<p class="label label-warning">
+<p class="alert alert-warning">
     For non-Laravel developers: beware that this is not about the facade pattern.
 </p>
 
