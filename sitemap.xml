@@ -7,6 +7,12 @@
     <priority>0.8</priority>
   </url>
     <url>
+    <loc>https://ocramius.github.io/blog/reviving-the-blog/</loc>
+    <lastmod>2026-02-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
     <loc>https://ocramius.github.io/blog/roave-better-reflection-v2.0/</loc>
     <lastmod>2017-09-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
