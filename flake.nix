@@ -46,6 +46,18 @@
             '';
             inherit system;
           };
+          built-blog-assets = derivation {
+            name    = "built-blog-assets";
+            src     = with-autoloader;
+            builder = pkgs.writeShellScript "generate-blog-assets.sh" ''
+              set -euxo pipefail
+              ${pkgs.coreutils}/bin/cp -r $src/. $TMPDIR
+              cd $TMPDIR
+              ${pkgs.php}/bin/php vendor/bin/sculpin generate --env=prod
+              ${pkgs.coreutils}/bin/cp -r $TMPDIR/output_prod $out
+            '';
+            inherit system;
+          };
         in {
           packages = {
             update-php-packages = pkgs.writeShellScriptBin "generate-composer-to-nix.sh" ''
@@ -65,17 +77,22 @@
               ${pkgs.coreutils}/bin/rm -f default.nix
             '';
             
-            built-blog-assets = derivation {
-              name    = "built-blog-assets";
-              src     = with-autoloader;
-              builder = pkgs.writeShellScript "generate-blog-assets.sh" ''
-                set -euxo pipefail
-                ${pkgs.coreutils}/bin/cp -r $src/. $TMPDIR
-                cd $TMPDIR
-                ${pkgs.php}/bin/php vendor/bin/sculpin generate --env=prod
-                ${pkgs.coreutils}/bin/cp -r $TMPDIR/output_prod $out
+            built-blog-assets = built-blog-assets;
+          };
+
+          checks = {
+            blog-assets-can-be-built = pkgs.stdenv.mkDerivation {
+              name       = "Website blogpost pages are being built";
+              src        = ./.;
+              doCheck    = true;
+              checkPhase = ''
+                if [[ -f "${built-blog-assets}/blog/proxy-manager-1-0-0-release/index.html" && -r "${built-blog-assets}/blog/proxy-manager-1-0-0-release/index.html" ]]; then
+                  echo "OK" >> $out;
+                else
+                  echo "KO" >> $out;
+                  exit 1;
+               fi
               '';
-              inherit system;
             };
           };
         }
