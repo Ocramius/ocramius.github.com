@@ -1,7 +1,7 @@
 {
     email ocramius@gmail.com
 
-
+    admin off
     http_port 8080
 
 #    log access_logs {
