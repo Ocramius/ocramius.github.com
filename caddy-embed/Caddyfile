@@ -1,0 +1,18 @@
+{
+    email ocramius@gmail.com
+
+
+    http_port 8080
+
+#    log access_logs {
+#                        level DEBUG
+#                    }
+
+    filesystem my_embeds embedded
+}
+
+*:8080 {
+    file_server {
+                    fs my_embeds
+                }
+}

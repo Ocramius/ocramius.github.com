@@ -12,6 +12,7 @@
     flake-utils.lib.eachDefaultSystem (
       system: 
         let
+          website-name = "ocramius.github.io";
           pkgs = (import nixpkgs) {
             inherit system;
           };
@@ -58,6 +59,21 @@
             '';
             inherit system;
           };
+          caddy-module-with-assets = derivation {
+            name    = "caddy-module-with-assets";
+            builder = pkgs.writeShellScript "generate-blog-assets.sh" ''
+              set -euxo pipefail
+              ${pkgs.coreutils}/bin/cp -r ${./caddy-embed/.} $out
+              ${pkgs.coreutils}/bin/chmod +w $out/files/
+              ${pkgs.coreutils}/bin/cp -rf ${built-blog-assets}/. $out/files/
+            '';
+            inherit system;
+          };
+          embedded-server = pkgs.buildGo126Module {
+            name       = "embedded-server";
+            src        = caddy-module-with-assets;
+            vendorHash = "sha256-v0YXbAaftLLc+e8/w1xghW5OHRjT7Xi87KyLv1siGSc=";
+          };
         in {
           packages = {
             update-php-packages = pkgs.writeShellScriptBin "generate-composer-to-nix.sh" ''
@@ -67,17 +83,35 @@
               #trap 'rm -rf -- "$TMPDIR"' EXIT
               mkdir "$TMPDIR/src"
               mkdir "$TMPDIR/composer2nix"
-              ${pkgs.coreutils}/bin/cp "${./.}/composer.json" "$TMPDIR/src/"
-              ${pkgs.coreutils}/bin/cp "${./.}/composer.lock" "$TMPDIR/src/"
-              ${pkgs.coreutils}/bin/cp -r "${./.}/app" "$TMPDIR/src/app"
+              ${pkgs.coreutils}/bin/cp "${./composer.json}" "$TMPDIR/src/"
+              ${pkgs.coreutils}/bin/cp "${./composer.lock}" "$TMPDIR/src/"
+              ${pkgs.coreutils}/bin/cp -r "${./app}" "$TMPDIR/src/app"
               ${pkgs.coreutils}/bin/cp -r "${composer2nix}/." "$TMPDIR/composer2nix"
               ${pkgs.coreutils}/bin/chmod -R +w "$TMPDIR/composer2nix"
               ${pkgs.php84Packages.composer}/bin/composer install --working-dir="$TMPDIR/composer2nix" --no-scripts --no-plugins
-              ${pkgs.php}/bin/php $TMPDIR/composer2nix/bin/composer2nix --name=ocramius.github.com
+              ${pkgs.php}/bin/php $TMPDIR/composer2nix/bin/composer2nix --name=${website-name}
               ${pkgs.coreutils}/bin/rm -f default.nix
             '';
             
             built-blog-assets = built-blog-assets;
+
+            embedded-server = embedded-server;
+            
+            runnable-container = pkgs.dockerTools.buildLayeredImage {
+              name = website-name;
+              tag  = "latest";
+              
+              contents = [
+                (pkgs.writeTextDir "Caddyfile" (builtins.readFile ./caddy-embed/Caddyfile))
+              ];
+
+              config = {
+                Cmd = [
+                  "${embedded-server}/bin/caddy-embed"
+                  "run"
+                ];
+              };
+            };
           };
 
           checks = {
