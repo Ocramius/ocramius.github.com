@@ -1,0 +1,19 @@
+name: "Continuous Integration"
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  check-blog-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: cachix/install-nix-action@v31
+
+      - run: nix flake check -L
+
+      - name: "Verify that we can update PHP dependencies from composer.lock"
+        run: nix run .#update-php-packages

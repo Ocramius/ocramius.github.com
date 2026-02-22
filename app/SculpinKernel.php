@@ -8,7 +8,8 @@ final class SculpinKernel extends AbstractKernel
     public function getAdditionalSculpinBundles(): array
     {
         return [
-            JoindInBundle::class,
+            // @TODO disabled: querying information at build time is disabled
+            //JoindInBundle::class,
         ];
     }
 }

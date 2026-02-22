@@ -2,7 +2,7 @@
 layout: post
 title: Eliminating Visual Debt
 category: Security
-tags: ["PHP", "Design", "Type Systems", "Visual Debt", "Sarcasm"]
+tags: ["php", "Design", "Type Systems", "Visual Debt", "Sarcasm"]
 year: 2017
 month: 05
 day: 29
