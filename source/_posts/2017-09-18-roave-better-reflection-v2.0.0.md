@@ -2,7 +2,7 @@
 layout: post
 title: BetterReflection version 2.0.0 released
 category: Security
-tags: ["PHP", "Library", "Roave", "Clean Code", "Tools"]
+tags: ["php", "Library", "Roave", "clean code", "Tools"]
 year: 2017
 month: 09
 day: 18
