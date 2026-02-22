@@ -56,6 +56,8 @@
               cd $TMPDIR
               ${pkgs.php}/bin/php vendor/bin/sculpin generate --env=prod
               ${pkgs.coreutils}/bin/cp -r $TMPDIR/output_prod $out
+              #${pkgs.coreutils}/bin/cp -r ${./presentations/.} $out/presentations
+              #${pkgs.findutils}/bin/find $out -name ".git" -exec ${pkgs.coreutils}/bin/rm -rf {} \;
             '';
             inherit system;
           };
@@ -79,8 +81,7 @@
             update-php-packages = pkgs.writeShellScriptBin "generate-composer-to-nix.sh" ''
               set -euxo pipefail
               TMPDIR="$(${pkgs.coreutils}/bin/mktemp -d)"
-              echo $TMPDIR
-              #trap 'rm -rf -- "$TMPDIR"' EXIT
+              trap 'rm -rf -- "$TMPDIR"' EXIT
               mkdir "$TMPDIR/src"
               mkdir "$TMPDIR/composer2nix"
               ${pkgs.coreutils}/bin/cp "${./composer.json}" "$TMPDIR/src/"
@@ -112,6 +113,19 @@
                 ];
               };
             };
+
+            publish-to-github-pages = pkgs.writeShellScriptBin "publish-blog.sh" ''
+              set -euxo pipefail
+              TMPDIR="$(${pkgs.coreutils}/bin/mktemp -d)"
+              trap 'rm -rf -- "$TMPDIR"' EXIT
+              cd "$TMPDIR"
+              ${pkgs.git}/bin/git clone git@github.com:Ocramius/ocramius.github.com.git .
+              git checkout master
+              ${pkgs.rsync}/bin/rsync --quiet --archive --filter="P .git*" --exclude=".*.sw*" --exclude=".*.un~" --delete "${built-blog-assets}/" ./
+              git add -A :/
+              git commit -a -m "Deploying sculpin-generated pages to \`master\` branch"
+              git push origin HEAD
+            '';
           };
 
           checks = {
