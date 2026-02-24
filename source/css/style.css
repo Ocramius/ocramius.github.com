@@ -34,11 +34,6 @@ a {
     background-color: #373A47;
 }
 
-.menu-wrap {
-    float: right;
-    width: 20%
-}
-
 .menu-fixed {
     position: relative;
     z-index: 1000
