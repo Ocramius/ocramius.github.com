@@ -3,7 +3,7 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2026-07-28T13:41:10+00:00</updated>
+    <updated>2026-07-28T13:55:21+00:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
             <entry>
@@ -365,7 +365,7 @@ function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
 </p>
 
 <p>
-    Traces allows for a cleaner implementation:
+    Traces allow for a cleaner implementation:
 </p>
 
 <pre><code class="php">final readonly class CreditCardCheckout implements Checkout {
@@ -523,7 +523,7 @@ function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
 </p>
 
 <p>
-    As a good rule of thumb, the logger call-site should not perform expressions that can <code>@throw</code>,
+    As a good rule of thumb, the logger call-site should not evaluate expressions that can <code>@throw</code>,
     or which interact with global state (a <code>@phpstan-pure</code> or <code>@psalm-pure</code> declaration can help).
 </p>
 

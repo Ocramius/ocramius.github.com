@@ -412,7 +412,7 @@ function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
 </p>
 
 <p>
-    Traces allows for a cleaner implementation:
+    Traces allow for a cleaner implementation:
 </p>
 
 <pre><code class="php">final readonly class CreditCardCheckout implements Checkout {
@@ -570,7 +570,7 @@ function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
 </p>
 
 <p>
-    As a good rule of thumb, the logger call-site should not perform expressions that can <code>@throw</code>,
+    As a good rule of thumb, the logger call-site should not evaluate expressions that can <code>@throw</code>,
     or which interact with global state (a <code>@phpstan-pure</code> or <code>@psalm-pure</code> declaration can help).
 </p>
 
