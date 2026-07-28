@@ -858,7 +858,7 @@ let
 in
 composerEnv.buildPackage {
   inherit packages devPackages noDev;
-  name = "ocramius.github.com";
+  name = "ocramius.github.io";
   src = composerEnv.filterSrc ./.;
   executable = false;
   symlinkDependencies = false;
