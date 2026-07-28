@@ -376,7 +376,7 @@ final readonly class CreditCardCheckout implements Checkout {
 </p>
 
 <p>
-    Traces allows for a cleaner implementation:
+    Traces allow for a cleaner implementation:
 </p>
 
 ~~~php
@@ -538,7 +538,7 @@ $this->logger->error(
 </p>
 
 <p>
-    As a good rule of thumb, the logger call-site should not perform expressions that can <code>@throw</code>,
+    As a good rule of thumb, the logger call-site should not evaluate expressions that can <code>@throw</code>,
     or which interact with global state (a <code>@phpstan-pure</code> or <code>@psalm-pure</code> declaration can help).
 </p>
 
