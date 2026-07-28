@@ -183,8 +183,13 @@ $eventLoop->run();
 <p>
     Periodically logging is not a replacement for
     <a href="https://github.com/inadarei/rfc-healthcheck/blob/5dc80646edea9415ecaece9d51de79bc8ef0f744/draft-inadarei-api-health-check-06.txt">
-        a health-check probe
+        an external health-check probe
     </a>.
+</p>
+
+<p>
+    Note that you may want to also use <a href="#metrics-instead-of-logs">metrics instead</a>
+    (more on this <a href="#metrics-instead-of-logs">below</a>).
 </p>
 
 <h3>Injecting loggers</h3>
@@ -264,7 +269,7 @@ function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
 }
 ~~~
 
-<h3>Using the logger for measurements?</h3>
+<h3 id="metrics-instead-of-logs">Using the logger for measurements?</h3>
 
 <p>
     I often see teams using loggers to record metric information, then <code>grep</code>ping through the result,
