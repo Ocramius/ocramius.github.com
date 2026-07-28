@@ -451,6 +451,11 @@ $this->logger->info(
     </li>
 </ul>
 
+<p>
+    Remember that this behaviour needs to be
+    <a href="https://github.com/php-fig/fig-standards/blob/229d92c7d6aeb087746cfb622f9fc12e62a4dd59/accepted/PSR-3-logger-interface.md#12-message">enabled</a>.
+</p>
+
 <h3>Log levels</h3>
 
 <p>
