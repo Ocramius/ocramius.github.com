@@ -3,9 +3,538 @@
     <title><![CDATA[]]></title>
     <link href="https://ocramius.github.io/atom.xml" rel="self"/>
     <link href="https://ocramius.github.io/"/>
-    <updated>2026-02-24T14:01:03+00:00</updated>
+    <updated>2026-07-28T13:41:10+00:00</updated>
     <id>https://ocramius.github.io/</id>
         <generator uri="http://sculpin.io/">Sculpin</generator>
+            <entry>
+            <title type="html"><![CDATA[Proper logging in PHP with PSR-3]]></title>
+            <link href="https://ocramius.github.io/blog/php-logging-with-psr-3/"/>
+            <updated>2026-07-28T00:00:00+00:00</updated>
+            <id>https://ocramius.github.io/blog/php-logging-with-psr-3/</id>
+            <content type="html"><![CDATA[<h3>Who is this article for?</h3>
+
+<p>
+    This post is for people that do day-by-day busywork coding, and for team leads that want to direct their
+    peers towards better logging practices.
+</p>
+
+<p>
+    Note that this article comes from my regular need to present these exact points to different people, multiple
+    times a year, in multiple teams, in multiple companies.
+</p>
+
+<p>
+    Also, we will not talk about how to <b>configure</b> a <a href="www.php-fig.org/psr/psr-3/">PSR-3</a> logger,
+    but rather how to <b>use</b> one.
+</p>
+
+<h3>Handling errors properly</h3>
+
+<p>
+    Error/exception handling is the main use-case for logging.
+</p>
+
+<p>
+    When logging exceptions, please pass the <code>Throwable</code> instance to the <code>'exception'</code> context key.
+</p>
+
+<pre><code class="php">try {
+    // logic here
+} catch (SomeException $failed) {
+    $this-&gt;logger-&gt;error('Something went wrong', [
+        'exception' =&gt; $failed,
+    ]);
+}
+</code></pre>
+
+<p>
+    Avoid cluttering the logger call with data deriving from the exception: it's not the logger call-site's job,
+    and you are just repeating work.
+</p>
+
+<p>
+    I often see <b>unnecessary code like</b>:
+</p>
+
+<pre><code class="php">try {
+    // logic here
+} catch (SomeException $failed) {
+    $this-&gt;logger-&gt;error('Something went wrong', [
+        // first mistake: we forgot 'exception'
+        'previous' =&gt; $failed-&gt;getPrevious(), // let the logger do this!
+        'line' =&gt; $failed-&gt;getLine(), // already part of the stack trace
+        'error' =&gt; $failed-&gt;getMessage(), // also always rendered
+        'error_type' =&gt; $failed::class, // done by the logger, usually
+    ]);
+}
+</code></pre>
+
+<p>
+    The logger itself must instead be configured (and usually already <b>is</b> configured) to render:
+</p>
+
+<ul>
+    <li>
+        the exception <code>::class</code>
+    </li>
+    <li>
+        the exception message and code (codes are not really relevant any more, in this century)
+    </li>
+    <li>
+        the stack trace
+    </li>
+    <li>
+        previous exceptions
+    </li>
+    <li>
+        additional exception fields
+    </li>
+</ul>
+
+<p>
+    Your responsibility is to instead <b>pass context</b> information <b>that the logger can't infer on its own</b>.
+</p>
+
+<h4>
+    What if my code fails gracefully, and <b>does not raise an exception</b>?
+</h4>
+
+<pre><code class="php">if (is_wrong($something)) {
+    $this-&gt;logger-&gt;warn('Something went wrong', ['something' =&gt; $something]);
+}
+</code></pre>
+
+<p>
+    For business-specific failures that deserve a type, we can upcast them to a <code>Throwable</code> anyway:
+</p>
+
+<pre><code class="php">if (is_wrong($something)) {
+    $this-&gt;logger-&gt;warn('Something went wrong', [
+        'something' =&gt; $something,
+        'exception' =&gt; new SomethingWentWrong($something), // Throwable
+    ]);
+}
+</code></pre>
+
+<p>
+    Having clear exception types, even if used just with the logger, will allow you to easily
+    detect multiple code locations affected by the same kind of failure later on.
+</p>
+
+<p>
+    Beware: raising exceptions and logging both come with substantial CPU, memory and IO overhead,
+    so you should always decide carefully when logging and exceptions can be raised in a tight loop.
+</p>
+
+<p>
+    Remember also that a <code>Throwable</code> always collects the entire stack trace it was raised from,
+    which may affect garbage collection, if the logger keeps messages in memory.
+</p>
+
+<p>
+    Loggers are perfectly capable of determining the stack trace of a raised log message: the <code>'exception'</code>
+    key is not necessary for that feature to work, so creating a new <code>Throwable</code> is your decision.
+</p>
+
+<h3>
+    "Some logs" are better than "no logs"
+</h3>
+
+<p>
+    I'm personally not a fan of cluttering code with log and debug statements, but it is undeniable that logging will
+    help you keep a general understanding of how your software is behaving in production, both when healthy or unhealthy. 
+</p>
+
+<p>
+    A system that produces <b>no output</b> may be functioning perfectly, or be completely broken: having some insight
+    into whether it is "still ticking" is a good idea.
+</p>
+
+<blockquote cite="me">
+    Not sure if everything OK, or monitoring is broken.
+</blockquote>
+
+<p>
+    I recommend having <code>$logger->info('Heartbeat');</code> or similar calls in code that runs in long-running
+    operations, polling loops, or that are sitting idly, waiting for input:
+</p>
+
+<pre><code class="php">$eventLoop-&gt;whenever(function ($someEvent) {
+    // main application logic
+});
+
+$eventLoop-&gt;periodically(function () {
+    $this-&gt;logger-&gt;info('still here, waiting for you');
+}, Time::seconds()-&gt;multiply(120));
+
+$eventLoop-&gt;run();
+</code></pre>
+
+<p>
+    You can either configure the logger or the call-site to only log a percentage of the calls,
+    where the system would otherwise become too chatty.
+</p>
+
+<p>
+    Periodically logging is not a replacement for
+    <a href="https://github.com/inadarei/rfc-healthcheck/blob/5dc80646edea9415ecaece9d51de79bc8ef0f744/draft-inadarei-api-health-check-06.txt">
+        an external health-check probe
+    </a>.
+</p>
+
+<p>
+    Note that you may want to also use <a href="#metrics-instead-of-logs">metrics instead</a>
+    (more on this <a href="#metrics-instead-of-logs">below</a>).
+</p>
+
+<h3>Injecting loggers</h3>
+
+<p>
+    Please <b>use dependency injection</b> when requesting a logger:
+</p>
+
+<pre><code class="php">final readonly class MyService implements SomeService
+{
+    public function __construct(private LoggerInterface $logger) {}
+
+    function someLogic() {
+        $this-&gt;logger-&gt;debug('Look ma, I got the logger via DI!');
+    }
+}
+</code></pre>
+
+<p>
+    Besides avoiding the pitfalls of service location and global state, you get:
+</p>
+
+<ul>
+    <li>
+        a clear declaration that your code unit will emit log messages
+    </li>
+    <li>
+        the possibility of picking a specific logger for each service
+    </li>
+    <li>
+        the ability to use non-magic test spies/mocks to verify logging behaviors
+    </li>
+</ul>
+
+<p>
+    Here's how one could customize the logger in a service definition:
+</p>
+
+<pre><code class="php">$serviceDefinitions-&gt;add(
+    SomeService::class,
+    function (MainLogger $rootLogger) { 
+        return new MyService(
+            $rootLogger
+                -&gt;forWiredService(SomeService::class)
+                -&gt;withEnvironment($someEnvironment)
+        );
+    }
+);
+</code></pre>
+
+<p>
+    Here's how one could work with log messages in a test:
+</p>
+
+<pre><code class="php">#[Test]
+function my_service_does_a_bunch_of_things_in_a_very_specific_order(): void
+{
+    $testSpyLogger = new RecordingLogger();
+
+    $systemUnderTest = new MyService($testSpyLogger);
+
+    $systemUnderTest-&gt;doSomeWork();
+
+    Assert::equals(
+        [
+            'Extracted data',
+            'processed row A',
+            'processed row B',
+            'failed to process row C',
+            'finished',
+        ],
+        $testSpyLogger-&gt;messages
+    );
+}
+</code></pre>
+
+<h3 id="metrics-instead-of-logs">Using the logger for measurements?</h3>
+
+<p>
+    I often see teams using loggers to record metric information, then <code>grep</code>ping through the result,
+    to produce graphs or further analytics data:
+</p>
+
+<pre><code class="php">final readonly class LoggedCart implements CartService {
+    public function __construct(
+        // ...
+        private LoggerInterface $logger,
+    ) {}
+
+    public function cartCheckout(
+        // ...
+    ): void {
+        // ...
+
+        $this-&gt;logger-&gt;info(
+            'cart.checkout',
+            ['total_amount' =&gt; $cart-&gt;totalAmount()]
+        );
+    }
+}
+</code></pre>
+
+<p>
+    While you can most certainly do that, <b>the logger is the wrong abstraction for metrics</b>. 
+</p>
+
+<p>
+    The correct tool for metrics is
+    <a href="https://github.com/open-telemetry/opentelemetry.io/blob/0916db501b8b2562b21e2fb56dea97aab38d3266/content/en/docs/concepts/signals/metrics.md">OTEL metrics</a>,
+    (although any "metrics-alike" tooling works too):
+</p>
+
+<pre><code class="php">final readonly class LoggedCart implements CartService {
+    public function __construct(
+        // ...
+        MeterProvider $metrics,
+    ) {
+        $this-&gt;checkoutAmounts = $metrics-&gt;createHistogram('cart.checkout.total_amount');
+    }
+
+    public function cartCheckout(
+        // ...
+    ): void {
+        // ...
+
+        $this-&gt;checkoutAmounts-&gt;record($cart-&gt;totalAmount());
+    }
+}
+</code></pre>
+
+<p>
+    See also <a href="https://github.com/open-telemetry/opentelemetry-php/blob/c948c8fe4eff3c6264f02b6a92e8b44f577ef2d5/src/API/Metrics/MeterProviderInterface.php">the <code>MeterProviderInterface</code></a>.
+</p>
+
+<p>
+    With this setup, your metrics can be collected more efficiently (in batches), and can be sent to dedicated
+    backends, such as time series databases, ready to be viewed.
+</p>
+
+<p>
+    Note that you are still free to wire the metrics reader so that it forwards recorded metrics to your logger!
+</p>
+
+<h3>Logging durations</h3>
+
+<p>
+    You will often see developers logging the elapsed time for an operation:
+</p>
+
+<pre><code class="php">final readonly class CreditCardCheckout implements Checkout {
+    public function __construct(
+        // ...
+        private LoggerInterface $logger,
+    ) {}
+
+    public function cartCheckout(
+        // ...
+    ): void {
+        $start = $this-&gt;clock-&gt;now();
+        $this-&gt;logger-&gt;debug('checkout.start', ['time' =&gt; $start])
+        // ...
+
+        $end = $this-&gt;clock-&gt;now();
+        $this-&gt;logger-&gt;log(
+            'checkout.end',
+            [
+                'time'     =&gt; $end,
+                'duration' =&gt; $end-&gt;diff($start)
+            ]
+        );
+    }
+}
+</code></pre>
+
+<p>
+    Similarly to metrics, a logger is not the correct abstraction: instead, look at
+    <a href="https://github.com/open-telemetry/opentelemetry.io/blob/0916db501b8b2562b21e2fb56dea97aab38d3266/content/en/docs/concepts/signals/traces.md">OTEL Tracing</a>
+</p>
+
+<p>
+    Traces allows for a cleaner implementation:
+</p>
+
+<pre><code class="php">final readonly class CreditCardCheckout implements Checkout {
+    public function __construct(
+        // ...
+        private Tracer $tracer,
+    ) {}
+
+    public function cartCheckout(
+        // ...
+    ): void {
+        $span = $this-&gt;tracer-&gt;spanBuilder('checkout')
+            -&gt;startSpan();
+
+        // ... 
+
+        $span-&gt;end();
+    }
+}
+</code></pre>
+
+<p>
+    The API can be further improved with your own <code>Tracer</code> additions, and you can still
+    send span start/end to your logger.
+</p>
+
+<p>
+    By using the correct abstraction, dedicated trace collector software (such as
+    <a href="https://www.jaegertracing.io/">Jaeger</a>, <a href="https://zipkin.io/">Zipkin</a>, AWS X-Ray, etc.)
+    can give you full insight into how operations are nested, run concurrently, etc:
+</p>
+
+<p>
+    <img
+        src="../../img/posts/2026-07-28-php-logging-with-psr-3/distributed-trace-jaeger.png"
+        alt="An example trace containing multiple parallel spans in different services. Image taken from https://github.com/open-telemetry/opentelemetry-php/tree/c948c8fe4eff3c6264f02b6a92e8b44f577ef2d5/examples/traces/demo"
+    >
+</p>
+
+<h3>Message interpolation</h3>
+
+<p>
+    Please don't do this:
+</p>
+
+<pre><code class="php">$this-&gt;logger-&gt;info('user ' . $user-&gt;username() . ' logged in');
+</code></pre>
+
+<p>
+    PSR-3 specifies a <code>{bracket_based}</code> message interpolation convention, which you can rely upon:
+</p>
+
+<pre><code class="php">$this-&gt;logger-&gt;info(
+    'user {username} logged in',
+    ['username' =&gt; $user-&gt;username()]
+);
+</code></pre>
+
+<p>
+    With the above, you gain:
+</p>
+
+<ul>
+    <li>
+        a structured, searchable "username" field in your logs 
+    </li>
+    <li>
+        clarity on which bits of the message are dynamic, especially when interpolated values contain spaces
+    </li>
+</ul>
+
+<p>
+    Remember that this behaviour needs to be
+    <a href="https://github.com/php-fig/fig-standards/blob/229d92c7d6aeb087746cfb622f9fc12e62a4dd59/accepted/PSR-3-logger-interface.md#12-message">enabled</a>.
+</p>
+
+<h3>Log levels</h3>
+
+<p>
+    The log level mostly has an effect on:
+</p>
+
+<ul>
+    <li>
+        whether the log message will be emitted
+    </li>
+    <li>
+        who will be notified
+    </li>
+</ul>
+
+<p>
+    It is important to not raise the log level unnecessarily,
+    or you may run into a full disk, capped out monitoring system, full email inbox, or annoyed
+    on-call coworker.
+</p>
+
+<blockquote cite="me">
+    Logs should capture our attention only when relevant: attention is a valuable currency
+</blockquote>
+
+<p>
+    When reviewing new code, always ask yourself whether you can "push the log level down".
+</p>
+
+<p>
+    For tight loops, <code>debug</code> could suffice. You also don't want to see these messages in production: they
+    should be turned off by default.
+</p>
+
+<p>
+    Successful operations should probably receive an <code>info</code> level: you also want to know if a system
+    is working correctly.
+</p>
+
+<p>
+    For acceptable blips in your data, a <code>notice</code> could work.
+</p>
+
+<p>
+    Data processing that failed, but recovered with a fallback, should probably receive a <code>warning</code>.
+</p>
+
+<p>
+    Anything from <code>exception</code> up should be discussed within your team and business domain, when introduced.
+</p>
+
+<h3>Avoid performing I/O during logging</h3>
+
+<p>
+    Logging is a delicate matter: avoid making it more delicate, as it is your last resort in trying to
+    understand a failing system.
+</p>
+
+<p>
+    Following code is problematic:
+</p>
+
+<pre><code class="php">$this-&gt;logger-&gt;error(
+    'user {username} failed to log in',
+    [
+        'exception' =&gt; $exception,
+        'username'  =&gt; $this-&gt;users-&gt;get($userId)-&gt;username()
+    ]
+);
+</code></pre>
+
+<p>
+    At this stage, you do not know if the system is in an irrecoverable state, and this entire expression may fail.
+</p>
+
+<p>
+    Additionally, your logging operation is potentially slowing down the system: perhaps logging <code>$userId</code>
+    sufficed?
+</p>
+
+<p>
+    As a good rule of thumb, the logger call-site should not perform expressions that can <code>@throw</code>,
+    or which interact with global state (a <code>@phpstan-pure</code> or <code>@psalm-pure</code> declaration can help).
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+    This article hopefully contains things that you can point at when discussing logger usages with your colleagues:
+    I sure needed this compendium of patterns for my future self ☺️
+</p>
+]]></content>
+        </entry>
             <entry>
             <title type="html"><![CDATA[Reviving the blog]]></title>
             <link href="https://ocramius.github.io/blog/reviving-the-blog/"/>
@@ -3098,134 +3627,6 @@ class SwitchableDbRegistrationService extends RegistrationService
     <li><a href="https://github.com/lisachenko" target="_blank">lisachenko</a></li>
     <li><a href="https://github.com/Pittiplatsch" target="_blank">Pittiplatsch</a></li>
 </ul>
-]]></content>
-        </entry>
-            <entry>
-            <title type="html"><![CDATA[roave/security-advisories: Composer against Security Vulnerabilities]]></title>
-            <link href="https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues/"/>
-            <updated>2014-12-11T00:00:00+00:00</updated>
-            <id>https://ocramius.github.io/blog/roave-security-advisories-protect-against-composer-packages-with-security-issues/</id>
-            <content type="html"><![CDATA[<p><hr/></p>
-
-<p>
-    Since it's almost christmas, it's also time to release a new project!
-</p>
-
-<p>
-    The <a href="https://twitter.com/RoaveTeam" target="_blank">Roave Team</a> is pleased to announce the release of
-    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a>, a package
-    that keeps known security issues out of your project.
-</p>
-
-<p>
-    Before telling you more, go grab it:
-</p>
-
-<pre><code class="sh">mkdir roave-security-advisories-test
-cd roave-security-advisories-test
-curl -sS https://getcomposer.org/installer | php --
-
-./composer.phar require roave/security-advisories:dev-master
-</code></pre>
-
-<p>
-    Hold on: I will tell you what to do with it in a few.
-</p>
-
-<h3>What is it?</h3>
-
-<p>
-    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">roave/security-advisories</a> is a composer
-    package that prevents installation of packages with known security issues.
-</p>
-
-<h3>Yet another one?</h3>
-
-<p>
-    Last year, <a href="https://twitter.com/fabpot" target="_blank">Fabien Potencier</a> 
-    <a href="http://fabien.potencier.org/article/67/don-t-use-php-libraries-with-known-security-issues" target="_blank">announced</a>
-    the <a href="https://security.sensiolabs.org/" target="_blank">security.sensiolabs.org</a> project.
-    This october, he 
-    <a href="http://fabien.potencier.org/article/74/the-php-security-advisories-database" target="_blank">announced again</a> 
-    that the project was being moved 
-    <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank">to the open-source FriendsOfPHP organization</a>.
-</p>
-
-<p>
-    While I like the idea of integrating security checks with my 
-    <abbr title="Continuous Integration">CI</abbr>, I don't like the fact that it is possible to install
-    and run harmful software before those checks.
-    <br/>
-    I also don't want to install and run an additional CLI tool for something that composer can provide directly.
-</p>
-
-<p>
-    That's why I had the idea of just compiling a list of <code>conflict</code> versions from 
-    <a href="https://github.com/FriendsOfPHP/security-advisories" target="_blank"></a> into a composer
-    <a href="https://getcomposer.org/doc/04-schema.md#type" target="_blank">metapackage</a>:
-</p>
-
-<iframe width="420" height="315" src="https://www.youtube.com/embed/QkjD3D5FgmE" frameborder="0" allowfullscreen></iframe>
-
-<h3>Why?</h3>
-
-<p>
-    This has various advantages:
-</p>
-
-<ul>
-    <li>
-        No files or actual dependencies are added to the project, since a "metapackage" does not provide 
-        a vendor directory by itself
-    </li>
-    <li>
-        Packages with security issues are filtered out during dependency resolution: they will not even be downloaded
-    </li>
-    <li>
-        No more CLI tool to run separately, no more <abbr title="Continuous Integration">CI</abbr> setup steps
-    </li>
-    <li>
-        No need to upgrade the tool separately
-    </li>
-    <li>
-        No coupling or version constraints with any dependencies used by similar CLI-based alternatives
-    </li>
-</ul>
-
-<h3>Try it out!</h3>
-
-<p>
-    Now that you installed <code>roave/security-advisories</code>, you can try out how it works:
-</p>
-
-<pre><code class="sh">cd roave-security-advisories-test
-
-./composer.phar require symfony/symfony:2.5.2 # this will fail
-./composer.phar require zendframework/zendframework:2.3.1 # this will fail
-./composer.phar require symfony/symfony:~2.6 # works!
-./composer.phar require zendframework/zendframework:~2.3 # works!
-</code></pre>
-
-<p>
-    Simple enough!
-</p>
-
-<p>
-    Please just note that this only works when adding new dependencies or when running <code>composer update</code>:
-    security issues in your <code>composer.lock</code> cannot be checked with this technique.
-</p>
-
-<h3>Why is there no tagged version?</h3>
-
-<p>
-    Because of how composer dependency resolution works, it is not possible to have more than one version of 
-    <code>roave/security-advisories</code> other than <code>dev-master</code>. More about this is on the 
-    <a href="https://github.com/Roave/SecurityAdvisories" target="_blank">project page</a>
-</p>
-
-<hr/>
-
-<h2>Fin</h2>
 ]]></content>
         </entry>
     </feed>
