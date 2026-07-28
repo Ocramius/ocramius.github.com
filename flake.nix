@@ -81,7 +81,6 @@
             update-php-packages = pkgs.writeShellScriptBin "generate-composer-to-nix.sh" ''
               set -euxo pipefail
               TMPDIR="$(${pkgs.coreutils}/bin/mktemp -d)"
-              trap 'rm -rf -- "$TMPDIR"' EXIT
               mkdir "$TMPDIR/src"
               mkdir "$TMPDIR/composer2nix"
               ${pkgs.coreutils}/bin/cp "${./composer.json}" "$TMPDIR/src/"
@@ -117,7 +116,6 @@
             publish-to-github-pages = pkgs.writeShellScriptBin "publish-blog.sh" ''
               set -euxo pipefail
               TMPDIR="$(${pkgs.coreutils}/bin/mktemp -d)"
-              trap 'rm -rf -- "$TMPDIR"' EXIT
               cd "$TMPDIR"
               ${pkgs.git}/bin/git clone git@github.com:Ocramius/ocramius.github.com.git .
               git checkout master
