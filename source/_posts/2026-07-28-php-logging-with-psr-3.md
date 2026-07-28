@@ -5,7 +5,7 @@ category: Blog
 tags: [ "logging", "php", "software design", "psr-3" ]
 year: 2026
 month: 07
-day: 24
+day: 28
 published: true
 summary: "Logging with PSR-3 in PHP - the proper way"
 description: Common logging usage in PHP, how to do it well, and what to avoid
@@ -412,7 +412,7 @@ final readonly class CreditCardCheckout implements Checkout {
 
 <p>
     <img
-        src="../../img/posts/2026-07-24-php-logging-with-psr-3/distributed-trace-jaeger.png"
+        src="../../img/posts/2026-07-28-php-logging-with-psr-3/distributed-trace-jaeger.png"
         alt="An example trace containing multiple parallel spans in different services. Image taken from https://github.com/open-telemetry/opentelemetry-php/tree/c948c8fe4eff3c6264f02b6a92e8b44f577ef2d5/examples/traces/demo"
     >
 </p>
