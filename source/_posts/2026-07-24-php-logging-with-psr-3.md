@@ -500,7 +500,7 @@ $this->logger->info(
 </p>
 
 <p>
-    Data processing that failed, but recovered, should probably receive a <code>warning</code>.
+    Data processing that failed, but recovered with a fallback, should probably receive a <code>warning</code>.
 </p>
 
 <p>
