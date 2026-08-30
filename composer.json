@@ -2,7 +2,7 @@
     "description": "A Skeleton for a Sculpin Based Blog",
     "type": "sculpin-skeleton",
     "require": {
-        "guzzlehttp/guzzle": "~5.0",
+        "guzzlehttp/guzzle": "~6.5",
         "components/jquery": "^v3.7.1",
         "sculpin/sculpin": "^3.2.0",
         "components/bootstrap": "^4.6.2",
